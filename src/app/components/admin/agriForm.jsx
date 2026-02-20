@@ -18,6 +18,7 @@ const initialForm = {
   engineHorsepower: 0,
   drive: "",
   transmissionType: "",
+  stockNumber: 0,
   imgs: [],
 };
 
@@ -29,7 +30,7 @@ export default function ProductForm() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    const numericFields = ["price", "year", "hours", "engineHorsepower"];
+    const numericFields = ["price", "year", "hours", "engineHorsepower", "stockNumber"];
 
     if (name === "imgs") {
       setForm((prev) => ({
@@ -51,51 +52,38 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      // 1️⃣ Creează un folder random pentru imagini
-      const folderId = crypto.randomUUID();
+      const formData = new FormData();
 
-      // 2️⃣ Upload imagini direct în Cloudinary
-      const uploadedUrls = [];
-      for (const file of form.imgs) {
-        const cloudData = new FormData();
-        cloudData.append("file", file);
-        cloudData.append("upload_preset", "YOUR_UPLOAD_PRESET"); // schimbă cu preset-ul tău
-        cloudData.append("folder", `products/${folderId}`);
-        cloudData.append("format", "webp");
+      // Adăugăm toate câmpurile normale
+      Object.keys(form).forEach((key) => {
+        if (key !== "imgs") {
+          formData.append(key, form[key]);
+        }
+      });
 
-        const res = await fetch(`https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload`, {
-          method: "POST",
-          body: cloudData,
+      // Adăugăm imaginile (multiple)
+      if (form.imgs.length > 0) {
+        form.imgs.forEach((file) => {
+          formData.append("imgs", file);
         });
-
-        if (!res.ok) throw new Error("Eroare upload imagine Cloudinary");
-
-        const data = await res.json();
-        uploadedUrls.push(data.secure_url);
       }
-
-      // 3️⃣ Trimite payload-ul complet la backend
-      const productPayload = { ...form, imgs: uploadedUrls };
 
       const res = await fetch("/api/products", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(productPayload),
+        body: formData, // ⚠️ fără headers JSON
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data?.error || "Eroare la salvare produs.");
+        setError(data?.error || "A apărut o eroare la salvare.");
         return;
       }
 
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
       setForm(initialForm);
-
     } catch (err) {
-      console.error(err);
-      setError("Nu s-au putut încărca imaginile sau salva produsul.");
+      setError("Nu s-a putut trimite cererea către server.");
     } finally {
       setIsSubmitting(false);
     }
@@ -110,41 +98,24 @@ export default function ProductForm() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Input label="Name" name="name" value={form.name} onChange={handleChange} required />
-        <Select
-          label="Category"
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          options={["agri", "construction", "attachments"]}
-        />
+        <Select label="Category" name="category" value={form.category} onChange={handleChange} options={["agri", "construction", "attachments"]} />
         <Input label="Price" name="price" type="number" value={form.price} onChange={handleChange} />
         <Input label="Year" name="year" type="number" value={form.year} onChange={handleChange} />
         <Input label="Manufacturer" name="manufacturer" value={form.manufacturer} onChange={handleChange} />
         <Input label="Model" name="model" value={form.model} onChange={handleChange} />
-        <Select
-          label="Condition"
-          name="condition"
-          value={form.condition}
-          onChange={handleChange}
-          options={["Used", "New"]}
-        />
+        <Select label="Condition" name="condition" value={form.condition} onChange={handleChange} options={["Used", "New"]} />
         <Input label="Hours" name="hours" type="number" value={form.hours} onChange={handleChange} />
         <Input label="Loader" name="loader" value={form.loader} onChange={handleChange} />
         <Input label="Backhoe" name="backhoe" value={form.backhoe} onChange={handleChange} />
         <Input label="Cab" name="cab" value={form.cab} onChange={handleChange} />
-        <Input
-          label="Engine Horsepower"
-          name="engineHorsepower"
-          type="number"
-          value={form.engineHorsepower}
-          onChange={handleChange}
-        />
+        <Input label="Engine Horsepower" name="engineHorsepower" type="number" value={form.engineHorsepower} onChange={handleChange} />
         <Input label="Drive" name="drive" value={form.drive} onChange={handleChange} />
         <Input label="Transmission Type" name="transmissionType" value={form.transmissionType} onChange={handleChange} />
+        <Input label="Stock Number" name="stockNumber" type="number" value={form.stockNumber} onChange={handleChange} />
       </div>
 
       <div className="mt-4">
-        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">
+        <label className="block mb-1 text-sm font-medium" htmlFor="description">
           Description
         </label>
         <textarea
@@ -157,53 +128,15 @@ export default function ProductForm() {
         />
       </div>
 
-      <div className="mt-6">
-        <label className="block mb-2 text-sm font-semibold text-[#1a1a1a]">
-          Upload Images
-        </label>
-
-        <label
-          htmlFor="imgs"
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black/20 bg-black/[0.02] px-6 py-10 text-center cursor-pointer hover:border-[#c9a227] hover:bg-[#c9a227]/10 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 text-black/60"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5V19a2 2 0 002 2h14a2 2 0 002-2v-2.5M16 12l-4-4m0 0L8 12m4-4v9"
-            />
-          </svg>
-
-          <span className="text-sm font-medium text-black/80">
-            Click to upload images
-          </span>
-
-          <span className="text-xs text-black/50">
-            PNG, JPG, WEBP – multiple allowed
-          </span>
-
-          {form.imgs.length > 0 && (
-            <span className="mt-2 text-xs font-semibold text-[#c9a227]">
-              {form.imgs.length} image(s) selected
-            </span>
-          )}
-        </label>
-
+      <div className="mt-4">
+        <label className="block mb-1 text-sm font-medium">Upload Images</label>
         <input
-          id="imgs"
           type="file"
           name="imgs"
           multiple
           accept="image/*"
           onChange={handleChange}
-          className="hidden"
+          className="w-full"
         />
       </div>
 
@@ -224,7 +157,7 @@ export default function ProductForm() {
 function Input({ label, name, value, onChange, type = "text", required = false }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>
+      <label className="block mb-1 text-sm font-medium" htmlFor={name}>
         {label}
       </label>
       <input
@@ -243,7 +176,7 @@ function Input({ label, name, value, onChange, type = "text", required = false }
 function Select({ label, name, value, onChange, options }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>
+      <label className="block mb-1 text-sm font-medium" htmlFor={name}>
         {label}
       </label>
       <select
