@@ -23,6 +23,7 @@ export async function POST(request) {
       condition: body.condition || "Used",
       hours: body.hours,
       description: body.description || "",
+      fuel: body.fuel || "",
       loader: body.loader || "",
       backhoe: body.backhoe || "",
       cab: body.cab || "",

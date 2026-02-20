@@ -1,25 +1,27 @@
 "use client";
 
 import { useState } from "react";
+import imageCompression from "browser-image-compression";
 
 const initialForm = {
   name: "",
-  category: "agri",
+  category: "agriculture",
   price: 0,
   year: new Date().getFullYear(),
   manufacturer: "",
   model: "",
   condition: "Used",
+  fuel: "",
   hours: 0,
   description: "",
+  imgs: [],
+  engineHorsepower: 0,
+    // opționale
   loader: "",
   backhoe: "",
   cab: "",
-  engineHorsepower: 0,
   drive: "",
   transmissionType: "",
-  stockNumber: 0,
-  imgs: [],
 };
 
 export default function ProductForm() {
@@ -30,7 +32,7 @@ export default function ProductForm() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    const numericFields = ["price", "year", "hours", "engineHorsepower", "stockNumber"];
+    const numericFields = ["price", "year", "hours", "engineHorsepower"];
 
     if (name === "imgs") {
       setForm((prev) => ({ ...prev, imgs: Array.from(files) }));
@@ -49,30 +51,38 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      const uploadedUrls = [];
+      // 🔹 Comprimă + convertește imagini în paralel
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: "image/webp",
+        initialQuality: 0.8,
+      };
 
-      // 1️⃣ Upload imagini direct în Cloudinary
-      for (const file of form.imgs) {
+      const uploadPromises = form.imgs.map(async (file) => {
+        const compressedFile = await imageCompression(file, options);
+
         const cloudData = new FormData();
-        cloudData.append("file", file);
-        cloudData.append("upload_preset", "oknamu"); // preset Unsigned
+        cloudData.append("file", compressedFile);
+        cloudData.append("upload_preset", "oknamu");
         cloudData.append("folder", "products");
-        cloudData.append("format", "webp");
 
         const res = await fetch(
           "https://api.cloudinary.com/v1_1/dt8xieeaj/image/upload",
           { method: "POST", body: cloudData }
         );
 
+        const data = await res.json();
         if (!res.ok) throw new Error("Eroare upload imagine Cloudinary");
 
-        const data = await res.json();
-        uploadedUrls.push(data.secure_url);
-      }
+        return data.secure_url;
+      });
 
-      // 2️⃣ Trimitem payload-ul la backend
+      const uploadedUrls = await Promise.all(uploadPromises);
+
+      // Trimitem payload-ul la backend
       const payload = { ...form, imgs: uploadedUrls };
-
       const res = await fetch("/api/products", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -80,14 +90,13 @@ export default function ProductForm() {
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setError(data?.error || "A apărut o eroare la salvare.");
         return;
       }
 
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
-      setForm(initialForm);
+      setForm(initialForm); // 🔹 reset complet
     } catch (err) {
       console.error(err);
       setError("Nu s-au putut încărca imaginile sau salva produsul.");
@@ -97,37 +106,42 @@ export default function ProductForm() {
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto max-w-4xl rounded-2xl border border-black/10 bg-white p-6 shadow-sm md:p-8"
-    >
+    <form onSubmit={handleSubmit} className="mx-auto max-w-4xl rounded-2xl border border-black/10 bg-white p-6 shadow-sm md:p-8">
       <h2 className="text-2xl font-semibold text-[#1a1a1a] mb-4">Create Product</h2>
 
+      {/* Required fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input label="Name" name="name" value={form.name} onChange={handleChange} required />
-        <Select label="Category" name="category" value={form.category} onChange={handleChange} options={["agri", "construction", "attachments"]} />
-        <Input label="Price" name="price" type="number" value={form.price} onChange={handleChange} />
-        <Input label="Year" name="year" type="number" value={form.year} onChange={handleChange} />
-        <Input label="Manufacturer" name="manufacturer" value={form.manufacturer} onChange={handleChange} />
-        <Input label="Model" name="model" value={form.model} onChange={handleChange} />
+        <Input label="Name*" name="name" value={form.name} onChange={handleChange} required />
+        <Input label="Price*" name="price" type="number" value={form.price} onChange={handleChange} required />
+        <Input label="Manufacturer*" name="manufacturer" value={form.manufacturer} onChange={handleChange} required />
+        <Input label="Model*" name="model" value={form.model} onChange={handleChange} required />
+        <Input label="Fuel*" name="fuel" value={form.fuel} onChange={handleChange} required/>
+        <Select label="Category" name="category" value={form.category} onChange={handleChange} options={["agriculture", "construction", "attachments"]} />
         <Select label="Condition" name="condition" value={form.condition} onChange={handleChange} options={["Used", "New"]} />
+        <Input label="Year" name="year" type="number" value={form.year} onChange={handleChange} />
         <Input label="Hours" name="hours" type="number" value={form.hours} onChange={handleChange} />
-        <Input label="Loader" name="loader" value={form.loader} onChange={handleChange} />
-        <Input label="Backhoe" name="backhoe" value={form.backhoe} onChange={handleChange} />
-        <Input label="Cab" name="cab" value={form.cab} onChange={handleChange} />
         <Input label="Engine Horsepower" name="engineHorsepower" type="number" value={form.engineHorsepower} onChange={handleChange} />
-        <Input label="Drive" name="drive" value={form.drive} onChange={handleChange} />
-        <Input label="Transmission Type" name="transmissionType" value={form.transmissionType} onChange={handleChange} />
-        <Input label="Stock Number" name="stockNumber" type="number" value={form.stockNumber} onChange={handleChange} />
       </div>
 
-      <div className="mt-4">
-        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">
-          Description
-        </label>
+      {/* Optional fields */}
+      <div className="mt-6 p-4 border-t border-gray-200">
+        <h3 className="font-medium mb-2 text-gray-700">Optional Fields</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Input label="Loader" name="loader" value={form.loader} onChange={handleChange} />
+          <Input label="Backhoe" name="backhoe" value={form.backhoe} onChange={handleChange} />
+          <Input label="Cab" name="cab" value={form.cab} onChange={handleChange} />
+          <Input label="Drive" name="drive" value={form.drive} onChange={handleChange} />
+          <Input label="Transmission Type" name="transmissionType" value={form.transmissionType} onChange={handleChange} />
+        </div>
+      </div>
+
+      {/* Description */}
+      <div className="mt-6">
+        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">Description</label>
         <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition" />
       </div>
 
+      {/* Images */}
       <div className="mt-6">
         <label className="block mb-2 text-sm font-semibold text-[#1a1a1a]">Upload Images</label>
         <label htmlFor="imgs" className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black/20 bg-black/[0.02] px-6 py-10 text-center cursor-pointer hover:border-[#c9a227] hover:bg-[#c9a227]/10 transition">
@@ -141,9 +155,11 @@ export default function ProductForm() {
         <input id="imgs" type="file" name="imgs" multiple accept="image/*" onChange={handleChange} className="hidden" />
       </div>
 
+      {/* Messages */}
       {error && <p className="mt-4 text-red-600">{error}</p>}
       {success && <p className="mt-4 text-green-700">{success}</p>}
 
+      {/* Submit */}
       <button type="submit" disabled={isSubmitting} className="mt-6 w-full md:w-auto rounded-xl bg-[#1a1a1a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c9a227] hover:text-black disabled:opacity-60 disabled:cursor-not-allowed transition">
         {isSubmitting ? "Saving..." : "Create Product"}
       </button>

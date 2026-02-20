@@ -1,18 +1,19 @@
 import { FaTractor, FaCogs } from "react-icons/fa";
 import { GiTowTruck } from "react-icons/gi";
+import ExcavatorBucketIcon from "../icons/ExcavatorBucketIcon"
 
 export default function CategorySeparator({ category }) {
   let IconComponent;
 
   switch (category) {
-    case "agri":
+    case "agriculture":
       IconComponent = FaTractor;
       break;
-    case "uti":
+    case "construction":
       IconComponent = GiTowTruck;
       break;
-    case "ati":
-      IconComponent = FaCogs;
+    case "attachments":
+      IconComponent = ExcavatorBucketIcon;
       break;
     default:
       IconComponent = null;

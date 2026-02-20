@@ -7,12 +7,12 @@ import Link from "next/link";
 
 export default function ListsSection() {
   const products = [
-    { name: "2022 BRANSON 5520CH", price: "USD $33,500", hours: 230, hp: 50, img: "/imgs/tractor1.jpeg", id: "123456" },
-    { name: "2021 JOHN DEERE 4052R", price: "USD $29,800", hours: 180, hp: 55, img: "/imgs/tractor2.jpeg", id: "993456" },
-    { name: "2020 KUBOTA L2501", price: "USD $27,500", hours: 200, hp: 80, img: "/imgs/tractor3.jpeg", id: "fg6867" },
-    { name: "2022 NEW HOLLAND WORKMASTER", price: "USD $31,200", hours: 150, hp: 57, img: "/imgs/tractor4.jpeg", id: "778344" },
-    { name: "2021 MASSEY FERGUSON 1735E", price: "USD $28,900", hours: 210, hp: 60, img: "/imgs/tractor5.jpeg", id: "00964" },
-    { name: "2021 MASSEY FERGUSON 1735E", price: "USD $28,900", hours: 210, hp: 67, img: "/imgs/tractor5.jpeg", id: "12345" },
+    { name: "2022 BRANSON 5520CH", price: 33500, hours: 230, hp: 50, img: "/imgs/tractor1.jpeg", id: "123456" },
+    { name: "2021 JOHN DEERE 4052R", price: 29800, hours: 180, hp: 55, img: "/imgs/tractor2.jpeg", id: "993456" },
+    { name: "2020 KUBOTA L2501", price: 27500, hours: 200, hp: 80, img: "/imgs/tractor3.jpeg", id: "fg6867" },
+    { name: "2022 NEW HOLLAND WORKMASTER", price: 31200, hours: 150, hp: 57, img: "/imgs/tractor4.jpeg", id: "778344" },
+    { name: "2021 MASSEY FERGUSON 1735E", price: 28900, hours: 210, hp: 60, img: "/imgs/tractor5.jpeg", id: "00964" },
+    { name: "2021 MASSEY FERGUSON 1735E", price: 28900, hours: 210, hp: 67, img: "/imgs/tractor5.jpeg", id: "12345" },
   ];
 
   const [modalOpen, setModalOpen] = useState(false);
@@ -49,7 +49,7 @@ export default function ListsSection() {
                   {prod.name}
                 </h3>
                 <div className="mt-1 text-[22px] font-bold text-[#c9a227]">
-                  {prod.price}
+                  USD ${prod.price.toLocaleString()}
                 </div>
               </div>
 

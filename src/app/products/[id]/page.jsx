@@ -10,8 +10,8 @@ import ListsSection from "@/app/components/product/lists";
 // === Obiect de test ===
 const product = { 
   name: "2022 BRANSON 5520CH", 
-  category: "agri",
-  price: "USD $33,500", 
+  category: "agriculture",
+  price: 33500, 
   year: 2022,
   manufacturer: "BRANSON",
   model: "5520CH",
@@ -136,7 +136,7 @@ export default function ProductDetails({ params }) {
 
   {/* Price */}
   <p className="text-3xl font-bold text-[#c9a227]">
-    {product.price}
+    USD ${product.price.toLocaleString()}
   </p>
 
   {/* Send Inquiry Button */}

@@ -2,7 +2,7 @@ export default function Info() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
       <h1 className="text-[24px] md:text-[28px] font-bold text-[#c9a227] mb-4">
-        Quality Used Construction Equipment For Sale
+        Quality Equipment For Sale
       </h1>
       <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
         Based in the picturesque farming community of Lancaster County, Pennsylvania, 
