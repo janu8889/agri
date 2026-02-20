@@ -4,12 +4,12 @@ import { useState } from "react";
 
 const initialForm = {
   name: "",
-  category: "agri", // enum string
+  category: "agri",
   price: 0,
   year: new Date().getFullYear(),
   manufacturer: "",
   model: "",
-  condition: "Used", // enum string
+  condition: "Used",
   hours: 0,
   description: "",
   loader: "",
@@ -18,7 +18,7 @@ const initialForm = {
   engineHorsepower: 0,
   drive: "",
   transmissionType: "",
-  imgs: [], // va fi split in array
+  imgs: [],
 };
 
 export default function ProductForm() {
@@ -29,7 +29,6 @@ export default function ProductForm() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     const numericFields = ["price", "year", "hours", "engineHorsepower"];
 
     if (name === "imgs") {
@@ -52,38 +51,51 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      const formData = new FormData();
+      // 1️⃣ Creează un folder random pentru imagini
+      const folderId = crypto.randomUUID();
 
-      // Adăugăm toate câmpurile normale
-      Object.keys(form).forEach((key) => {
-        if (key !== "imgs") {
-          formData.append(key, form[key]);
-        }
-      });
+      // 2️⃣ Upload imagini direct în Cloudinary
+      const uploadedUrls = [];
+      for (const file of form.imgs) {
+        const cloudData = new FormData();
+        cloudData.append("file", file);
+        cloudData.append("upload_preset", "YOUR_UPLOAD_PRESET"); // schimbă cu preset-ul tău
+        cloudData.append("folder", `products/${folderId}`);
+        cloudData.append("format", "webp");
 
-      // Adăugăm imaginile (multiple)
-      if (form.imgs && form.imgs.length > 0) {
-        form.imgs.forEach((file) => {
-          formData.append("imgs", file);
+        const res = await fetch(`https://api.cloudinary.com/v1_1/YOUR_CLOUD_NAME/image/upload`, {
+          method: "POST",
+          body: cloudData,
         });
+
+        if (!res.ok) throw new Error("Eroare upload imagine Cloudinary");
+
+        const data = await res.json();
+        uploadedUrls.push(data.secure_url);
       }
+
+      // 3️⃣ Trimite payload-ul complet la backend
+      const productPayload = { ...form, imgs: uploadedUrls };
 
       const res = await fetch("/api/products", {
         method: "POST",
-        body: formData, // ⚠️ FĂRĂ headers JSON
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(productPayload),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data?.error || "A apărut o eroare la salvare.");
+        setError(data?.error || "Eroare la salvare produs.");
         return;
       }
 
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
       setForm(initialForm);
+
     } catch (err) {
-      setError("Nu s-a putut trimite cererea către server.");
+      console.error(err);
+      setError("Nu s-au putut încărca imaginile sau salva produsul.");
     } finally {
       setIsSubmitting(false);
     }
