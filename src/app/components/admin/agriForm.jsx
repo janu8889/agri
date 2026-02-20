@@ -33,10 +33,7 @@ export default function ProductForm() {
     const numericFields = ["price", "year", "hours", "engineHorsepower", "stockNumber"];
 
     if (name === "imgs") {
-      setForm((prev) => ({
-        ...prev,
-        imgs: Array.from(files),
-      }));
+      setForm((prev) => ({ ...prev, imgs: Array.from(files) }));
     } else {
       setForm((prev) => ({
         ...prev,
@@ -52,25 +49,34 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      const formData = new FormData();
+      const uploadedUrls = [];
 
-      // Adăugăm toate câmpurile normale
-      Object.keys(form).forEach((key) => {
-        if (key !== "imgs") {
-          formData.append(key, form[key]);
-        }
-      });
+      // 1️⃣ Upload imagini direct în Cloudinary
+      for (const file of form.imgs) {
+        const cloudData = new FormData();
+        cloudData.append("file", file);
+        cloudData.append("upload_preset", "oknamu"); // preset Unsigned
+        cloudData.append("folder", "products");
+        cloudData.append("format", "webp");
 
-      // Adăugăm imaginile (multiple)
-      if (form.imgs.length > 0) {
-        form.imgs.forEach((file) => {
-          formData.append("imgs", file);
-        });
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dt8xieeaj/image/upload",
+          { method: "POST", body: cloudData }
+        );
+
+        if (!res.ok) throw new Error("Eroare upload imagine Cloudinary");
+
+        const data = await res.json();
+        uploadedUrls.push(data.secure_url);
       }
+
+      // 2️⃣ Trimitem payload-ul la backend
+      const payload = { ...form, imgs: uploadedUrls };
 
       const res = await fetch("/api/products", {
         method: "POST",
-        body: formData, // ⚠️ fără headers JSON
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
@@ -83,7 +89,8 @@ export default function ProductForm() {
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
       setForm(initialForm);
     } catch (err) {
-      setError("Nu s-a putut trimite cererea către server.");
+      console.error(err);
+      setError("Nu s-au putut încărca imaginile sau salva produsul.");
     } finally {
       setIsSubmitting(false);
     }
@@ -115,39 +122,29 @@ export default function ProductForm() {
       </div>
 
       <div className="mt-4">
-        <label className="block mb-1 text-sm font-medium" htmlFor="description">
+        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">
           Description
         </label>
-        <textarea
-          id="description"
-          name="description"
-          rows={4}
-          value={form.description}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-        />
+        <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition" />
       </div>
 
-      <div className="mt-4">
-        <label className="block mb-1 text-sm font-medium">Upload Images</label>
-        <input
-          type="file"
-          name="imgs"
-          multiple
-          accept="image/*"
-          onChange={handleChange}
-          className="w-full"
-        />
+      <div className="mt-6">
+        <label className="block mb-2 text-sm font-semibold text-[#1a1a1a]">Upload Images</label>
+        <label htmlFor="imgs" className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black/20 bg-black/[0.02] px-6 py-10 text-center cursor-pointer hover:border-[#c9a227] hover:bg-[#c9a227]/10 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5V19a2 2 0 002 2h14a2 2 0 002-2v-2.5M16 12l-4-4m0 0L8 12m4-4v9" />
+          </svg>
+          <span className="text-sm font-medium text-black/80">Click to upload images</span>
+          <span className="text-xs text-black/50">PNG, JPG, WEBP – multiple allowed</span>
+          {form.imgs.length > 0 && <span className="mt-2 text-xs font-semibold text-[#c9a227]">{form.imgs.length} image(s) selected</span>}
+        </label>
+        <input id="imgs" type="file" name="imgs" multiple accept="image/*" onChange={handleChange} className="hidden" />
       </div>
 
       {error && <p className="mt-4 text-red-600">{error}</p>}
       {success && <p className="mt-4 text-green-700">{success}</p>}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-6 w-full md:w-auto rounded-xl bg-[#1a1a1a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c9a227] hover:text-black disabled:opacity-60 disabled:cursor-not-allowed transition"
-      >
+      <button type="submit" disabled={isSubmitting} className="mt-6 w-full md:w-auto rounded-xl bg-[#1a1a1a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c9a227] hover:text-black disabled:opacity-60 disabled:cursor-not-allowed transition">
         {isSubmitting ? "Saving..." : "Create Product"}
       </button>
     </form>
@@ -157,18 +154,8 @@ export default function ProductForm() {
 function Input({ label, name, value, onChange, type = "text", required = false }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium" htmlFor={name}>
-        {label}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        required={required}
-        value={value}
-        onChange={onChange}
-        className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-      />
+      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>{label}</label>
+      <input id={name} name={name} type={type} required={required} value={value} onChange={onChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition" />
     </div>
   );
 }
@@ -176,21 +163,9 @@ function Input({ label, name, value, onChange, type = "text", required = false }
 function Select({ label, name, value, onChange, options }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium" htmlFor={name}>
-        {label}
-      </label>
-      <select
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
+      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>{label}</label>
+      <select id={name} name={name} value={value} onChange={onChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition">
+        {options.map((o) => (<option key={o} value={o}>{o}</option>))}
       </select>
     </div>
   );
