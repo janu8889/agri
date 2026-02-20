@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import ContactModal from "../ContactModal";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import { usePathname } from "next/navigation";
@@ -153,116 +154,116 @@ export default function Header() {
       )}
 
 
-{/* ---------------- Contact Modal ---------------- */}
-{contactOpen && (
-  <div
-    className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
-    onClick={(e) => {
-      if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setContactOpen(false);
-      }
-    }}
-  >
-    <div
-      ref={modalRef}
-      className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
-    >
-      <button
-        onClick={() => setContactOpen(false)}
-        className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
-      >
-        <FaTimes />
-      </button>
-
-      <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
-        Do you have any questions?
-      </h3>
-
-      <p className="text-xs text-gray-500 mb-4">
-        All fields marked with an (*) are required.
-      </p>
-
-      <form className="flex flex-col gap-4">
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="First Name *"
-            className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            required
-          />
-          <input
-            type="text"
-            placeholder="Last Name *"
-            className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            required
-          />
-        </div>
-
-        <input
-          type="text"
-          placeholder="Business Name"
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-        />
-
-        <input
-          type="text"
-          placeholder="Address *"
-          required
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-        />
-
-        <div className="flex gap-2">
-          <input
-            type="text"
-            placeholder="City *"
-            required
-            className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-          />
-          <input
-            type="text"
-            placeholder="State *"
-            required
-            className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-          />
-        </div>
-
-        <input
-          type="text"
-          placeholder="Zip Code *"
-          required
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-        />
-
-        <input
-          type="email"
-          placeholder="Email *"
-          required
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-        />
-
-        <input
-          type="text"
-          placeholder="Phone Number *"
-          required
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-        />
-
-        <textarea
-          rows={4}
-          placeholder="Message"
-          className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-        />
-
-        <button
-          type="submit"
-          className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+      {/* ---------------- Contact Modal ---------------- */}
+      {contactOpen && (
+        <div
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
+          onClick={(e) => {
+            if (modalRef.current && !modalRef.current.contains(e.target)) {
+              setContactOpen(false);
+            }
+          }}
         >
-          Send Inquiry
-        </button>
-      </form>
-    </div>
-  </div>
-)}
+          <div
+            ref={modalRef}
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
+          >
+            <button
+              onClick={() => setContactOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
+            >
+              <FaTimes />
+            </button>
+
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
+              Do you have any questions?
+            </h3>
+
+            <p className="text-xs text-gray-500 mb-4">
+              All fields marked with an (*) are required.
+            </p>
+
+            <form className="flex flex-col gap-4">
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="First Name *"
+                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                  required
+                />
+                <input
+                  type="text"
+                  placeholder="Last Name *"
+                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                  required
+                />
+              </div>
+
+              <input
+                type="text"
+                placeholder="Business Name"
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Address *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <div className="flex gap-2">
+                <input
+                  type="text"
+                  placeholder="City *"
+                  required
+                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                />
+                <input
+                  type="text"
+                  placeholder="State *"
+                  required
+                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                />
+              </div>
+
+              <input
+                type="text"
+                placeholder="Zip Code *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="email"
+                placeholder="Email *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Phone Number *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <textarea
+                rows={4}
+                placeholder="Message"
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+              />
+
+              <button
+                type="submit"
+                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+              >
+                Send Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </header>
   );
 }
