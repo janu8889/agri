@@ -52,7 +52,7 @@ export default function FilterSection({ defaultCategory, onFilter }) {
         />
         <button
           onClick={handleSearch}
-          className="bg-black text-white px-4 rounded-r"
+          className="bg-black text-white px-4 rounded-r cursor-pointer"
         >
           <FaSearch />
         </button>
