@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 
-export default function FilterSection() {
+export default function FilterSection({ defaultCategory, onFilter }) {
   const [filters, setFilters] = useState({
     search: "",
-    category: "",
+    category: defaultCategory || "",
     manufacturer: "",
     yearMin: "",
     yearMax: "",
@@ -16,25 +16,31 @@ export default function FilterSection() {
     hoursMax: "",
     hpMin: "",
     hpMax: "",
-    sort: ""
+    sort: "",
   });
+
+  // dacă defaultCategory se schimbă (ex: altă pagină)
+  useEffect(() => {
+    setFilters((prev) => ({
+      ...prev,
+      category: defaultCategory || "",
+    }));
+  }, [defaultCategory]);
 
   const handleChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
   };
 
   const handleSearch = () => {
-    console.log("Filters:", filters);
-    // logica reală de filtrare/sortare
+    onFilter(filters);
   };
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 mb-10">
-      <h2 className="text-xl font-bold text-[#1a1a1a] mb-6">
+      <h2 className="text-xl font-bold mb-6">
         Search & Filter Equipment
       </h2>
 
-      {/* SEARCH */}
       <div className="flex mb-6">
         <input
           type="text"
@@ -42,26 +48,24 @@ export default function FilterSection() {
           value={filters.search}
           onChange={handleChange}
           placeholder="Search equipment..."
-          className="border border-gray-300 rounded-l px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+          className="border rounded-l px-3 py-2 w-full"
         />
         <button
           onClick={handleSearch}
-          className="bg-[#1a1a1a] text-white px-4 rounded-r hover:bg-[#c9a227] transition-colors"
+          className="bg-black text-white px-4 rounded-r"
         >
           <FaSearch />
         </button>
       </div>
 
-      {/* FILTER GRID */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Category */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Category</label>
+          <label>Category</label>
           <select
             name="category"
             value={filters.category}
             onChange={handleChange}
-            className="border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#c9a227]"
+            className="border rounded px-3 py-2"
           >
             <option value="">All</option>
             <option value="agriculture">Agriculture</option>
@@ -177,10 +181,9 @@ export default function FilterSection() {
             />
           </div>
         </div>
-
       </div>
 
-      {/* Global Apply Filters */}
+      {/* Apply Filters Button jos */}
       <div className="mt-6 text-right md:text-right">
         <button
           onClick={handleSearch}

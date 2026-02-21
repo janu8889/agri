@@ -6,6 +6,8 @@ import CategorySeparator from "@/app/components/product/category";
 import ListsSection from "@/app/components/product/lists";
 import { useParams } from "next/navigation";
 
+const BATCH_SIZE = 7; // câte thumbnails încărcăm pe batch
+
 export default function ProductDetailsClient() {
   const params = useParams();
   const id = params.id;
@@ -16,6 +18,8 @@ export default function ProductDetailsClient() {
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [thumbBatch, setThumbBatch] = useState([]);
+
   const inquiryRef = useRef();
   const thumbsRef = useRef(null);
   const modalRef = useRef(null);
@@ -28,8 +32,18 @@ export default function ProductDetailsClient() {
         const res = await fetch(`/api/products/${id}`);
         if (!res.ok) return;
         const data = await res.json();
+
+        // Optimizează imaginile pentru thumbnails
+        const optimizedImgs = data.imgs.map((url) =>
+          url.replace("/upload/", "/upload/f_auto,q_auto,w_200/")
+        );
+        data.optimizedImgs = optimizedImgs;
+
         setProduct(data);
         setMainImg(data.imgs?.[0] || "/imgs/placeholder.png");
+
+        // Primele BATCH_SIZE thumbnails
+        setThumbBatch(optimizedImgs.slice(0, BATCH_SIZE));
       } catch (err) {
         console.error(err);
       }
@@ -82,17 +96,27 @@ export default function ProductDetailsClient() {
   const prevImage = () =>
     currentIndex > 0 && setMainImg(product.imgs[currentIndex - 1]);
 
+  // Main image optimizată (1200px)
+  const mainImgOptimized = mainImg.replace("/upload/", "/upload/f_auto,q_auto,w_600/");
+
+  // Încarcă batch-ul următor de thumbnails
+  const loadNextBatch = () => {
+    const currentLength = thumbBatch.length;
+    if (currentLength >= product.optimizedImgs.length) return;
+    const nextBatch = product.optimizedImgs.slice(currentLength, currentLength + BATCH_SIZE);
+    setThumbBatch([...thumbBatch, ...nextBatch]);
+  };
+
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12">
         <div className="flex flex-col lg:flex-row gap-10">
-
           {/* LEFT COLUMN */}
           <div className="w-full lg:w-[500px] flex-shrink-0">
             {/* Main Image */}
             <div className="relative w-full h-[400px] overflow-hidden rounded-xl shadow-lg">
               <img
-                src={mainImg}
+                src={mainImgOptimized}
                 alt={product.name}
                 className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
                 onClick={() => setGalleryModalOpen(true)}
@@ -117,16 +141,31 @@ export default function ProductDetailsClient() {
             </div>
 
             {/* Thumbnails scrollabile */}
-            <div ref={thumbsRef} className="flex gap-2 mt-3 overflow-x-auto scrollbar-none">
-              {product.imgs.map((img, idx) => (
+            <div
+              ref={thumbsRef}
+              className="flex gap-2 mt-3 overflow-x-auto scrollbar-none"
+              onScroll={() => {
+                if (
+                  thumbsRef.current.scrollLeft + thumbsRef.current.clientWidth >=
+                  thumbsRef.current.scrollWidth - 50
+                ) {
+                  loadNextBatch();
+                }
+              }}
+            >
+              {thumbBatch.map((img, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setMainImg(img)}
-                  className={`min-w-[80px] h-[80px] rounded overflow-hidden border-2 cursor-pointer transition ${
-                    mainImg === img ? "border-[#c9a227] active-thumb" : "border-transparent"
+                  onClick={() => setMainImg(product.imgs[idx])}
+                  className={`relative w-[80px] h-[80px] flex-shrink-0 rounded overflow-hidden border-2 cursor-pointer transition ${
+                    mainImg === product.imgs[idx] ? "border-[#c9a227] active-thumb" : "border-transparent"
                   }`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                  <img
+                    src={img}
+                    alt=''
+                    className="w-full h-full object-cover"
+                  />
                 </div>
               ))}
             </div>
@@ -187,7 +226,11 @@ export default function ProductDetailsClient() {
             >
               <FaTimes />
             </button>
-            <img src={mainImg} alt="Product Large" className="w-full h-auto rounded shadow-lg" />
+            <img
+              src={mainImgOptimized}
+              alt="Product Large"
+              className="w-full h-auto rounded shadow-lg"
+            />
             {currentIndex > 0 && (
               <button
                 onClick={prevImage}
