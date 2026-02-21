@@ -1,8 +1,27 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import FilterSection from "@/app/components/products/filtreSection";
 import CategorySeparator from "@/app/components/product/category";
 import FiltreList from "@/app/components/products/filtreList";
 
 export default function Construction() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        const res = await fetch("/api/products/inventoryDefault?category=construction");
+        const data = await res.json();
+        setProducts(data.products || []);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+
+    fetchProducts();
+  }, []);
+
   return (
     <div className="max-w-screen-2xl mx-auto px-6">
       {/* Header categorie cu descriere */}

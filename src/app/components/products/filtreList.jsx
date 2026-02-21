@@ -5,23 +5,17 @@ import { FaSearch, FaClock, FaTimes, FaPlus } from "react-icons/fa";
 import { TbEngine } from "react-icons/tb";
 import Link from "next/link";
 
-// ... păstrează restul importurilor și starea produselor
-
-export default function ListsSection() {
-  const initialProducts = [
-    { name: "2022 BRANSON 5520CH", price: 33500, hours: 230, hp: 50, img: "/imgs/tractor1.jpeg", id: "123456" },
-    { name: "2021 JOHN DEERE 4052R", price: 29800, hours: 180, hp: 55, img: "/imgs/tractor2.jpeg", id: "993456" },
-    { name: "2020 KUBOTA L2501", price: 27500, hours: 200, hp: 80, img: "/imgs/tractor3.jpeg", id: "fg6867" },
-    { name: "2022 NEW HOLLAND WORKMASTER", price: 31200, hours: 150, hp: 57, img: "/imgs/tractor4.jpeg", id: "778344" },
-    { name: "2021 MASSEY FERGUSON 1735E", price: 28900, hours: 210, hp: 60, img: "/imgs/tractor5.jpeg", id: "00964" },
-    { name: "2021 MASSEY FERGUSON 1735E", price: 28900, hours: 210, hp: 67, img: "/imgs/tractor5.jpeg", id: "12345" },
-  ];
-
-  const [products, setProducts] = useState(initialProducts);
+export default function FiltreList({ products: initialProducts }) {
+  const [products, setProducts] = useState(initialProducts || []);
   const [sort, setSort] = useState("");
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const modalRef = useRef(null);
+
+  // actualizare produse dacă prop-ul se schimbă
+  useEffect(() => {
+    setProducts(initialProducts || []);
+  }, [initialProducts]);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -33,8 +27,7 @@ export default function ListsSection() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalOpen]);
 
-  const handleLoadMore = () => setProducts(prev => [...prev, ...initialProducts]);
-
+  // restul codului rămâne la fel: sortare, modal, load more etc.
   const handleSortChange = (e) => {
     setSort(e.target.value);
     let sorted = [...products];
@@ -52,15 +45,19 @@ export default function ListsSection() {
         sorted.sort((a, b) => b.hours - a.hours);
         break;
       case "yearNew":
-        sorted.sort((a, b) => parseInt(b.name.slice(0, 4)) - parseInt(a.name.slice(0, 4)));
+        sorted.sort((a, b) => b.year - a.year);
         break;
       case "yearOld":
-        sorted.sort((a, b) => parseInt(a.name.slice(0, 4)) - parseInt(b.name.slice(0, 4)));
+        sorted.sort((a, b) => a.year - b.year);
         break;
       default:
         break;
     }
     setProducts(sorted);
+  };
+
+  const handleLoadMore = () => {
+    setProducts(prev => [...prev, ...(initialProducts || [])]);
   };
 
   return (
@@ -89,8 +86,8 @@ export default function ListsSection() {
 
         {/* GRID PRODUSE */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-8">
-          {products.map((prod, idx) => (
-            <div key={idx} className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden flex flex-col group">
+          {products.map((prod) => (
+            <div key={prod._id || prod.id} className="bg-white rounded-2xl shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-500 overflow-hidden flex flex-col group">
               {/* TITLE & PRICE */}
               <div className="p-6 flex flex-col items-left text-left">
                 <h3 className="font-semibold text-[#1a1a1a] text-[15px] leading-snug line-clamp-2">{prod.name}</h3>
@@ -98,21 +95,18 @@ export default function ListsSection() {
               </div>
               {/* IMAGE */}
               <div className="relative h-56 w-full overflow-hidden">
-                <img src={prod.img} alt={prod.name} className="object-cover w-full h-full transform group-hover:scale-105 transition duration-700 ease-out" />
+                <img
+                  src={prod.imgs?.[0] || prod.img || "/imgs/default.jpeg"}
+                  alt={prod.name}
+                  className="object-cover w-full h-full transform group-hover:scale-105 transition duration-700 ease-out"
+                />
               </div>
               {/* TECH INFO */}
               <div className="p-6 flex flex-col flex-grow items-center">
                 <div className="flex justify-center items-center gap-5 text-[#555] text-[14px] font-medium mt-3">
                   <span className="flex items-center gap-2"><FaClock className="text-[#c9a227]" />{prod.hours} hrs</span>
                   <span className="h-4 w-px bg-gray-300"></span>
-                  <span className="flex items-center gap-2">
-                    <TbEngine className="text-[#c9a227]" />
-                      {prod.hp} HP
-                  </span>                  </div>
-                {/* BUTTONS */}
-                <div className="mt-8 flex flex-col gap-3 w-full">
-                  <button onClick={() => { setSelectedProduct(prod); setModalOpen(true); }} className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 w-full">Get Shipping Quotes</button>
-                  <Link href={`/products/${prod.id}`} className="border border-[#1a1a1a] text-[#1a1a1a] font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1a1a1a] hover:text-white transition-all duration-300 w-full"><FaSearch />View Details</Link>
+                  <span className="flex items-center gap-2"><TbEngine className="text-[#c9a227]" />{prod.engineHorsepower || prod.hp} HP</span>
                 </div>
               </div>
             </div>
@@ -125,24 +119,8 @@ export default function ListsSection() {
             <FaPlus /> More
           </button>
         </div>
-      </div>
 
-      {/* MODAL */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 px-4">
-          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
-            <button onClick={() => setModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"><FaTimes /></button>
-            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-4">Shipping Quote Inquiry</h3>
-            {selectedProduct && <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>}
-            <form className="flex flex-col gap-4">
-              <input type="text" placeholder="Name" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="email" placeholder="Email" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="text" placeholder="Cell Phone" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <button type="submit" className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">Send Inquiry</button>
-            </form>
-          </div>
-        </div>
-      )}
+      </div>
     </section>
   );
 }
