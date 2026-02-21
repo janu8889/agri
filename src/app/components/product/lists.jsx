@@ -20,8 +20,21 @@ export default function ProductsSection({ products }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalOpen]);
 
-  if (!products.length)
-    return <p className="text-center py-16">Loading products...</p>;
+  if (!products) {
+    return (
+      <div className="bg-[#f3f4f6] py-32 flex justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="bg-[#f3f4f6] py-32 text-center text-gray-500">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <section className="bg-[#f3f4f6] py-16">

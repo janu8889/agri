@@ -26,7 +26,7 @@ export default function Carousel({ images }) {
           index === current ? "opacity-100" : "opacity-0"
         }`}
       >
-        <img src={img} alt={`Slide ${index}`} className="w-full h-full object-cover" />
+        <img src={img} className="w-full h-full object-cover" />
         {/* Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
         {/* Text */}
