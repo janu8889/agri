@@ -8,39 +8,36 @@ import { useParams } from "next/navigation";
 
 export default function ProductDetailsClient() {
   const params = useParams();
-  const id = params.id; // id-ul produsului din URL
+  const id = params.id;
 
   const [product, setProduct] = useState(null);
   const [mainImg, setMainImg] = useState("");
   const [galleryModalOpen, setGalleryModalOpen] = useState(false);
   const [inquiryModalOpen, setInquiryModalOpen] = useState(false);
   const [products, setProducts] = useState([]);
+  const [selectedProduct, setSelectedProduct] = useState(null);
   const inquiryRef = useRef();
+  const thumbsRef = useRef(null);
+  const modalRef = useRef(null);
 
-  // === Fetch produsul curent ===
+  // Fetch produsul curent
   useEffect(() => {
     if (!id) return;
-
     async function fetchProduct() {
       try {
-        const res = await fetch(`/api/products/${id}/single`);
-
-        if (!res.ok) {
-          console.error("Product not found");
-          return;
-        }
+        const res = await fetch(`/api/products/${id}`);
+        if (!res.ok) return;
         const data = await res.json();
         setProduct(data);
         setMainImg(data.imgs?.[0] || "/imgs/placeholder.png");
       } catch (err) {
-        console.error("Failed to fetch product:", err);
+        console.error(err);
       }
     }
-
     fetchProduct();
   }, [id]);
 
-  // === Fetch produse random pentru lista de sugestii ===
+  // Fetch produse random
   useEffect(() => {
     async function fetchProducts() {
       try {
@@ -48,52 +45,63 @@ export default function ProductDetailsClient() {
         const data = await res.json();
         setProducts(data.products || []);
       } catch (err) {
-        console.error("Failed to fetch random products:", err);
+        console.error(err);
       }
     }
-
     fetchProducts();
   }, []);
 
-  // === Close inquiry modal la click în afara ===
+  // Close inquiry modal la click în afara
   useEffect(() => {
     function handleClickOutside(e) {
-      if (inquiryRef.current && !inquiryRef.current.contains(e.target)) {
+      if (
+        (inquiryModalOpen && inquiryRef.current && !inquiryRef.current.contains(e.target)) ||
+        (modalRef.current && !modalRef.current.contains(e.target))
+      ) {
         setInquiryModalOpen(false);
       }
     }
-    if (inquiryModalOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
+    document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [inquiryModalOpen]);
+
+  // Scroll automat la thumbnail-ul activ
+  useEffect(() => {
+    if (!thumbsRef.current || !product) return;
+    const activeThumb = thumbsRef.current.querySelector(".active-thumb");
+    if (activeThumb) {
+      activeThumb.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    }
+  }, [mainImg, product]);
 
   if (!product) return <p className="text-center py-16">Loading product...</p>;
 
   const currentIndex = product.imgs.indexOf(mainImg);
-  const nextImage = () => setMainImg(product.imgs[(currentIndex + 1) % product.imgs.length]);
-  const prevImage = () => currentIndex > 0 && setMainImg(product.imgs[currentIndex - 1]);
+  const nextImage = () =>
+    setMainImg(product.imgs[(currentIndex + 1) % product.imgs.length]);
+  const prevImage = () =>
+    currentIndex > 0 && setMainImg(product.imgs[currentIndex - 1]);
 
   return (
     <>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-12">
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col lg:flex-row gap-10">
 
-          {/* IMAGES LEFT */}
-          <div className="flex flex-col gap-3">
-            <div className="relative w-full lg:w-[500px] h-[400px] cursor-pointer overflow-hidden rounded-xl shadow-lg">
+          {/* LEFT COLUMN */}
+          <div className="w-full lg:w-[500px] flex-shrink-0">
+            {/* Main Image */}
+            <div className="relative w-full h-[400px] overflow-hidden rounded-xl shadow-lg">
               <img
                 src={mainImg}
                 alt={product.name}
-                className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                className="w-full h-full object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
                 onClick={() => setGalleryModalOpen(true)}
               />
+
               {currentIndex > 0 && (
                 <button
                   onClick={prevImage}
-                  className="absolute top-1/2 -translate-y-1/2 left-2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-80 transition"
+                  className="absolute top-1/2 -translate-y-1/2 left-3 bg-black/60 text-white p-2 rounded-full hover:bg-black transition"
                 >
                   <FaArrowLeft />
                 </button>
@@ -101,22 +109,22 @@ export default function ProductDetailsClient() {
               {currentIndex < product.imgs.length - 1 && (
                 <button
                   onClick={nextImage}
-                  className="absolute top-1/2 -translate-y-1/2 right-2 bg-black bg-opacity-50 text-white p-2 rounded-full hover:bg-opacity-80 transition"
+                  className="absolute top-1/2 -translate-y-1/2 right-3 bg-black/60 text-white p-2 rounded-full hover:bg-black transition"
                 >
                   <FaArrowRight />
                 </button>
               )}
             </div>
 
-            {/* Thumbnails */}
-            <div className="flex gap-2 mt-2">
+            {/* Thumbnails scrollabile */}
+            <div ref={thumbsRef} className="flex gap-2 mt-3 overflow-x-auto scrollbar-none">
               {product.imgs.map((img, idx) => (
                 <div
                   key={idx}
-                  className={`w-20 h-20 cursor-pointer rounded overflow-hidden border-2 ${
-                    mainImg === img ? "border-[#c9a227] shadow-md" : "border-transparent"
-                  } transition-all duration-300`}
                   onClick={() => setMainImg(img)}
+                  className={`min-w-[80px] h-[80px] rounded overflow-hidden border-2 cursor-pointer transition ${
+                    mainImg === img ? "border-[#c9a227] active-thumb" : "border-transparent"
+                  }`}
                 >
                   <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
                 </div>
@@ -124,31 +132,43 @@ export default function ProductDetailsClient() {
             </div>
           </div>
 
-          {/* INFO RIGHT */}
+          {/* RIGHT COLUMN */}
           <div className="flex-1 flex flex-col gap-6">
-            <h1 className="text-4xl font-extrabold text-[#1a1a1a] leading-tight">{product.name}</h1>
+            <h1 className="text-4xl font-extrabold leading-tight">{product.name}</h1>
             <p className="text-3xl font-bold text-[#c9a227]">USD ${product.price.toLocaleString()}</p>
+
+            {/* SEND INQUIRY BUTTON */}
             <button
-              onClick={() => setInquiryModalOpen(true)}
-              className="bg-[#1a1a1a] text-white py-3 rounded-xl font-bold shadow-md hover:bg-[#c9a227] hover:text-black transition-transform duration-200 hover:scale-105 w-full lg:w-auto px-8"
+              onClick={() => {
+                setSelectedProduct(product);
+                setInquiryModalOpen(true);
+              }}
+              className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-[#c9a227] hover:text-black cursor-pointer transition-all duration-300"
             >
               Send Inquiry
             </button>
 
-            <div className="bg-white p-6 rounded-2xl shadow-lg mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 text-[#444]">
-              {product.year && <div><div className="font-semibold">Year</div>{product.year}</div>}
-              {product.manufacturer && <div><div className="font-semibold">Manufacturer</div>{product.manufacturer}</div>}
-              {product.model && <div><div className="font-semibold">Model</div>{product.model}</div>}
-              {product.condition && <div><div className="font-semibold">Condition</div>{product.condition}</div>}
-              {product.hours && <div><div className="font-semibold">Hours</div>{product.hours} hrs</div>}
-              {product.engineHorsepower && <div><div className="font-semibold">Engine HP</div>{product.engineHorsepower}</div>}
-              {product.drive && <div><div className="font-semibold">Drive</div>{product.drive}</div>}
-              {product.transmissionType && <div><div className="font-semibold">Transmission</div>{product.transmissionType}</div>}
-              {product.description && <div className="col-span-2 mt-2"><span className="font-semibold">Description:</span><p className="mt-1 text-[#555]">{product.description}</p></div>}
+            <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+              {product.year && <Info label="Year" value={product.year} />}
+              {product.manufacturer && <Info label="Manufacturer" value={product.manufacturer} />}
+              {product.model && <Info label="Model" value={product.model} />}
+              {product.condition && <Info label="Condition" value={product.condition} />}
+              {product.hours && <Info label="Hours" value={`${product.hours} hrs`} />}
+              {product.engineHorsepower && <Info label="Engine HP" value={product.engineHorsepower} />}
+              {product.drive && <Info label="Drive" value={product.drive} />}
+              {product.transmissionType && <Info label="Transmission" value={product.transmissionType} />}
+              {product.description && (
+                <div className="md:col-span-2">
+                  <div className="font-semibold">Description</div>
+                  <p className="mt-1 text-gray-600">{product.description}</p>
+                </div>
+              )}
             </div>
 
             {product.stockNumber && (
-              <div className="text-xs text-gray-400 tracking-widest uppercase mt-2">Reference #{product.stockNumber}</div>
+              <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
+                Reference #{product.stockNumber}
+              </div>
             )}
           </div>
         </div>
@@ -156,23 +176,74 @@ export default function ProductDetailsClient() {
 
       {/* GALLERY MODAL */}
       {galleryModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4" onClick={() => setGalleryModalOpen(false)}>
+        <div
+          className="fixed inset-0 bg-black bg-opacity-80 z-50 flex items-center justify-center p-4"
+          onClick={() => setGalleryModalOpen(false)}
+        >
           <div className="relative max-w-4xl w-full scale-95" onClick={(e) => e.stopPropagation()}>
-            <button onClick={() => setGalleryModalOpen(false)} className="absolute top-2 right-2 text-white text-2xl p-2 hover:text-[#c9a227]"><FaTimes /></button>
+            <button
+              onClick={() => setGalleryModalOpen(false)}
+              className="absolute top-2 right-2 text-white text-2xl p-2 hover:text-[#c9a227]"
+            >
+              <FaTimes />
+            </button>
             <img src={mainImg} alt="Product Large" className="w-full h-auto rounded shadow-lg" />
-            {currentIndex > 0 && <button onClick={prevImage} className="absolute top-1/2 -translate-y-1/2 left-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition"><FaArrowLeft /></button>}
-            {currentIndex < product.imgs.length - 1 && <button onClick={nextImage} className="absolute top-1/2 -translate-y-1/2 right-4 bg-black bg-opacity-50 text-white p-3 rounded-full hover:bg-opacity-80 transition"><FaArrowRight /></button>}
+            {currentIndex > 0 && (
+              <button
+                onClick={prevImage}
+                className="absolute top-1/2 -translate-y-1/2 left-4 bg-black/60 text-white p-3 rounded-full hover:bg-black transition"
+              >
+                <FaArrowLeft />
+              </button>
+            )}
+            {currentIndex < product.imgs.length - 1 && (
+              <button
+                onClick={nextImage}
+                className="absolute top-1/2 -translate-y-1/2 right-4 bg-black/60 text-white p-3 rounded-full hover:bg-black transition"
+              >
+                <FaArrowRight />
+              </button>
+            )}
           </div>
         </div>
       )}
 
       {/* INQUIRY MODAL */}
       {inquiryModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 px-4">
-          <div ref={inquiryRef} className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative">
-            <button onClick={() => setInquiryModalOpen(false)} className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl font-bold"><FaTimes /></button>
-            <h3 className="text-[20px] font-bold text-[#1a1a1a] mb-4">Send Inquiry</h3>
-            <p className="mb-4 text-[#555] font-medium">{product.name}</p>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
+          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+            <button
+              onClick={() => setInquiryModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
+            >
+              <FaTimes />
+            </button>
+
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">Inquiry</h3>
+            {selectedProduct && <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>}
+
+            <form className="flex flex-col gap-4">
+              <p className="text-xs text-gray-500 mb-2">All fields marked with an (*) are required.</p>
+
+              <input type="text" placeholder="Name *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <input type="email" placeholder="Email *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <input type="text" placeholder="Cell Phone *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
+                <option value="">Preferred Time to Be Contacted</option>
+                <option>Morning (8AM - 12PM)</option>
+                <option>Afternoon (12PM - 5PM)</option>
+                <option>Evening (5PM - 8PM)</option>
+              </select>
+              <input type="text" placeholder="Address *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <input type="text" placeholder="City *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <input type="text" placeholder="State *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <input type="text" placeholder="Zip Code *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
+              <textarea rows={4} placeholder="Message" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none" />
+
+              <button type="submit" className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
+                Send Inquiry
+              </button>
+            </form>
           </div>
         </div>
       )}
@@ -180,5 +251,14 @@ export default function ProductDetailsClient() {
       <CategorySeparator category={product.category} />
       <ListsSection products={products} />
     </>
+  );
+}
+
+function Info({ label, value }) {
+  return (
+    <div>
+      <div className="font-semibold">{label}</div>
+      <div>{value}</div>
+    </div>
   );
 }

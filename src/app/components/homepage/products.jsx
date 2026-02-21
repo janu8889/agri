@@ -90,8 +90,102 @@ export default function ProductsSection({ products }) {
         </div>
       </div>
 
-      {/* MODAL */}
-      {/* ...păstrează modalul ca înainte */}
+   {/* MODAL */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
+          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
+            >
+              <FaTimes />
+            </button>
+
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
+              Shipping Quote Inquiry
+            </h3>
+
+            {selectedProduct && (
+              <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
+            )}
+
+            <form className="flex flex-col gap-4">
+              <p className="text-xs text-gray-500 mb-2">
+                All fields marked with an (*) are required.
+              </p>
+
+              <input
+                type="text"
+                placeholder="Name *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="email"
+                placeholder="Email *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Cell Phone *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
+                <option value="">Preferred Time to Be Contacted</option>
+                <option>Morning (8AM - 12PM)</option>
+                <option>Afternoon (12PM - 5PM)</option>
+                <option>Evening (5PM - 8PM)</option>
+              </select>
+
+              <input
+                type="text"
+                placeholder="Address *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="City *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="State *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Zip Code *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <textarea
+                rows={4}
+                placeholder="Message"
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+              />
+
+              <button
+                type="submit"
+                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+              >
+                Send Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }

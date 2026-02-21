@@ -101,26 +101,137 @@ export default function FiltreList({ products: initialProducts }) {
                   className="object-cover w-full h-full transform group-hover:scale-105 transition duration-700 ease-out"
                 />
               </div>
-              {/* TECH INFO */}
+                           {/* TECH INFO */}
               <div className="p-6 flex flex-col flex-grow items-center">
                 <div className="flex justify-center items-center gap-5 text-[#555] text-[14px] font-medium mt-3">
-                  <span className="flex items-center gap-2"><FaClock className="text-[#c9a227]" />{prod.hours} hrs</span>
+                  <span className="flex items-center gap-2">
+                    <FaClock className="text-[#c9a227]" /> {prod.hours} hrs
+                  </span>
                   <span className="h-4 w-px bg-gray-300"></span>
-                  <span className="flex items-center gap-2"><TbEngine className="text-[#c9a227]" />{prod.engineHorsepower || prod.hp} HP</span>
+                  <span className="flex items-center gap-2">
+                    <TbEngine className="text-[#c9a227]" /> {prod.engineHorsepower} HP
+                  </span>
+                </div>
+
+                <div className="mt-8 flex flex-col gap-3 w-full">
+                  <button
+                    onClick={() => {
+                      setSelectedProduct(prod);
+                      setModalOpen(true);
+                    }}
+                    className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 w-full"
+                  >
+                    Get Shipping Quotes
+                  </button>
+                  <Link
+                    href={`/products/${prod._id}`}
+                    className="border border-[#1a1a1a] text-[#1a1a1a] font-semibold py-3 rounded-xl flex items-center justify-center gap-2 hover:bg-[#1a1a1a] hover:text-white transition-all duration-300 w-full"
+                  >
+                    <FaSearch /> View Details
+                  </Link>
                 </div>
               </div>
             </div>
           ))}
         </div>
-
-        {/* MORE BUTTON */}
-        <div className="flex justify-center mt-10">
-          <button onClick={handleLoadMore} className="flex cursor-pointer items-center gap-2 bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition">
-            <FaPlus /> More
-          </button>
-        </div>
-
       </div>
+
+   {/* MODAL */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
+          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+            <button
+              onClick={() => setModalOpen(false)}
+              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
+            >
+              <FaTimes />
+            </button>
+
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
+              Shipping Quote Inquiry
+            </h3>
+
+            {selectedProduct && (
+              <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
+            )}
+
+            <form className="flex flex-col gap-4">
+              <p className="text-xs text-gray-500 mb-2">
+                All fields marked with an (*) are required.
+              </p>
+
+              <input
+                type="text"
+                placeholder="Name *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="email"
+                placeholder="Email *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Cell Phone *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
+                <option value="">Preferred Time to Be Contacted</option>
+                <option>Morning (8AM - 12PM)</option>
+                <option>Afternoon (12PM - 5PM)</option>
+                <option>Evening (5PM - 8PM)</option>
+              </select>
+
+              <input
+                type="text"
+                placeholder="Address *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="City *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="State *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="text"
+                placeholder="Zip Code *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <textarea
+                rows={4}
+                placeholder="Message"
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+              />
+
+              <button
+                type="submit"
+                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+              >
+                Send Inquiry
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
