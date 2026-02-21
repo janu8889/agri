@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { FaSearch, FaClock, FaTimes } from "react-icons/fa";
+import Spinner from "../ui/spinner";
 import { TbEngine } from "react-icons/tb";
 import Link from "next/link";
 
