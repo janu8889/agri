@@ -1,24 +1,126 @@
 "use client";
 
 import { useState } from "react";
+import imageCompression from "browser-image-compression";
 
 const initialForm = {
   name: "",
-  category: "uti", // enum string
+  category: "construction",
   price: 0,
   year: new Date().getFullYear(),
   manufacturer: "",
   model: "",
-  condition: "Used", // enum string
-  hours: 0,
+  condition: "Used",
   description: "",
-  loader: "",
-  backhoe: "",
-  cab: "",
+  imgs: [],
+  hours: 0,
+  // optional fields
+  fuel: "",
   engineHorsepower: 0,
+
+  showing: "",
+  standardFlow: "",
+  additionalInformation: "",
+  arm: "",
+  armLength: "",
+  athensDlrPdi: "",
+  auxiliaryHydraulics: "",
+  auxiliaryLighting: "",
+  bucketSize: "",
+  bucket: "",
+  engineTier: "",
+  backAuxiliaryHydraulics: "",
+  backBucketWidth: "",
+  backfillBlade: "",
+  batteryType: "",
+  blockHeater: "",
+  boomSwing: "",
+  boomType: "",
+  bucketWidth: "",
+  camera: "",
+  catKey: "",
+  counterweight: "",
+  counterweightType: "",
+  coupler: "",
+  digDepth: "",
   drive: "",
-  transmissionType: "",
-  imgs: [], // va fi split in array
+  engineMake: "",
+  engineManufacturer: "",
+  engineModel: "",
+  engineOutput: "",
+  engineTurbo: "",
+  extendAHoe: "",
+  exteriorLighting: "",
+  fisier: "",
+  forkLength: "",
+  forkWidth: "",
+  frontAuxiliaryHydraulics: "",
+  frontCoupler: "",
+  frontElectric: "",
+  frontWheelSize: "",
+  frontWheelType: "",
+  fuelCapacity: "",
+  fuelType: "",
+  gradeControl: "",
+  groundPressure: "",
+  headings: "",
+  headlightsWork: "",
+  heater: "",
+  height: "",
+  hydraulicHighFlow: "",
+  keylessStart: "",
+  length: "",
+  liftCapacity: "",
+  liftType: "",
+  lines: "",
+  longUndercarriage: "",
+  maxCapacity: "",
+  maxDumpHeight: "",
+  maxForwardReach: "",
+  maxTravelSpeed: "",
+  maxTravelSpeedEmpty: "",
+  maximumLiftHeight: "",
+  monitorNextGen: "",
+  numberOfBuckets: "",
+  numberOfSpeeds: "",
+  operatingCapacity: "",
+  operatingWeight: "",
+  operatorControls: "",
+  pack: "",
+  packing: "",
+  patternChanger: "",
+  powerType: "",
+  premiumDisplayPanel: "",
+  productConfiguration: "",
+  quickAttach: "",
+  rops: "",
+  rearWheelSize: "",
+  rearWheelType: "",
+  rearviewCamera: "",
+  rideControl: "",
+  seatMaterial: "",
+  seatType: "",
+  selfLeveling: "",
+  serialNumber: "",
+  shippingHeight: "",
+  shippingLength: "",
+  shippingWeight: "",
+  shippingWidth: "",
+  tailSwingConfiguration: "",
+  tailSwingRadius: "",
+  telematics: "",
+  thumb: "",
+  thumbType: "",
+  tippingLoad: "",
+  trackShoeWidth: "",
+  trackSize: "",
+  trackType: "",
+  transmission: "",
+  travelSpeed: "",
+  undercarriageType: "",
+  wheelSize: "",
+  wheelType: "",
+  width: "",
 };
 
 export default function ProductForm() {
@@ -29,14 +131,10 @@ export default function ProductForm() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-
     const numericFields = ["price", "year", "hours", "engineHorsepower"];
 
     if (name === "imgs") {
-      setForm((prev) => ({
-        ...prev,
-        imgs: Array.from(files),
-      }));
+      setForm((prev) => ({ ...prev, imgs: Array.from(files) }));
     } else {
       setForm((prev) => ({
         ...prev,
@@ -52,29 +150,43 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      const formData = new FormData();
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: "image/webp",
+        initialQuality: 0.8,
+      };
 
-      // Adăugăm toate câmpurile normale
-      Object.keys(form).forEach((key) => {
-        if (key !== "imgs") {
-          formData.append(key, form[key]);
-        }
+      const uploadPromises = form.imgs.map(async (file) => {
+        const compressedFile = await imageCompression(file, options);
+
+        const cloudData = new FormData();
+        cloudData.append("file", compressedFile);
+        cloudData.append("upload_preset", "oknamu");
+        cloudData.append("folder", "products");
+
+        const res = await fetch(
+          "https://api.cloudinary.com/v1_1/dt8xieeaj/image/upload",
+          { method: "POST", body: cloudData }
+        );
+
+        const data = await res.json();
+        if (!res.ok) throw new Error("Eroare upload imagine Cloudinary");
+
+        return data.secure_url;
       });
 
-      // Adăugăm imaginile (multiple)
-      if (form.imgs && form.imgs.length > 0) {
-        form.imgs.forEach((file) => {
-          formData.append("imgs", file);
-        });
-      }
+      const uploadedUrls = await Promise.all(uploadPromises);
 
+      const payload = { ...form, imgs: uploadedUrls };
       const res = await fetch("/api/products", {
         method: "POST",
-        body: formData, // ⚠️ FĂRĂ headers JSON
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json();
-
       if (!res.ok) {
         setError(data?.error || "A apărut o eroare la salvare.");
         return;
@@ -83,126 +195,72 @@ export default function ProductForm() {
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
       setForm(initialForm);
     } catch (err) {
-      setError("Nu s-a putut trimite cererea către server.");
+      console.error(err);
+      setError("Nu s-au putut încărca imaginile sau salva produsul.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="mx-auto max-w-4xl rounded-2xl border border-black/10 bg-white p-6 shadow-sm md:p-8"
-    >
+    <form onSubmit={handleSubmit} className="mx-auto max-w-4xl rounded-2xl border border-black/10 bg-white p-6 shadow-sm md:p-8">
       <h2 className="text-2xl font-semibold text-[#1a1a1a] mb-4">Create Product</h2>
 
+      {/* Required fields */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Input label="Name" name="name" value={form.name} onChange={handleChange} required />
-        <Select
-          label="Category"
-          name="category"
-          value={form.category}
-          onChange={handleChange}
-          options={["agri", "construction", "attachments"]}
-        />
-        <Input label="Price" name="price" type="number" value={form.price} onChange={handleChange} />
+        <Input label="Name*" name="name" value={form.name} onChange={handleChange} required />
+        <Input label="Price*" name="price" type="number" value={form.price} onChange={handleChange} required />
+        <Input label="Manufacturer*" name="manufacturer" value={form.manufacturer} onChange={handleChange} required />
+        <Input label="Model*" name="model" value={form.model} onChange={handleChange} required />
+        <Select label="Category" name="category" value={form.category} onChange={handleChange} options={["agriculture", "construction", "attachments"]} />
+        <Select label="Condition" name="condition" value={form.condition} onChange={handleChange} options={["Used", "New"]} />
         <Input label="Year" name="year" type="number" value={form.year} onChange={handleChange} />
-        <Input label="Manufacturer" name="manufacturer" value={form.manufacturer} onChange={handleChange} />
-        <Input label="Model" name="model" value={form.model} onChange={handleChange} />
-        <Select
-          label="Condition"
-          name="condition"
-          value={form.condition}
-          onChange={handleChange}
-          options={["Used", "New"]}
-        />
         <Input label="Hours" name="hours" type="number" value={form.hours} onChange={handleChange} />
-        <Input label="Loader" name="loader" value={form.loader} onChange={handleChange} />
-        <Input label="Backhoe" name="backhoe" value={form.backhoe} onChange={handleChange} />
-        <Input label="Cab" name="cab" value={form.cab} onChange={handleChange} />
-        <Input
-          label="Engine Horsepower"
-          name="engineHorsepower"
-          type="number"
-          value={form.engineHorsepower}
-          onChange={handleChange}
-        />
-        <Input label="Drive" name="drive" value={form.drive} onChange={handleChange} />
-        <Input label="Transmission Type" name="transmissionType" value={form.transmissionType} onChange={handleChange} />
       </div>
 
-      <div className="mt-4">
-        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">
-          Description
-        </label>
-        <textarea
-          id="description"
-          name="description"
-          rows={4}
-          value={form.description}
-          onChange={handleChange}
-          className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-        />
+      {/* Optional fields */}
+      <div className="mt-6 p-4 border-t border-gray-200">
+        <h3 className="font-medium mb-2 text-gray-700">Optional Fields</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* fuel și engineHorsepower */}
+          <Input label="Fuel" name="fuel" value={form.fuel} onChange={handleChange} />
+          <Input label="Engine Horsepower" name="engineHorsepower" type="number" value={form.engineHorsepower} onChange={handleChange} />
+
+          {/* restul opționalelor */}
+          {Object.keys(initialForm)
+            .filter((k) => !["name","price","manufacturer","model","category","condition","year","hours","description","imgs","fuel","engineHorsepower"].includes(k))
+            .map((key) => (
+              <Input key={key} label={key} name={key} value={form[key]} onChange={handleChange} />
+            ))}
+        </div>
       </div>
 
+      {/* Description */}
       <div className="mt-6">
-        <label className="block mb-2 text-sm font-semibold text-[#1a1a1a]">
-          Upload Images
-        </label>
-
-        <label
-          htmlFor="imgs"
-          className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black/20 bg-black/[0.02] px-6 py-10 text-center cursor-pointer hover:border-[#c9a227] hover:bg-[#c9a227]/10 transition"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8 text-black/60"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={1.5}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M3 16.5V19a2 2 0 002 2h14a2 2 0 002-2v-2.5M16 12l-4-4m0 0L8 12m4-4v9"
-            />
-          </svg>
-
-          <span className="text-sm font-medium text-black/80">
-            Click to upload images
-          </span>
-
-          <span className="text-xs text-black/50">
-            PNG, JPG, WEBP – multiple allowed
-          </span>
-
-          {form.imgs.length > 0 && (
-            <span className="mt-2 text-xs font-semibold text-[#c9a227]">
-              {form.imgs.length} image(s) selected
-            </span>
-          )}
-        </label>
-
-        <input
-          id="imgs"
-          type="file"
-          name="imgs"
-          multiple
-          accept="image/*"
-          onChange={handleChange}
-          className="hidden"
-        />
+        <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor="description">Description</label>
+        <textarea id="description" name="description" rows={4} value={form.description} onChange={handleChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition" />
       </div>
 
+      {/* Images */}
+      <div className="mt-6">
+        <label className="block mb-2 text-sm font-semibold text-[#1a1a1a]">Upload Images</label>
+        <label htmlFor="imgs" className="flex flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-black/20 bg-black/[0.02] px-6 py-10 text-center cursor-pointer hover:border-[#c9a227] hover:bg-[#c9a227]/10 transition">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8 text-black/60" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5V19a2 2 0 002 2h14a2 2 0 002-2v-2.5M16 12l-4-4m0 0L8 12m4-4v9" />
+          </svg>
+          <span className="text-sm font-medium text-black/80">Click to upload images</span>
+          <span className="text-xs text-black/50">PNG, JPG, WEBP – multiple allowed</span>
+          {form.imgs.length > 0 && <span className="mt-2 text-xs font-semibold text-[#c9a227]">{form.imgs.length} image(s) selected</span>}
+        </label>
+        <input id="imgs" type="file" name="imgs" multiple accept="image/*" onChange={handleChange} className="hidden" />
+      </div>
+
+      {/* Messages */}
       {error && <p className="mt-4 text-red-600">{error}</p>}
       {success && <p className="mt-4 text-green-700">{success}</p>}
 
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className="mt-6 w-full md:w-auto rounded-xl bg-[#1a1a1a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c9a227] hover:text-black disabled:opacity-60 disabled:cursor-not-allowed transition"
-      >
+      {/* Submit */}
+      <button type="submit" disabled={isSubmitting} className="mt-6 w-full md:w-auto rounded-xl bg-[#1a1a1a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#c9a227] hover:text-black disabled:opacity-60 disabled:cursor-not-allowed transition">
         {isSubmitting ? "Saving..." : "Create Product"}
       </button>
     </form>
@@ -212,18 +270,8 @@ export default function ProductForm() {
 function Input({ label, name, value, onChange, type = "text", required = false }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>
-        {label}
-      </label>
-      <input
-        id={name}
-        name={name}
-        type={type}
-        required={required}
-        value={value}
-        onChange={onChange}
-        className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-      />
+      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>{label}</label>
+      <input id={name} name={name} type={type} required={required} value={value} onChange={onChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition" />
     </div>
   );
 }
@@ -231,21 +279,9 @@ function Input({ label, name, value, onChange, type = "text", required = false }
 function Select({ label, name, value, onChange, options }) {
   return (
     <div>
-      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>
-        {label}
-      </label>
-      <select
-        id={name}
-        name={name}
-        value={value}
-        onChange={onChange}
-        className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition"
-      >
-        {options.map((o) => (
-          <option key={o} value={o}>
-            {o}
-          </option>
-        ))}
+      <label className="block mb-1 text-sm font-medium text-[#1a1a1a]" htmlFor={name}>{label}</label>
+      <select id={name} name={name} value={value} onChange={onChange} className="w-full rounded-lg border border-black/15 px-3 py-2 text-sm focus:border-black/30 outline-none transition">
+        {options.map((o) => (<option key={o} value={o}>{o}</option>))}
       </select>
     </div>
   );

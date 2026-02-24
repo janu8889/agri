@@ -222,47 +222,59 @@ export default function ProductDetailsClient() {
             </div>
           </div>
 
-          {/* RIGHT COLUMN */}
-          <div className="flex-1 flex flex-col gap-6">
-            <h1 className="text-4xl font-extrabold leading-tight">{product.name}</h1>
-            <p className="text-3xl font-bold text-[#c9a227]">USD ${product.price.toLocaleString()}</p>
+{/* RIGHT COLUMN */}
+<div className="flex-1 flex flex-col gap-6">
+  <h1 className="text-4xl font-extrabold leading-tight">{product.name}</h1>
+  <p className="text-3xl font-bold text-[#c9a227]">USD ${product.price.toLocaleString()}</p>
 
-            {/* SEND INQUIRY BUTTON */}
-            <button
-              onClick={() => {
-                setSelectedProduct(product);
-                setInquiryModalOpen(true);
-              }}
-              className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-[#c9a227] hover:text-black cursor-pointer transition-all duration-300"
-            >
-              Send Inquiry
-            </button>
+  {/* SEND INQUIRY BUTTON */}
+  <button
+    onClick={() => {
+      setSelectedProduct(product);
+      setInquiryModalOpen(true);
+    }}
+    className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-[#c9a227] hover:text-black cursor-pointer transition-all duration-300"
+  >
+    Send Inquiry
+  </button>
 
-            <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-              {product.year && <Info label="Year" value={product.year} />}
-              {product.manufacturer && <Info label="Manufacturer" value={product.manufacturer} />}
-              {product.model && <Info label="Model" value={product.model} />}
-              {product.condition && <Info label="Condition" value={product.condition} />}
-              {product.hours && <Info label="Hours" value={`${product.hours} hrs`} />}
-              {product.engineHorsepower && <Info label="Engine HP" value={product.engineHorsepower} />}
-              {product.drive && <Info label="Drive" value={product.drive} />}
-              {product.transmissionType && <Info label="Transmission" value={product.transmissionType} />}
-              {product.description && (
-                <div className="md:col-span-2">
-                  <div className="font-semibold">Description</div>
-                  <p className="mt-1 text-gray-600">{product.description}</p>
-                </div>
-              )}
-            </div>
+  {/* INFO DYNAMIC + DESCRIPTION */}
+  <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+    {Object.entries(product).map(([key, value]) => {
+      if (!value) return null;
+      if (Array.isArray(value) || typeof value === "object") return null;
+      if (key === "name" || key === "price" || key === "imgs" || key === "optimizedImgs" || key === "category" || key === "_id" || key === "createdAt") return null;
+      if (key === "description") return null;
+      if (key === "stockNumber") return null;
 
-            {product.stockNumber && (
-              <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
-                Reference #{product.stockNumber}
-              </div>
-            )}
+      return (
+        <div key={key}>
+          {/* afișăm exact cum e cheia în obiect */}
+          <div className="font-semibold capitalize">{key}</div>
+          <div>{value}</div>
+        </div>
+      );
+    })}
+
+    {/* Description separat */}
+    {product.description && (
+      <div className="md:col-span-2">
+        <div className="font-semibold">Description</div>
+        <p className="mt-1 text-gray-600">{product.description}</p>
+      </div>
+    )}
+  </div>
+
+  {/* Reference rămâne exact cum e */}
+  {product.stockNumber && (
+    <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
+      Reference #{product.stockNumber}
+    </div>
+  )}
+</div>
           </div>
         </div>
-      </div>
+
 
       {/* GALLERY MODAL */}
       {galleryModalOpen && (

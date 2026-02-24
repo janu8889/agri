@@ -11,17 +11,14 @@ const initialForm = {
   manufacturer: "",
   model: "",
   condition: "Used",
-  fuel: "",
-  hours: 0,
   description: "",
   imgs: [],
+  hours: 0,
+  // optional fields
+  fuel: "",
   engineHorsepower: 0,
-    // opționale
-  loader: "",
-  backhoe: "",
-  cab: "",
-  drive: "",
-  transmissionType: "",
+  serialNumber: "",
+  separatorHours: ""
 };
 
 export default function ProductForm() {
@@ -51,7 +48,6 @@ export default function ProductForm() {
     setSuccess("");
 
     try {
-      // 🔹 Comprimă + convertește imagini în paralel
       const options = {
         maxSizeMB: 1,
         maxWidthOrHeight: 1920,
@@ -81,7 +77,6 @@ export default function ProductForm() {
 
       const uploadedUrls = await Promise.all(uploadPromises);
 
-      // Trimitem payload-ul la backend
       const payload = { ...form, imgs: uploadedUrls };
       const res = await fetch("/api/products", {
         method: "POST",
@@ -96,7 +91,7 @@ export default function ProductForm() {
       }
 
       setSuccess(`Produs creat cu succes. ID: ${data?.product?._id}`);
-      setForm(initialForm); // 🔹 reset complet
+      setForm(initialForm);
     } catch (err) {
       console.error(err);
       setError("Nu s-au putut încărca imaginile sau salva produsul.");
@@ -115,23 +110,26 @@ export default function ProductForm() {
         <Input label="Price*" name="price" type="number" value={form.price} onChange={handleChange} required />
         <Input label="Manufacturer*" name="manufacturer" value={form.manufacturer} onChange={handleChange} required />
         <Input label="Model*" name="model" value={form.model} onChange={handleChange} required />
-        <Input label="Fuel*" name="fuel" value={form.fuel} onChange={handleChange} required/>
         <Select label="Category" name="category" value={form.category} onChange={handleChange} options={["agriculture", "construction", "attachments"]} />
         <Select label="Condition" name="condition" value={form.condition} onChange={handleChange} options={["Used", "New"]} />
         <Input label="Year" name="year" type="number" value={form.year} onChange={handleChange} />
         <Input label="Hours" name="hours" type="number" value={form.hours} onChange={handleChange} />
-        <Input label="Engine Horsepower" name="engineHorsepower" type="number" value={form.engineHorsepower} onChange={handleChange} />
       </div>
 
       {/* Optional fields */}
       <div className="mt-6 p-4 border-t border-gray-200">
         <h3 className="font-medium mb-2 text-gray-700">Optional Fields</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Input label="Loader" name="loader" value={form.loader} onChange={handleChange} />
-          <Input label="Backhoe" name="backhoe" value={form.backhoe} onChange={handleChange} />
-          <Input label="Cab" name="cab" value={form.cab} onChange={handleChange} />
-          <Input label="Drive" name="drive" value={form.drive} onChange={handleChange} />
-          <Input label="Transmission Type" name="transmissionType" value={form.transmissionType} onChange={handleChange} />
+          {/* fuel și engineHorsepower */}
+          <Input label="Fuel" name="fuel" value={form.fuel} onChange={handleChange} />
+          <Input label="Engine Horsepower" name="engineHorsepower" type="number" value={form.engineHorsepower} onChange={handleChange} />
+
+          {/* restul opționalelor */}
+          {Object.keys(initialForm)
+            .filter((k) => !["name","price","manufacturer","model","category","condition","year","hours","description","imgs","fuel","engineHorsepower"].includes(k))
+            .map((key) => (
+              <Input key={key} label={key} name={key} value={form[key]} onChange={handleChange} />
+            ))}
         </div>
       </div>
 

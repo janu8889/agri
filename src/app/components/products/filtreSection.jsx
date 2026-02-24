@@ -84,9 +84,36 @@ export default function FilterSection({ defaultCategory, onFilter }) {
             className="border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#c9a227]"
           >
             <option value="">All</option>
+            <option>ARMOR LITE</option>
+            <option>BOBCAT</option>
+            <option>CASE</option>
+            <option>CASE IH</option>
+            <option>CHALLENGER</option>
+            <option>CLAAS</option>
+            <option>CATERPILLAR</option>
+            <option>DEERE</option>
+            <option>DEUTZ FAHR</option>
+            <option>FAE</option>
+            <option>FECON</option>
+            <option>GENIE</option>
+            <option>GLEANER</option>
+            <option>HITACHI</option>
+            <option>J&M</option>
+            <option>JCB</option>
+            <option>JLG</option>
             <option>JOHN DEERE</option>
+            <option>KOBELCO</option>
+            <option>KOMATSU</option>
             <option>KUBOTA</option>
+            <option>LEXION</option>
+            <option>MANITOU</option>
+            <option>MASSEY FERGUSON</option>
+            <option>MERIDIAN</option>
             <option>NEW HOLLAND</option>
+            <option>PARKER</option>
+            <option>TAKEUCHI</option>
+            <option>VERSATILE</option>
+            <option>YANMAR</option>
           </select>
         </div>
 
