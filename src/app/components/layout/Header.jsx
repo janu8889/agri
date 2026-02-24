@@ -34,6 +34,7 @@ export default function Header() {
           alt="Logo"
           width={180}
           height={80}
+          priority
         />
         </Link>
 
