@@ -5,12 +5,12 @@ export default function Info() {
         Quality Equipment For Sale
       </h1>
       <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-        Based in the picturesque farming community of Lancaster County, Pennsylvania, 
-        Shertzer Equipment Group specializes in Pre-owned Construction and Lift equipment. 
+        Based in the picturesque farming community of Mims, Florida, 
+        Robinson Equipment Co. specializes in Pre-owned Construction and Lift equipment. 
         Our goal is to provide contractors, farmers, and landowners with an alternative 
         to purchasing new equipment by providing good quality, work ready equipment at reasonable prices. 
         We look at each business transaction as an opportunity to build relationships between our team 
-        and our customers based on the principle of the Golden Rule (Matthew 7:12).
+        and our customers based on the principle of the Golden Rule.
       </p>
     </div>
   );

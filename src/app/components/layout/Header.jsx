@@ -5,6 +5,7 @@ import ContactModal from "../ContactModal";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 export default function Header() {
   const [buyNowOpen, setBuyNowOpen] = useState(false);
@@ -25,9 +26,16 @@ export default function Header() {
   }, [buyNowOpen, contactOpen]);
 
   return (
-    <header className="sticky top-0 z-50 bg-[#eeeeee] text-[#1a1a1a] font-bold text-[18px] shadow-md shadow-black/20">
+    <header className="sticky top-[54px] z-50 bg-[#eeeeee] text-[#1a1a1a] font-bold text-[18px] shadow-md shadow-black/20">
       <div className="max-w-7xl mx-auto flex justify-between items-center px-4 md:px-8 py-2">
-        <Link href="/" className="text-xl">AgriStore</Link>
+        <Link href="/" className="text-xl">
+        <Image
+          src="/logo.png"
+          alt="Logo"
+          width={180}
+          height={80}
+        />
+        </Link>
 
         {/* Desktop Menu */}
         <nav className="hidden md:flex gap-6 items-center relative">
@@ -307,7 +315,7 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
       </button>
 
       {open && (
-        <div className="absolute right-0 mt-2 w-48 bg-[#eeeeee] shadow-lg rounded-md py-2 flex flex-col gap-1">
+        <div className="absolute z-50 right-0 mt-2 w-48 bg-[#eeeeee] shadow-lg rounded-md py-2 flex flex-col gap-1">
           <button
             className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227] transition"
             onClick={() => setInventoryOpen(!inventoryOpen)}

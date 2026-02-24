@@ -75,10 +75,10 @@ export default function ProductsSection({ products }) {
                   <span className="flex items-center gap-2">
                     <FaClock className="text-[#c9a227]" /> {prod.hours} hrs
                   </span>
-                  <span className="h-4 w-px bg-gray-300"></span>
+                  {/* <span className="h-4 w-px bg-gray-300"></span>
                   <span className="flex items-center gap-2">
                     <TbEngine className="text-[#c9a227]" /> {prod.engineHorsepower} HP
-                  </span>
+                  </span> */}
                 </div>
 
                 <div className="mt-8 flex flex-col gap-3 w-full">

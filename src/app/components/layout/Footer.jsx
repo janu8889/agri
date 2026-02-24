@@ -31,12 +31,12 @@ export default function Footer() {
             {/* Contact */}
             <div className="flex flex-col gap-2">
               <h2 className="mb-2 uppercase tracking-wide font-bold text-[18px] text-[#c9a227]">
-                SHERTZER EQUIPMENT GROUP
+                Robinson Equipment Co.
               </h2>
               <div className="flex flex-col gap-1">
-                <span className="text-[16px]">255 Highville Road</span>
-                <span className="text-[16px]">Conestoga, PA 17516</span>
-                <span className="text-[16px]">(717) 341-9514</span>
+                <span className="text-[16px]">3030 Cuyler St</span>
+                <span className="text-[16px]">Mims, FL 32754</span>
+                <span className="text-[16px]">(561) 755-4373</span>
               </div>
             </div>
 
@@ -53,7 +53,7 @@ export default function Footer() {
                   Construction
                 </Link>
                 <Link className="text-[16px] hover:text-[#c9a227] transition-colors duration-200" href="/inventory/attachments">
-                  Construction Attachments
+                 Attachments
                 </Link>
               </div>
             </div>
