@@ -1,9 +1,14 @@
 // agri/src/app/sitemap.js
-import { getAllProducts } from "../../lib/products";
+import dbConnect from "../../lib/dbConnect";
+import Product from "../../models/product";
 
 export default async function sitemap() {
-  // URL-uri statice
-  const staticUrls = [
+  await dbConnect();
+
+  // fetch produse
+  const products = await Product.find({}, { _id: 1, updatedAt: 1 }).lean();
+
+  const staticPages = [
     { url: "https://robinson-equipment.com/", lastModified: new Date() },
     { url: "https://robinson-equipment.com/about", lastModified: new Date() },
     { url: "https://robinson-equipment.com/shipping", lastModified: new Date() },
@@ -12,13 +17,10 @@ export default async function sitemap() {
     { url: "https://robinson-equipment.com/inventory/attachments", lastModified: new Date() },
   ];
 
-  // URL-uri dinamice pentru produse
-  const products = await getAllProducts();
-  const productUrls = products.map((p) => ({
-    url: `https://robinson-equipment.com/products/${p.id}`,
-    lastModified: new Date(p.updatedAt),
+  const productPages = products.map((p) => ({
+    url: `https://robinson-equipment.com/products/${p._id.toString()}`,
+    lastModified: p.updatedAt || new Date(),
   }));
 
-  // Combina static + dynamic
-  return [...staticUrls, ...productUrls];
+  return [...staticPages, ...productPages];
 }

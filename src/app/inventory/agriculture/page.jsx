@@ -15,6 +15,7 @@ export default function Agriculture() {
   });
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 🔹 loading state
 
   useEffect(() => {
     fetchProducts(filters, 0, true);
@@ -22,6 +23,7 @@ export default function Agriculture() {
 
   const fetchProducts = async (activeFilters, currentSkip, reset = false) => {
     try {
+      setIsLoading(true); // începe loading
       const params = new URLSearchParams({
         ...activeFilters,
         limit: LIMIT,
@@ -42,6 +44,8 @@ export default function Agriculture() {
       setHasMore(received.length === LIMIT);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false); // sfârșit loading
     }
   };
 
@@ -108,26 +112,30 @@ export default function Agriculture() {
 
       <CategorySeparator category="agriculture" />
 
-    {products.length === 0 ? (
-      <div className="bg-[#f3f4f6] py-32 text-center">
-        <Spinner />
-      </div>
-    ) : (
-      <>
-        <FiltreList products={products} />
-
-        {hasMore && (
-          <div className="text-center my-8">
-            <button
-              onClick={handleLoadMore}
-              className="bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
-            >
-              Load More
-            </button>
-          </div>
-        )}
-      </>
-    )}
-  </div>
+   {/* ---------------- Products List / Loading / No Results ---------------- */}
+      {isLoading ? (
+        <div className="bg-[#f3f4f6]">
+          <Spinner />
+        </div>
+      ) : products.length === 0 ? (
+        <div className="bg-[#f3f4f6] py-32 text-center text-gray-500">
+          No products found.
+        </div>
+      ) : (
+        <>
+          <FiltreList products={products} />
+          {hasMore && (
+            <div className="text-center my-8">
+              <button
+                onClick={handleLoadMore}
+                className="bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
+              >
+                Load More
+              </button>
+            </div>
+          )}
+        </>
+      )}
+    </div>
   );
 }
