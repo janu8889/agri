@@ -50,7 +50,7 @@ export default function ProductForm() {
     try {
       const options = {
         maxSizeMB: 1,
-        maxWidthOrHeight: 1920,
+        maxWidthOrHeight: 800,
         useWebWorker: true,
         fileType: "image/webp",
         initialQuality: 0.8,

@@ -15,10 +15,51 @@ const geistMono = Geist_Mono({
 });
 
 // 🔑 Faviconul se pune aici în app directory
+// export const metadata = {
+//   title: "Robinson Equipment Co.",
+//   description:
+//     "Robinson Equipment Co. offers high-quality agricultural and construction machinery. Explore durable tractors, excavators, and equipment solutions designed for efficiency and performance.",
+//   icons: {
+//     icon: "/favicon.ico",               // favicon principal
+//     apple: "/apple-touch-icon.png",     // optional pentru iOS
+//     other: [
+//       { rel: "icon", url: "/favicon-32x32.png", type: "image/png" },
+//       { rel: "icon", url: "/favicon-16x16.png", type: "image/png" },
+//     ],
+//   },
+// };
+
 export const metadata = {
-  title: "Robinson Equipment Co.",
+  metadataBase: new URL("https://robinson-equipment.com"), // pune domeniul tău real
+
+  title: {
+    default: "Robinson Equipment Co.",
+    template: "%s | Robinson Equipment Co.",
+  },
+
   description:
-    "Robinson Equipment Co. offers high-quality agricultural and construction machinery. Explore durable tractors, excavators, and equipment solutions designed for efficiency and performance.",
+    "Robinson Equipment Co. offers high-quality agricultural and construction machinery.",
+
+  alternates: {
+    canonical: "/", 
+  },
+
+  openGraph: {
+    title: "Robinson Equipment Co.",
+    description:
+      "High-quality agricultural and construction machinery.",
+    url: "https://robinson-equipment.com",
+    siteName: "Robinson Equipment Co.",
+    images: [
+      {
+        url: "/og-image.jpg",
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
   icons: {
     icon: "/favicon.ico",               // favicon principal
     apple: "/apple-touch-icon.png",     // optional pentru iOS
@@ -26,6 +67,10 @@ export const metadata = {
       { rel: "icon", url: "/favicon-32x32.png", type: "image/png" },
       { rel: "icon", url: "/favicon-16x16.png", type: "image/png" },
     ],
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
