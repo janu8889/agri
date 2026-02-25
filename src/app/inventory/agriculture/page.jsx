@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import FilterSection from "@/app/components/products/filtreSection";
 import CategorySeparator from "@/app/components/product/category";
 import FiltreList from "@/app/components/products/filtreList";
+import Spinner from "@/app/components/ui/spinner";
 
 const LIMIT = 6;
 
@@ -107,18 +108,26 @@ export default function Agriculture() {
 
       <CategorySeparator category="agriculture" />
 
-      <FiltreList products={products} />
+    {products.length === 0 ? (
+      <div className="bg-[#f3f4f6] py-32 text-center">
+        <Spinner />
+      </div>
+    ) : (
+      <>
+        <FiltreList products={products} />
 
-      {hasMore && (
-        <div className="text-center my-8">
-          <button
-            onClick={handleLoadMore}
-            className="bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
-          >
-            Load More
-          </button>
-        </div>
-      )}
-    </div>
+        {hasMore && (
+          <div className="text-center my-8">
+            <button
+              onClick={handleLoadMore}
+              className="bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+      </>
+    )}
+  </div>
   );
 }

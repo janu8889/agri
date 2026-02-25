@@ -21,22 +21,6 @@ export default function ProductsSection({ products }) {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [modalOpen]);
 
-  if (!products) {
-    return (
-      <div className="bg-[#f3f4f6] py-32 flex justify-center">
-        <Spinner />
-      </div>
-    );
-  }
-
-  if (products.length === 0) {
-    return (
-      <div className="bg-[#f3f4f6] py-32 text-center text-gray-500">
-        <Spinner />
-      </div>
-    );
-  }
-
   return (
     <section className="bg-[#f3f4f6] py-16">
       <div className="max-w-screen-2xl mx-auto px-6">
