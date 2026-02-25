@@ -64,6 +64,9 @@ export default function Footer() {
                 PAGE LINKS
               </h2>
               <div className="flex flex-col gap-2">
+                <Link className="text-[16px] hover:text-[#c9a227] transition-colors duration-200" href="/shipping">
+                  Shipping
+                </Link>
                 <Link className="text-[16px] hover:text-[#c9a227] transition-colors duration-200" href="/about">
                   About Us
                 </Link>

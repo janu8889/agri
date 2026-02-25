@@ -39,7 +39,7 @@ export default function Header() {
         </Link>
 
         {/* Desktop Menu */}
-        <nav className="hidden md:flex gap-6 items-center relative">
+        <nav className="hidden lg:flex gap-6 items-center relative">
           <InventoryDropdown />
 
           {/* BUY NOW */}
@@ -49,6 +49,9 @@ export default function Header() {
           >
             BUY NOW
           </button>
+          <Link href="/shipping" className="uppercase tracking-wide px-[18px] py-[5px] text-[#1a1a1a] border-b-2 border-transparent hover:text-[#c9a227] hover:border-[#c9a227] transition">
+            SHIPPING
+          </Link>
 
           <Link href="/about" className="uppercase tracking-wide px-[18px] py-[5px] text-[#1a1a1a] border-b-2 border-transparent hover:text-[#c9a227] hover:border-[#c9a227] transition">
             ABOUT US
@@ -62,7 +65,7 @@ export default function Header() {
         </nav>
 
         {/* Mobile Hamburger */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <MobileMenu setBuyNowOpen={setBuyNowOpen} setContactOpen={setContactOpen} />
         </div>
       </div>
@@ -318,26 +321,27 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
       {open && (
         <div className="absolute z-50 right-0 mt-2 w-48 bg-[#eeeeee] shadow-lg rounded-md py-2 flex flex-col gap-1">
           <button
-            className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227] transition"
+            className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]"
             onClick={() => setInventoryOpen(!inventoryOpen)}
           >
             INVENTORY
           </button>
           {inventoryOpen && (
             <div className="flex flex-col ml-2 gap-1">
-              <Link href="/inventory/agriculture" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">AGRICULTURE</Link>
-              <Link href="/inventory/construction" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">CONSTRUCTION</Link>
-              <Link href="/inventory/attachments" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">ATTACHMENTS</Link>
+              <Link href="/inventory/agriculture" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">AGRICULTURE</Link>
+              <Link href="/inventory/construction" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">CONSTRUCTION</Link>
+              <Link href="/inventory/attachments" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">ATTACHMENTS</Link>
             </div>
           )}
 
-          <button onClick={() => setBuyNowOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227] transition">
+          <button onClick={() => setBuyNowOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
             BUY NOW
           </button>
-          <button onClick={() => setContactOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227] transition">
+          <Link href="/shipping" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">SHIPPING</Link>
+          <button onClick={() => setContactOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
             CONTACT US
           </button>
-          <Link href="/about" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227] transition">ABOUT US</Link>
+          <Link href="/about" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">ABOUT US</Link>
         </div>
       )}
     </div>

@@ -65,8 +65,8 @@ export default function FiltreList({ products: initialProducts }) {
       <div className="max-w-screen-2xl mx-auto px-6">
 
         {/* SORT BY */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 gap-4">
-          <div className="flex-1">
+        <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
+          <div className="flex-1 min-w-[150px]">
             <label className="block font-semibold text-[#1a1a1a] mb-2">Sort By</label>
             <select
               value={sort}
