@@ -89,10 +89,10 @@ export default function RootLayout({ children }) {
               EMAIL US:
             </p>
             <a
-              href="mailto:shertzerequipmentgroup@gmail.com"
+              href="mailto:sales@robinson-equipment.com"
               className="text-[#c9a227] text-base md:text-lg font-semibold hover:underline hover:text-[#a17f0d] transition duration-300"
             >
-              shertzerequipmentgroup@gmail.com
+              	sales@robinson-equipment.com
             </a>
           </div>
         </div>
