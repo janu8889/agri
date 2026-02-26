@@ -26,6 +26,89 @@ export default function ProductDetailsClient() {
   const thumbsRef = useRef(null);
   const modalRef = useRef(null);
 
+  const [inquiryData, setInquiryData] = useState({
+    productName: "", // aici trimitem LINK-ul complet
+    name: "",
+    email: "",
+    phone: "",
+    preferredTime: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    message: "",
+  });
+
+  const [inquiryLoading, setInquiryLoading] = useState(false);
+  const [inquiryMessage, setInquiryMessage] = useState("");
+
+  function handleInquiryChange(e) {
+    const { name, value } = e.target;
+    setInquiryData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  async function handleInquirySubmit(e) {
+    e.preventDefault();
+    setInquiryMessage("");
+
+    const requiredFields = [
+      "name",
+      "email",
+      "phone",
+      "preferredTime",
+      "address",
+      "city",
+      "state",
+      "zip",
+    ];
+
+    for (let field of requiredFields) {
+      if (!inquiryData[field]?.trim()) {
+        setInquiryMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    setInquiryLoading(true);
+
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inquiryData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setInquiryMessage("Inquiry sent successfully!");
+
+        setInquiryData({
+          productName: "",
+          name: "",
+          email: "",
+          phone: "",
+          preferredTime: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
+          message: "",
+        });
+      } else {
+        setInquiryMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setInquiryMessage("Server error. Try again later.");
+    } finally {
+      setInquiryLoading(false);
+    }
+  }
+
+
   // Fetch produsul curent
   useEffect(() => {
     if (!id) return;
@@ -231,6 +314,10 @@ export default function ProductDetailsClient() {
   <button
     onClick={() => {
       setSelectedProduct(product);
+      setInquiryData(prev => ({
+        ...prev,
+        productName: `https://robinson-equipment.com/products/${product._id}`,
+      }));
       setInquiryModalOpen(true);
     }}
     className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-[#c9a227] hover:text-black cursor-pointer transition-all duration-300"
@@ -319,7 +406,10 @@ export default function ProductDetailsClient() {
       {/* INQUIRY MODAL */}
       {inquiryModalOpen && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
-          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+          <div
+            ref={modalRef}
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto"
+          >
             <button
               onClick={() => setInquiryModalOpen(false)}
               className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
@@ -327,30 +417,141 @@ export default function ProductDetailsClient() {
               <FaTimes />
             </button>
 
-            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">Inquiry</h3>
-            {selectedProduct && <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>}
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
+              Inquiry
+            </h3>
 
-            <form className="flex flex-col gap-4">
-              <p className="text-xs text-gray-500 mb-2">All fields marked with an (*) are required.</p>
+            {selectedProduct && (
+              <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
+            )}
 
-              <input type="text" placeholder="Name *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="email" placeholder="Email *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="text" placeholder="Cell Phone *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
-                <option value="">Preferred Time to Be Contacted</option>
-                <option>Morning (8AM - 12PM)</option>
-                <option>Afternoon (12PM - 5PM)</option>
-                <option>Evening (5PM - 8PM)</option>
+            <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4">
+              <p className="text-xs text-gray-500 mb-2">
+                All fields marked with an (*) are required.
+              </p>
+
+              {/* NAME */}
+              <input
+                type="text"
+                name="name"
+                placeholder="Name *"
+                required
+                value={inquiryData.name}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* EMAIL */}
+              <input
+                type="email"
+                name="email"
+                placeholder="Email *"
+                required
+                value={inquiryData.email}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* PHONE */}
+              <input
+                type="text"
+                name="phone"
+                placeholder="Cell Phone *"
+                required
+                value={inquiryData.phone}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* PREFERRED TIME */}
+              <select
+                name="preferredTime"
+                required
+                value={inquiryData.preferredTime}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              >
+                <option value="">Preferred Time to Be Contacted *</option>
+                <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+                <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
+                <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
               </select>
-              <input type="text" placeholder="Address *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="text" placeholder="City *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="text" placeholder="State *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <input type="text" placeholder="Zip Code *" required className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-              <textarea rows={4} placeholder="Message" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none" />
 
-              <button type="submit" className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
-                Send Inquiry
+              {/* ADDRESS */}
+              <input
+                type="text"
+                name="address"
+                placeholder="Address *"
+                required
+                value={inquiryData.address}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* CITY */}
+              <input
+                type="text"
+                name="city"
+                placeholder="City *"
+                required
+                value={inquiryData.city}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* STATE */}
+              <input
+                type="text"
+                name="state"
+                placeholder="State *"
+                required
+                value={inquiryData.state}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* ZIP */}
+              <input
+                type="text"
+                name="zip"
+                placeholder="Zip Code *"
+                required
+                value={inquiryData.zip}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* MESSAGE */}
+              <textarea
+                name="message"
+                placeholder="Message"
+                rows={4}
+                value={inquiryData.message}
+                onChange={handleInquiryChange}
+                className="border border-gray-300 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              {/* SUBMIT BUTTON */}
+              <button
+                type="submit"
+                disabled={inquiryLoading}
+                className="bg-black text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black disabled:opacity-50"
+              >
+                {inquiryLoading ? "Sending..." : "Send Inquiry"}
               </button>
+
+              {/* MESSAGE */}
+              {inquiryMessage && (
+                <p
+                  className={`text-sm ${
+                    inquiryMessage.toLowerCase().includes("success")
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {inquiryMessage}
+                </p>
+              )}
             </form>
           </div>
         </div>

@@ -11,6 +11,87 @@ export default function ProductsSection({ products }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const modalRef = useRef(null);
 
+  const [shippingData, setShippingData] = useState({
+    productName: "",
+    name: "",
+    email: "",
+    phone: "",
+    preferredTime: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    message: "",
+  });
+
+  const [shippingLoading, setShippingLoading] = useState(false);
+  const [shippingMessage, setShippingMessage] = useState("");
+
+  function handleShippingChange(e) {
+    const { name, value } = e.target;
+    setShippingData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  async function handleShippingSubmit(e) {
+    e.preventDefault();
+    setShippingMessage("");
+
+    const requiredFields = [
+      "name",
+      "email",
+      "phone",
+        "preferredTime",
+      "address",
+      "city",
+      "state",
+      "zip",
+    ];
+
+    for (let field of requiredFields) {
+      if (!shippingData[field]?.trim()) {
+        setShippingMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    setShippingLoading(true);
+
+    try {
+      const res = await fetch("/api/shipping-quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(shippingData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setShippingMessage("Inquiry sent successfully!");
+        setShippingData({
+          productName: "",
+          name: "",
+          email: "",
+          phone: "",
+          preferredTime: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
+          message: "",
+        });
+      } else {
+        setShippingMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setShippingMessage("Server error. Try again later.");
+    } finally {
+      setShippingLoading(false);
+    }
+  }
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -84,7 +165,15 @@ export default function ProductsSection({ products }) {
                 <div className="mt-8 flex flex-col gap-3 w-full">
                   <button
                     onClick={() => {
+                      const productUrl = `https://robinson-equipment.com/products/${prod._id}`;
+
                       setSelectedProduct(prod);
+
+                      setShippingData(prev => ({
+                        ...prev,
+                        productName: productUrl,
+                      }));
+
                       setModalOpen(true);
                     }}
                     className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 w-full"
@@ -123,80 +212,123 @@ export default function ProductsSection({ products }) {
               <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
             )}
 
-            <form className="flex flex-col gap-4">
-              <p className="text-xs text-gray-500 mb-2">
-                All fields marked with an (*) are required.
-              </p>
+          <form onSubmit={handleShippingSubmit} className="flex flex-col gap-4">
+            <p className="text-xs text-gray-500 mb-2">
+              All fields marked with an (*) are required.
+            </p>
 
-              <input
-                type="text"
-                placeholder="Name *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="name"
+              value={shippingData.name}
+              onChange={handleShippingChange}
+              placeholder="Name *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <input
-                type="email"
-                placeholder="Email *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="email"
+              name="email"
+              value={shippingData.email}
+              onChange={handleShippingChange}
+              placeholder="Email *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <input
-                type="text"
-                placeholder="Cell Phone *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="phone"
+              value={shippingData.phone}
+              onChange={handleShippingChange}
+              placeholder="Cell Phone *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
-                <option value="">Preferred Time to Be Contacted</option>
-                <option>Morning (8AM - 12PM)</option>
-                <option>Afternoon (12PM - 5PM)</option>
-                <option>Evening (5PM - 8PM)</option>
-              </select>
+            <select
+              name="preferredTime"
+              value={shippingData.preferredTime}
+              required
+              onChange={handleShippingChange}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            >
+              <option value="">Preferred Time to Be Contacted *</option>
+              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
+              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
+            </select>
 
-              <input
-                type="text"
-                placeholder="Address *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="address"
+              value={shippingData.address}
+              onChange={handleShippingChange}
+              placeholder="Address *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <input
-                type="text"
-                placeholder="City *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="city"
+              value={shippingData.city}
+              onChange={handleShippingChange}
+              placeholder="City *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <input
-                type="text"
-                placeholder="State *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="state"
+              value={shippingData.state}
+              onChange={handleShippingChange}
+              placeholder="State *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <input
-                type="text"
-                placeholder="Zip Code *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <input
+              type="text"
+              name="zip"
+              value={shippingData.zip}
+              onChange={handleShippingChange}
+              placeholder="Zip Code *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <textarea
-                rows={4}
-                placeholder="Message"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-              />
+            <textarea
+              name="message"
+              value={shippingData.message}
+              onChange={handleShippingChange}
+              rows={4}
+              placeholder="Message"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+            />
 
-              <button
-                type="submit"
-                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+            <button
+              type="submit"
+              disabled={shippingLoading}
+              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+            >
+              {shippingLoading ? "Sending..." : "Send Inquiry"}
+            </button>
+
+            {shippingMessage && (
+              <p
+                className={`text-sm ${
+                  shippingMessage.toLowerCase().includes("success")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
               >
-                Send Inquiry
-              </button>
-            </form>
+                {shippingMessage}
+              </p>
+            )}
+          </form>
           </div>
         </div>
       )}

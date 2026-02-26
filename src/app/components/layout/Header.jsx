@@ -12,6 +12,151 @@ export default function Header() {
   const [contactOpen, setContactOpen] = useState(false);
   const modalRef = useRef(null);
 
+  const [buyNowData, setBuyNowData] = useState({
+    machine: "",
+    billingStreet: "",
+    billingCity: "",
+    billingState: "",
+    shippingStreet: "",
+    shippingCity: "",
+    shippingState: "",
+    name: "",
+    email: "",
+    phone: "",
+  });
+
+  const [buyNowLoading, setBuyNowLoading] = useState(false);
+  const [buyNowMessage, setBuyNowMessage] = useState("");
+
+  const [contactData, setContactData] = useState({
+    firstName: "",
+    lastName: "",
+    businessName: "",
+    address: "",
+    city: "",
+    state: "",
+    zip: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactMessage, setContactMessage] = useState("");
+
+  function handleBuyNowChange(e) {
+    const { name, value } = e.target;
+    setBuyNowData(prev => ({ ...prev, [name]: value }));
+  }
+
+  function handleContactChange(e) {
+    const { name, value } = e.target;
+    setContactData(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function handleBuyNowSubmit(e) {
+    e.preventDefault();
+    setBuyNowMessage("");
+
+    // 🔹 Validare simplă
+    const requiredFields = [
+      "machine",
+      "billingStreet",
+      "billingCity",
+      "billingState",
+      "shippingStreet",
+      "shippingCity",
+      "shippingState",
+      "email",
+    ];
+
+    for (let field of requiredFields) {
+      if (!buyNowData[field]?.trim()) {
+        setBuyNowMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    // 🔹 Call API
+    setBuyNowLoading(true);
+    try {
+      const res = await fetch("/api/buy-now", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buyNowData),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setBuyNowMessage("Inquiry sent successfully!");
+        setBuyNowData({
+          machine: "",
+          billingStreet: "",
+          billingCity: "",
+          billingState: "",
+          shippingStreet: "",
+          shippingCity: "",
+          shippingState: "",
+          name: "",
+          email: "",
+          phone: "",
+        });
+      } else {
+        setBuyNowMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setBuyNowMessage("Server error. Try again later.");
+    } finally {
+      setBuyNowLoading(false);
+    }
+  }
+
+  async function handleContactSubmit(e) {
+    e.preventDefault();
+    setContactMessage("");
+
+    // Validare simplă
+    const requiredFields = ["firstName", "lastName", "address", "city", "state", "zip", "email", "phone"];
+    for (let field of requiredFields) {
+      if (!contactData[field]?.trim()) {
+        setContactMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    setContactLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactData),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setContactMessage("Inquiry sent successfully!");
+        setContactData({
+          firstName: "",
+          lastName: "",
+          businessName: "",
+          address: "",
+          city: "",
+          state: "",
+          zip: "",
+          email: "",
+          phone: "",
+          message: "",
+        });
+      } else {
+        setContactMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setContactMessage("Server error. Try again later.");
+    } finally {
+      setContactLoading(false);
+    }
+  }
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -93,11 +238,18 @@ export default function Header() {
 
             <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-4">Buy Now Inquiry</h3>
 
-            <form className="flex flex-col gap-4">
+            <p className="text-xs text-gray-500 mb-4">
+              All fields marked with an (*) are required.
+            </p>
+
+            <form onSubmit={handleBuyNowSubmit} className="flex flex-col gap-4">
               {/* Machine */}
               <input
                 type="text"
-                placeholder="Which Machine Are You Purchasing?"
+                  name="machine"
+                  value={buyNowData.machine}
+                  onChange={handleBuyNowChange}
+                placeholder="Which Machine Are You Purchasing? *"
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                 required
               />
@@ -107,20 +259,29 @@ export default function Header() {
               <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                 <input
                   type="text"
-                  placeholder="Street Address"
+                  name="billingStreet"
+                  value={buyNowData.billingStreet}
+                  onChange={handleBuyNowChange}
+                  placeholder="Street Address *"
                   className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                   required
                 />
                 <div className="flex gap-2 mt-2">
                   <input
                     type="text"
-                    placeholder="City"
+                    name="billingCity"
+                    value={buyNowData.billingCity}
+                    onChange={handleBuyNowChange}
+                    placeholder="City *"
                     className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                     required
                   />
                   <input
                     type="text"
-                    placeholder="State"
+                    name="billingState"
+                    value={buyNowData.billingState}
+                    onChange={handleBuyNowChange}
+                    placeholder="State *"
                     className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                     required
                   />
@@ -132,20 +293,29 @@ export default function Header() {
               <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
                 <input
                   type="text"
-                  placeholder="Street Address"
+                  name="shippingStreet"
+                  value={buyNowData.shippingStreet}
+                  onChange={handleBuyNowChange}
+                  placeholder="Street Address *"
                   className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                   required
                 />
                 <div className="flex gap-2 mt-2">
                   <input
                     type="text"
-                    placeholder="City"
+                    name="shippingCity"
+                    value={buyNowData.shippingCity}
+                    onChange={handleBuyNowChange}
+                    placeholder="City *"
                     className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                     required
                   />
                   <input
                     type="text"
-                    placeholder="State"
+                    name="shippingState"
+                    value={buyNowData.shippingState}
+                    onChange={handleBuyNowChange}
+                    placeholder="State *"
                     className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
                     required
                   />
@@ -153,18 +323,51 @@ export default function Header() {
               </div>
 
               {/* Existing Fields */}
-              <input type="text" placeholder="Name" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
-              <input type="email" placeholder="Email" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
-              <input type="text" placeholder="Cell Phone" className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
+              <input 
+              type="text" 
+              placeholder="Name" 
+              name="name" 
+              value={buyNowData.name}                    
+              onChange={handleBuyNowChange} 
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
 
-              <button type="submit" className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
+              <input 
+              type="email" 
+              name="email" 
+              placeholder="Email*" 
+              value={buyNowData.email}
+              onChange={handleBuyNowChange} 
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
+
+              <input 
+              type="text" 
+              placeholder="Cell Phone"  
+              name="phone" 
+              value={buyNowData.phone}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" 
+              onChange={handleBuyNowChange}/>
+
+              <button type="submit"  disabled={buyNowLoading} className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
                 Send Inquiry
+
+                {buyNowLoading ? "Sending..." : "Send Inquiry"}
+                
               </button>
+              {buyNowMessage && (
+                <p
+                  className={`text-sm mt-2 ${
+                    buyNowMessage.toLowerCase().includes("success")
+                      ? "text-green-600"
+                      : "text-red-600"
+                  }`}
+                >
+                  {buyNowMessage}
+                </p>
+)}
             </form>
           </div>
         </div>
       )}
-
 
       {/* ---------------- Contact Modal ---------------- */}
       {contactOpen && (
@@ -195,84 +398,121 @@ export default function Header() {
               All fields marked with an (*) are required.
             </p>
 
-            <form className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="First Name *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-              </div>
-
+           <form onSubmit={handleContactSubmit} className="flex flex-col gap-4">
+            <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Business Name"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                name="firstName"
+                value={contactData.firstName}
+                onChange={handleContactChange}
+                placeholder="First Name *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
-
               <input
                 type="text"
-                placeholder="Address *"
+                name="lastName"
+                value={contactData.lastName}
+                onChange={handleContactChange}
+                placeholder="Last Name *"
                 required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
+            </div>
 
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="City *"
-                  required
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                />
-                <input
-                  type="text"
-                  placeholder="State *"
-                  required
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                />
-              </div>
+            <input
+              type="text"
+              name="businessName"
+              value={contactData.businessName}
+              onChange={handleContactChange}
+              placeholder="Business Name"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
+            <input
+              type="text"
+              name="address"
+              value={contactData.address}
+              onChange={handleContactChange}
+              placeholder="Address *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="Zip Code *"
+                name="city"
+                value={contactData.city}
+                onChange={handleContactChange}
+                placeholder="City *"
                 required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
-
-              <input
-                type="email"
-                placeholder="Email *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
               <input
                 type="text"
-                placeholder="Phone Number *"
+                name="state"
+                value={contactData.state}
+                onChange={handleContactChange}
+                placeholder="State *"
                 required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
+            </div>
 
-              <textarea
-                rows={4}
-                placeholder="Message"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-              />
+            <input
+              type="text"
+              name="zip"
+              value={contactData.zip}
+              onChange={handleContactChange}
+              placeholder="Zip Code *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
-              <button
-                type="submit"
-                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
-              >
-                Send Inquiry
-              </button>
-            </form>
+            <input
+              type="email"
+              name="email"
+              value={contactData.email}
+              onChange={handleContactChange}
+              placeholder="Email *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <input
+              type="text"
+              name="phone"
+              value={contactData.phone}
+              onChange={handleContactChange}
+              placeholder="Phone Number *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <textarea
+              name="message"
+              value={contactData.message}
+              onChange={handleContactChange}
+              placeholder="Message"
+              rows={4}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+            />
+
+            <button
+              type="submit"
+              disabled={contactLoading}
+              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+            >
+              {contactLoading ? "Sending..." : "Send Inquiry"}
+            </button>
+
+            {contactMessage && (
+              <p className={`text-sm mt-2 ${contactMessage.toLowerCase().includes("success") ? "text-green-600" : "text-red-600"}`}>
+                {contactMessage}
+              </p>
+            )}
+          </form>
           </div>
         </div>
       )}
