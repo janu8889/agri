@@ -25,7 +25,7 @@ export default function TopBar() {
           {/* PHONE - mereu vizibil */}
           <div className="flex items-center space-x-2">
             <FaPhoneAlt className="text-[#c9a227]" />
-            <span>(561) 755-4373</span>
+            <span>(321) 524-9445</span>
           </div> 
 
           {/* ADDRESS - ascuns pe mobil */}

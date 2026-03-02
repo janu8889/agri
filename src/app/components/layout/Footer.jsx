@@ -36,7 +36,7 @@ export default function Footer() {
               <div className="flex flex-col gap-1">
                 <span className="text-[16px]">3030 Cuyler St</span>
                 <span className="text-[16px]">Mims, FL 32754</span>
-                <span className="text-[16px]">(561) 755-4373</span>
+                <span className="text-[16px]">(321) 524-9445</span>
               </div>
             </div>
 
