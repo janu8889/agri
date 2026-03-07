@@ -8,19 +8,9 @@ import { usePathname } from "next/navigation";
 import Image from "next/image";
 
 export default function Header() {
-  const [buyNowOpen, setBuyNowOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const modalRef = useRef(null);
 
-  const [buyNowData, setBuyNowData] = useState({
-    fullName: "",
-    phone: "",
-    email: "",
-    message: "",
-  });
-
-  const [buyNowLoading, setBuyNowLoading] = useState(false);
-  const [buyNowMessage, setBuyNowMessage] = useState("");
 
   const [contactData, setContactData] = useState({
     fullName: "",
@@ -32,61 +22,12 @@ export default function Header() {
   const [contactLoading, setContactLoading] = useState(false);
   const [contactMessage, setContactMessage] = useState("");
 
-  function handleBuyNowChange(e) {
-    const { name, value } = e.target;
-    setBuyNowData(prev => ({ ...prev, [name]: value }));
-  }
 
   function handleContactChange(e) {
     const { name, value } = e.target;
     setContactData(prev => ({ ...prev, [name]: value }));
   }
 
-  async function handleBuyNowSubmit(e) {
-    e.preventDefault();
-    setBuyNowMessage("");
-
-    // 🔹 Validare simplă
-    const requiredFields = [
-      "fullName",
-      "phone",
-      "email",
-    ];
-
-    for (let field of requiredFields) {
-      if (!buyNowData[field]?.trim()) {
-        setBuyNowMessage("Please fill all required fields (*)");
-        return;
-      }
-    }
-
-    // 🔹 Call API
-    setBuyNowLoading(true);
-    try {
-      const res = await fetch("/api/buy-now", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(buyNowData),
-      });
-      const data = await res.json();
-
-      if (res.ok) {
-        setBuyNowMessage("Inquiry sent successfully!");
-        setBuyNowData({
-          fullName: "",
-          phone: "",
-          email: "",
-          message: "",
-        });
-      } else {
-        setBuyNowMessage(data.error || "Something went wrong");
-      }
-    } catch (err) {
-      setBuyNowMessage("Server error. Try again later.");
-    } finally {
-      setBuyNowLoading(false);
-    }
-  }
 
   async function handleContactSubmit(e) {
     e.preventDefault();
@@ -131,15 +72,14 @@ export default function Header() {
   useEffect(() => {
     function handleClickOutside(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
-        setBuyNowOpen(false);
         setContactOpen(false);
       }
     }
-    if (buyNowOpen || contactOpen) {
+    if (contactOpen) {
       document.addEventListener("mousedown", handleClickOutside);
     }
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [buyNowOpen, contactOpen]);
+  }, [contactOpen]);
 
   return (
     <header className="sticky top-[54px] z-50 bg-[#eeeeee] text-[#1a1a1a] font-bold text-[18px] shadow-md shadow-black/20">
@@ -158,13 +98,10 @@ export default function Header() {
         <nav className="hidden lg:flex gap-6 items-center relative">
           <InventoryDropdown />
 
-          {/* BUY NOW */}
-          <button
-            onClick={() => setBuyNowOpen(true)}
-            className="uppercase tracking-wide px-[18px] py-[5px] text-[#1a1a1a] border-b-2 border-transparent hover:text-[#c9a227] hover:border-[#c9a227] transition cursor-pointer"
-          >
-            BUY NOW
-          </button>
+          <Link href="/warranty" className="uppercase tracking-wide px-[18px] py-[5px] text-[#1a1a1a] border-b-2 border-transparent hover:text-[#c9a227] hover:border-[#c9a227] transition">
+            Warranty
+          </Link>
+
           <Link href="/shipping" className="uppercase tracking-wide px-[18px] py-[5px] text-[#1a1a1a] border-b-2 border-transparent hover:text-[#c9a227] hover:border-[#c9a227] transition">
             SHIPPING
           </Link>
@@ -182,107 +119,11 @@ export default function Header() {
 
         {/* Mobile Hamburger */}
         <div className="lg:hidden">
-          <MobileMenu setBuyNowOpen={setBuyNowOpen} setContactOpen={setContactOpen} />
+          <MobileMenu setContactOpen={setContactOpen} />
         </div>
       </div>
 
-      {/* ---------------- Buy Now Modal ---------------- */}
-      {buyNowOpen && (
-        <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
-          onClick={(e) => {
-            if (modalRef.current && !modalRef.current.contains(e.target)) {
-              setBuyNowOpen(false);
-            }
-          }}
-        >
-          <div
-            ref={modalRef}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
-          >
-            <button
-              onClick={() => setBuyNowOpen(false)}
-              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
-            >
-              <FaTimes />
-            </button>
 
-            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">Buy Now Inquiry</h3>
-
-            <p className="text-xs text-gray-500 mb-4">
-              All fields marked with an (*) are required.
-            </p>
-
-            <form onSubmit={handleBuyNowSubmit} className="flex flex-col gap-4">
-
-              {/* Existing Fields */}
-              <input 
-              type="text" 
-              placeholder="Full Name *" 
-              name="fullName" 
-              value={buyNowData.fullName}                    
-              onChange={handleBuyNowChange} 
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
-
-              <input 
-              type="email" 
-              name="email" 
-              placeholder="Email *" 
-              value={buyNowData.email}
-              onChange={handleBuyNowChange} 
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
-
-              <input 
-              type="text" 
-              placeholder="Phone Number *"  
-              name="phone" 
-              value={buyNowData.phone}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" 
-              onChange={handleBuyNowChange}/>
-
-              <textarea
-              name="message"
-              value={buyNowData.message}
-              onChange={handleBuyNowChange}
-              placeholder="Message"
-              rows={4}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-            />
-
-            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
-              <input
-                type="checkbox"
-                name="consent"
-                defaultChecked
-                required
-                className="mt-1"
-              />
-              <span>
-                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
-              </span>
-            </label>
-
-
-              <button type="submit"  disabled={buyNowLoading} className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
-
-                {buyNowLoading ? "Sending..." : "Send Inquiry"}
-                
-              </button>
-              {buyNowMessage && (
-                <p
-                  className={`text-sm mt-2 ${
-                    buyNowMessage.toLowerCase().includes("success")
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {buyNowMessage}
-                </p>
-)}
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* ---------------- Contact Modal ---------------- */}
       {contactOpen && (
@@ -441,9 +282,8 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
             </div>
           )}
 
-          <button onClick={() => setBuyNowOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
-            BUY NOW
-          </button>
+          <Link href="/warranty" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">WARRANTY</Link>
+
           <Link href="/shipping" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">SHIPPING</Link>
           <button onClick={() => setContactOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
             CONTACT US
