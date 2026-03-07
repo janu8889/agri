@@ -75,7 +75,9 @@ export default function ProductDetailsClient() {
 
       if (res.ok) {
         setInquiryMessage("Inquiry sent successfully!");
-
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "Lead")     
+        }
         setInquiryData({
           productName: "",
           fullName: "",

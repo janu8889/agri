@@ -60,6 +60,9 @@ export default function FiltreList({ products: initialProducts }) {
 
       if (res.ok) {
         setShippingMessage("Inquiry sent successfully!");
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "Lead")     
+        }
         setShippingData({
           fullName: "",
           phone: "",

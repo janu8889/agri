@@ -3,7 +3,6 @@
 import { useState, useRef, useEffect } from "react";
 import Spinner from "../ui/spinner";
 import { FaSearch, FaClock, FaTimes } from "react-icons/fa";
-import { TbEngine } from "react-icons/tb";
 import Link from "next/link";
 
 export default function ProductsSection({ products }) {
@@ -59,6 +58,9 @@ export default function ProductsSection({ products }) {
 
       if (res.ok) {
         setShippingMessage("Inquiry sent successfully!");
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "Lead")     
+        }
         setShippingData({
           fullName: "",
           phone: "",

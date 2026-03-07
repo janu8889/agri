@@ -53,6 +53,11 @@ export default function Header() {
 
       if (res.ok) {
         setContactMessage("Inquiry sent successfully!");
+
+        if (typeof window !== "undefined" && window.fbq) {
+          window.fbq("track", "Lead")     
+        }
+
         setContactData({
           fullName: "",
           phone: "",
