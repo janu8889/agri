@@ -7,24 +7,29 @@ import FiltreList from "@/app/components/products/filtreList";
 
 const LIMIT = 6;
 
+
 export default function Construction() {
-  const [products, setProducts] = useState([]);
-  const [filters, setFilters] = useState({
-    category: "construction",
-  });
+ const [products, setProducts] = useState([]);
+  const [filters, setFilters] = useState({ category: "construction" });
   const [skip, setSkip] = useState(0);
   const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [firstLoadMoreDone, setFirstLoadMoreDone] = useState(false); // 🔹 pentru prima apăsare Load More
 
   useEffect(() => {
-    fetchProducts(filters, 0, true);
+    // Primul request = random, initial:1
+    fetchProducts(filters, 0, true, true);
   }, []);
 
-  const fetchProducts = async (activeFilters, currentSkip, reset = false) => {
+  const fetchProducts = async (activeFilters, currentSkip, reset = false, initial = false) => {
     try {
+      setIsLoading(true);
+
       const params = new URLSearchParams({
         ...activeFilters,
         limit: LIMIT,
         skip: currentSkip,
+        initial: initial ? 1 : 0, // initial=1 doar la primul fetch random
       });
 
       const res = await fetch(`/api/products/filter?${params.toString()}`);
@@ -41,6 +46,8 @@ export default function Construction() {
       setHasMore(received.length === LIMIT);
     } catch (err) {
       console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,13 +55,23 @@ export default function Construction() {
     setFilters(newFilters);
     setSkip(0);
     setHasMore(true);
-    await fetchProducts(newFilters, 0, true);
+    await fetchProducts(newFilters, 0, true, false); // filtrele nu folosesc initial:1
   };
 
   const handleLoadMore = async () => {
     if (!hasMore) return;
-    await fetchProducts(filters, skip, false);
+
+    if (!firstLoadMoreDone) {
+      // 🔹 Prima dată când apeși Load More:
+      setProducts([]); // golim lista
+      await fetchProducts(filters, 0, true, false); // initial=0
+      setFirstLoadMoreDone(true); // marchează că prima Load More s-a făcut
+    } else {
+      // Load More normal, adaugă produsele fără să golești lista
+      await fetchProducts(filters, skip, false, false);
+    }
   };
+
 
   return (
     <div className="max-w-screen-2xl mx-auto">

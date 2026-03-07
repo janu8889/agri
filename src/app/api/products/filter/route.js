@@ -6,7 +6,7 @@ export async function GET(req) {
   await dbConnect();
 
   try {
-    const { search, category, manufacturer, yearMin, yearMax, priceMin, priceMax, hoursMin, hoursMax, hpMin, hpMax, sort, limit = 6, skip = 0 } = Object.fromEntries(new URL(req.url).searchParams);
+    const { search, category, manufacturer, yearMin, yearMax, priceMin, priceMax, hoursMin, hoursMax, hpMin, hpMax, sort, limit = 6, skip = 0, initial } = Object.fromEntries(new URL(req.url).searchParams);
 
     const query = {};
 
@@ -37,7 +37,43 @@ export async function GET(req) {
       if (hpMax) query.engineHorsepower.$lte = Number(hpMax);
     }
 
-    let mongoQuery = Product.find(query).skip(Number(skip)).limit(Math.min(Number(limit), 6));
+    let mongoQuery;
+    console.log(initial)
+    if(initial == 1) {
+      console.log(initial)
+
+       mongoQuery = Product.aggregate([
+        { $match: query },
+        { $sample: { size: Math.min(Number(limit), 6) } },
+        {
+          $project: {
+            name: 1,
+            price: 1,
+            hours: 1,
+            engineHorsepower: 1,
+            category: 1,
+            manufacturer: 1,
+            _id: 1,
+            imgs: { $slice: ["$imgs", 1] }
+          }
+        }
+      ]);
+    } else {
+
+      mongoQuery = Product.find(query)
+      .skip(Number(skip))
+      .limit(Math.min(Number(limit), 6))
+      .select({
+        name: 1,
+        price: 1,
+        hours: 1,
+        engineHorsepower: 1,
+        category: 1,
+        manufacturer: 1,
+        _id: 1,
+        imgs: { $slice: 1 } // doar prima imagine
+      });
+    }
 
     if (sort === "priceAsc") mongoQuery = mongoQuery.sort({ price: 1 });
     if (sort === "priceDesc") mongoQuery = mongoQuery.sort({ price: -1 });
