@@ -3,19 +3,14 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     const {
+      fullName,
       productName,
-      name,
       email,
       phone,
-      preferredTime,
-      address,
-      city,
-      state,
-      zip,
-      message,
+      message
     } = await req.json();
 
-    if (!name || !email || !phone || !address || !preferredTime || !city || !state || !zip) {
+    if (!fullName || !email || !phone) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -24,24 +19,16 @@ export async function POST(req) {
 
     const token = '7594221274:AAHhvlVReiGLUAbAhePSW6cq0CEW6_5i80s';
     const chatId = '892718536';
-    
+    console.log(productName)
     const text = `
 SHIPPING QUOTE REQUEST
 
 Product: ${productName}
 
-Name: ${name}
-Email: ${email}
-Phone: ${phone}
-Preferred Time: ${preferredTime}
-
-Address: ${address}
-City: ${city}
-State: ${state}
-Zip: ${zip}
-
-Message:
-${message}
+fullName ${fullName}
+phone: ${phone}
+email: ${email}
+message: ${message}
 `;
 
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

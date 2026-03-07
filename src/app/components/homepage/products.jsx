@@ -12,15 +12,9 @@ export default function ProductsSection({ products }) {
   const modalRef = useRef(null);
 
   const [shippingData, setShippingData] = useState({
-    productName: "",
-    name: "",
-    email: "",
+    fullName: "",
     phone: "",
-    preferredTime: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
+    email: "",
     message: "",
   });
 
@@ -40,14 +34,9 @@ export default function ProductsSection({ products }) {
     setShippingMessage("");
 
     const requiredFields = [
-      "name",
-      "email",
+      "fullName",
       "phone",
-        "preferredTime",
-      "address",
-      "city",
-      "state",
-      "zip",
+      "email",
     ];
 
     for (let field of requiredFields) {
@@ -71,15 +60,9 @@ export default function ProductsSection({ products }) {
       if (res.ok) {
         setShippingMessage("Inquiry sent successfully!");
         setShippingData({
-          productName: "",
-          name: "",
-          email: "",
+          fullName: "",
           phone: "",
-          preferredTime: "",
-          address: "",
-          city: "",
-          state: "",
-          zip: "",
+          email: "",
           message: "",
         });
       } else {
@@ -195,8 +178,16 @@ export default function ProductsSection({ products }) {
 
    {/* MODAL */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
-          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto" 
+        
+        onClick={(e) => {
+            if (modalRef.current && !modalRef.current.contains(e.target)) {
+              setModalOpen(false);
+            }
+          }}
+        >
+
+          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
@@ -213,16 +204,16 @@ export default function ProductsSection({ products }) {
             )}
 
           <form onSubmit={handleShippingSubmit} className="flex flex-col gap-4">
-            <p className="text-xs text-gray-500 mb-2">
+            <p className="text-xs text-gray-500 mb-4">
               All fields marked with an (*) are required.
             </p>
 
             <input
               type="text"
-              name="name"
+              name="fullName"
               value={shippingData.name}
               onChange={handleShippingChange}
-              placeholder="Name *"
+              placeholder="Full Name *"
               required
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
@@ -242,60 +233,7 @@ export default function ProductsSection({ products }) {
               name="phone"
               value={shippingData.phone}
               onChange={handleShippingChange}
-              placeholder="Cell Phone *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
-            <select
-              name="preferredTime"
-              value={shippingData.preferredTime}
-              required
-              onChange={handleShippingChange}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            >
-              <option value="">Preferred Time to Be Contacted *</option>
-              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
-              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
-            </select>
-
-            <input
-              type="text"
-              name="address"
-              value={shippingData.address}
-              onChange={handleShippingChange}
-              placeholder="Address *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
-            <input
-              type="text"
-              name="city"
-              value={shippingData.city}
-              onChange={handleShippingChange}
-              placeholder="City *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
-            <input
-              type="text"
-              name="state"
-              value={shippingData.state}
-              onChange={handleShippingChange}
-              placeholder="State *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
-            <input
-              type="text"
-              name="zip"
-              value={shippingData.zip}
-              onChange={handleShippingChange}
-              placeholder="Zip Code *"
+              placeholder="Phone Number *"
               required
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
@@ -309,10 +247,23 @@ export default function ProductsSection({ products }) {
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
             />
 
+            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
+              <input
+                type="checkbox"
+                name="consent"
+                defaultChecked
+                required
+                className="mt-1"
+              />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+            </label>
+
             <button
               type="submit"
               disabled={shippingLoading}
-              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
+              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
             >
               {shippingLoading ? "Sending..." : "Send Inquiry"}
             </button>

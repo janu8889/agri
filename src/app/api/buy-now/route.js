@@ -8,43 +8,30 @@ export async function POST(req) {
 
     const body = await req.json();
     const {
-      machine,
-      billingStreet,
-      billingCity,
-      billingState,
-      shippingStreet,
-      shippingCity,
-      shippingState,
-      name,
+      fullName,
       email,
-      phone
+      phone,
+      message
     } = body;
 
     if (
-      !machine || !billingStreet || !billingCity || !billingState ||
-      !shippingStreet || !shippingCity || !shippingState || !email
+      !fullName || !phone || !email
     ) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    const message = `
+    const text = `
 BUY NOW
-machine: ${machine}
-billingStreet: ${billingStreet}
-billingCity: ${billingCity}
-billingState: ${billingState}
-shippingStreet: ${shippingStreet}
-shippingCity: ${shippingCity}
-shippingState: ${shippingState}
-name: ${name}
-email: ${email}
+fullName ${fullName}
 phone: ${phone}
+email: ${email}
+message: ${message}
 `;
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ chat_id: chatId, text: message })
+      body: JSON.stringify({ chat_id: chatId, text: text })
     });
 
     const data = await tgRes.json();

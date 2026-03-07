@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { FaTimes, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import CategorySeparator from "@/app/components/product/category";
-import ListsSection from "@/app/components/product/lists";
+import ListsSection from "@/app/components/homepage/products";
 import Spinner from "@/app/components/ui/spinner";
 import { useParams } from "next/navigation";
 import Image from "next/image";
@@ -28,14 +28,9 @@ export default function ProductDetailsClient() {
 
   const [inquiryData, setInquiryData] = useState({
     productName: "", // aici trimitem LINK-ul complet
-    name: "",
-    email: "",
+    fullName: "",
     phone: "",
-    preferredTime: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
+    email: "",
     message: "",
   });
 
@@ -55,14 +50,9 @@ export default function ProductDetailsClient() {
     setInquiryMessage("");
 
     const requiredFields = [
-      "name",
-      "email",
+      "fullName",
       "phone",
-      "preferredTime",
-      "address",
-      "city",
-      "state",
-      "zip",
+      "email",
     ];
 
     for (let field of requiredFields) {
@@ -88,14 +78,9 @@ export default function ProductDetailsClient() {
 
         setInquiryData({
           productName: "",
-          name: "",
-          email: "",
+          fullName: "",
           phone: "",
-          preferredTime: "",
-          address: "",
-          city: "",
-          state: "",
-          zip: "",
+          email: "",
           message: "",
         });
       } else {
@@ -320,7 +305,7 @@ export default function ProductDetailsClient() {
       }));
       setInquiryModalOpen(true);
     }}
-    className="w-full bg-black text-white py-3 rounded-xl font-bold hover:bg-[#c9a227] hover:text-black cursor-pointer transition-all duration-300"
+    className="w-full bg-[#e6c65a] text-black py-3 rounded-xl font-bold hover:bg-[#d4b44f] hover:text-black cursor-pointer transition-all duration-300"
   >
     Send Inquiry
   </button>
@@ -405,10 +390,16 @@ export default function ProductDetailsClient() {
 
       {/* INQUIRY MODAL */}
       {inquiryModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
+            onClick={(e) => {
+              if (modalRef.current && !modalRef.current.contains(e.target)) {
+                setModalOpen(false);
+              }
+            }}
+        >
           <div
             ref={modalRef}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto"
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
           >
             <button
               onClick={() => setInquiryModalOpen(false)}
@@ -426,17 +417,17 @@ export default function ProductDetailsClient() {
             )}
 
             <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4">
-              <p className="text-xs text-gray-500 mb-2">
+              <p className="text-xs text-gray-500 mb-4">
                 All fields marked with an (*) are required.
               </p>
 
               {/* NAME */}
               <input
                 type="text"
-                name="name"
-                placeholder="Name *"
+                name="fullName"
+                placeholder="Full Name *"
                 required
-                value={inquiryData.name}
+                value={inquiryData.fullName}
                 onChange={handleInquiryChange}
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
@@ -456,67 +447,9 @@ export default function ProductDetailsClient() {
               <input
                 type="text"
                 name="phone"
-                placeholder="Cell Phone *"
+                placeholder="Phone Number *"
                 required
                 value={inquiryData.phone}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* PREFERRED TIME */}
-              <select
-                name="preferredTime"
-                required
-                value={inquiryData.preferredTime}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              >
-                <option value="">Preferred Time to Be Contacted *</option>
-                <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
-                <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-                <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
-              </select>
-
-              {/* ADDRESS */}
-              <input
-                type="text"
-                name="address"
-                placeholder="Address *"
-                required
-                value={inquiryData.address}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* CITY */}
-              <input
-                type="text"
-                name="city"
-                placeholder="City *"
-                required
-                value={inquiryData.city}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* STATE */}
-              <input
-                type="text"
-                name="state"
-                placeholder="State *"
-                required
-                value={inquiryData.state}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* ZIP */}
-              <input
-                type="text"
-                name="zip"
-                placeholder="Zip Code *"
-                required
-                value={inquiryData.zip}
                 onChange={handleInquiryChange}
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
@@ -528,14 +461,28 @@ export default function ProductDetailsClient() {
                 rows={4}
                 value={inquiryData.message}
                 onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 resize-none focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
               />
+
+              <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
+                <input
+                  type="checkbox"
+                  name="consent"
+                  defaultChecked
+                  required
+                  className="mt-1"
+                />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+              </label>
+
 
               {/* SUBMIT BUTTON */}
               <button
                 type="submit"
                 disabled={inquiryLoading}
-                className="bg-black text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black disabled:opacity-50"
+                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
               >
                 {inquiryLoading ? "Sending..." : "Send Inquiry"}
               </button>

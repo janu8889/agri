@@ -113,7 +113,7 @@ export default function Construction() {
         <div className="text-center my-8">
           <button
             onClick={handleLoadMore}
-            className="bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
+            className="cursor-pointer bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
           >
             Load More
           </button>

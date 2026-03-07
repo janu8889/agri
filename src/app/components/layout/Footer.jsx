@@ -8,6 +8,61 @@ export default function Footer() {
   const [contactOpen, setContactOpen] = useState(false);
   const modalRef = useRef(null);
 
+  const [contactData, setContactData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const [contactLoading, setContactLoading] = useState(false);
+  const [contactMessage, setContactMessage] = useState("");
+
+  function handleContactChange(e) {
+    const { name, value } = e.target;
+    setContactData(prev => ({ ...prev, [name]: value }));
+  }
+
+  async function handleContactSubmit(e) {
+    e.preventDefault();
+    setContactMessage("");
+
+    // Validare simplă
+    const requiredFields = ["fullName", "phone", "email"];
+    for (let field of requiredFields) {
+      if (!contactData[field]?.trim()) {
+        setContactMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    setContactLoading(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(contactData),
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        setContactMessage("Inquiry sent successfully!");
+        setContactData({
+          fullName: "",
+          phone: "",
+          email: "",
+          message: "",
+        });
+      } else {
+        setContactMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setContactMessage("Server error. Try again later.");
+    } finally {
+      setContactLoading(false);
+    }
+  }
+
   useEffect(() => {
     function handleClickOutside(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -112,84 +167,73 @@ export default function Footer() {
               All fields marked with an (*) are required.
             </p>
 
-            <form className="flex flex-col gap-4">
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="First Name *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-                <input
-                  type="text"
-                  placeholder="Last Name *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-              </div>
-
-              <input
+           <form onSubmit={handleContactSubmit} className="flex flex-col gap-4">
+            <input
                 type="text"
-                placeholder="Business Name"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <input
-                type="text"
-                placeholder="Address *"
+                name="fullName"
+                value={contactData.fullName}
+                onChange={handleContactChange}
+                placeholder="Full Name *"
                 required
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            />
 
-              <div className="flex gap-2">
-                <input
-                  type="text"
-                  placeholder="City *"
-                  required
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                />
-                <input
-                  type="text"
-                  placeholder="State *"
-                  required
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                />
-              </div>
+            <input
+              type="text"
+              name="phone"
+              value={contactData.phone}
+              onChange={handleContactChange}
+              placeholder="Phone Number *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
 
+            <input
+              type="email"
+              name="email"
+              value={contactData.email}
+              onChange={handleContactChange}
+              placeholder="Email *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <textarea
+              name="message"
+              value={contactData.message}
+              onChange={handleContactChange}
+              placeholder="Message"
+              rows={4}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+            />
+
+            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
               <input
-                type="text"
-                placeholder="Zip Code *"
+                type="checkbox"
+                name="consent"
+                defaultChecked
                 required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="mt-1"
               />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+            </label>
 
-              <input
-                type="email"
-                placeholder="Email *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <button
+              type="submit"
+              disabled={contactLoading}
+              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+            >
+              {contactLoading ? "Sending..." : "Send Inquiry"}
+            </button>
 
-              <input
-                type="text"
-                placeholder="Phone Number *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <textarea
-                rows={4}
-                placeholder="Message"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-              />
-
-              <button
-                type="submit"
-                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
-              >
-                Send Inquiry
-              </button>
-            </form>
+            {contactMessage && (
+              <p className={`text-sm mt-2 ${contactMessage.toLowerCase().includes("success") ? "text-green-600" : "text-red-600"}`}>
+                {contactMessage}
+              </p>
+            )}
+          </form>
           </div>
         </div>
       )}

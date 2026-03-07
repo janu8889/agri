@@ -12,6 +12,70 @@ export default function FiltreList({ products: initialProducts }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const modalRef = useRef(null);
 
+  const [shippingData, setShippingData] = useState({
+    fullName: "",
+    phone: "",
+    email: "",
+    message: "",
+  });
+
+  const [shippingLoading, setShippingLoading] = useState(false);
+  const [shippingMessage, setShippingMessage] = useState("");
+
+  function handleShippingChange(e) {
+    const { name, value } = e.target;
+    setShippingData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
+
+  async function handleShippingSubmit(e) {
+    e.preventDefault();
+    setShippingMessage("");
+    console.log("shippingData:", shippingData)
+    const requiredFields = [
+      "fullName",
+      "phone",
+      "email",
+    ];
+
+    for (let field of requiredFields) {
+      if (!shippingData[field]?.trim()) {
+        setShippingMessage("Please fill all required fields (*)");
+        return;
+      }
+    }
+
+    setShippingLoading(true);
+
+    try {
+      const res = await fetch("/api/shipping-quote", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(shippingData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setShippingMessage("Inquiry sent successfully!");
+        setShippingData({
+          fullName: "",
+          phone: "",
+          email: "",
+          message: "",
+        });
+      } else {
+        setShippingMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setShippingMessage("Server error. Try again later.");
+    } finally {
+      setShippingLoading(false);
+    }
+  }
+
   // actualizare produse dacă prop-ul se schimbă
   useEffect(() => {
     setProducts(initialProducts || []);
@@ -114,9 +178,17 @@ export default function FiltreList({ products: initialProducts }) {
                 </div>
 
                 <div className="mt-8 flex flex-col gap-3 w-full">
-                  <button
+                 <button
                     onClick={() => {
+                      const productUrl = `https://robinson-equipment.com/products/${prod._id}`;
+
                       setSelectedProduct(prod);
+
+                      setShippingData(prev => ({
+                        ...prev,
+                        productName: productUrl,
+                      }));
+
                       setModalOpen(true);
                     }}
                     className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 w-full"
@@ -137,9 +209,17 @@ export default function FiltreList({ products: initialProducts }) {
       </div>
 
    {/* MODAL */}
-      {modalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto">
-          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto">
+    {modalOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto" 
+        
+        onClick={(e) => {
+            if (modalRef.current && !modalRef.current.contains(e.target)) {
+              setModalOpen(false);
+            }
+          }}
+        >
+
+          <div ref={modalRef} className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative">
             <button
               onClick={() => setModalOpen(false)}
               className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
@@ -155,80 +235,83 @@ export default function FiltreList({ products: initialProducts }) {
               <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
             )}
 
-            <form className="flex flex-col gap-4">
-              <p className="text-xs text-gray-500 mb-2">
-                All fields marked with an (*) are required.
-              </p>
+          <form onSubmit={handleShippingSubmit} className="flex flex-col gap-4">
+            <p className="text-xs text-gray-500 mb-4">
+              All fields marked with an (*) are required.
+            </p>
 
+            <input
+              type="text"
+              name="fullName"
+              value={shippingData.name}
+              onChange={handleShippingChange}
+              placeholder="Full Name *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <input
+              type="email"
+              name="email"
+              value={shippingData.email}
+              onChange={handleShippingChange}
+              placeholder="Email *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <input
+              type="text"
+              name="phone"
+              value={shippingData.phone}
+              onChange={handleShippingChange}
+              placeholder="Phone Number *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <textarea
+              name="message"
+              value={shippingData.message}
+              onChange={handleShippingChange}
+              rows={4}
+              placeholder="Message"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+            />
+
+            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
               <input
-                type="text"
-                placeholder="Name *"
+                type="checkbox"
+                name="consent"
+                defaultChecked
                 required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                className="mt-1"
               />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+            </label>
 
-              <input
-                type="email"
-                placeholder="Email *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
+            <button
+              type="submit"
+              disabled={shippingLoading}
+              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+            >
+              {shippingLoading ? "Sending..." : "Send Inquiry"}
+            </button>
 
-              <input
-                type="text"
-                placeholder="Cell Phone *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <select className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]">
-                <option value="">Preferred Time to Be Contacted</option>
-                <option>Morning (8AM - 12PM)</option>
-                <option>Afternoon (12PM - 5PM)</option>
-                <option>Evening (5PM - 8PM)</option>
-              </select>
-
-              <input
-                type="text"
-                placeholder="Address *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <input
-                type="text"
-                placeholder="City *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <input
-                type="text"
-                placeholder="State *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <input
-                type="text"
-                placeholder="Zip Code *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              <textarea
-                rows={4}
-                placeholder="Message"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-              />
-
-              <button
-                type="submit"
-                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+            {shippingMessage && (
+              <p
+                className={`text-sm ${
+                  shippingMessage.toLowerCase().includes("success")
+                    ? "text-green-600"
+                    : "text-red-600"
+                }`}
               >
-                Send Inquiry
-              </button>
-            </form>
+                {shippingMessage}
+              </p>
+            )}
+          </form>
           </div>
         </div>
       )}

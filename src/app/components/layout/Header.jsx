@@ -13,31 +13,19 @@ export default function Header() {
   const modalRef = useRef(null);
 
   const [buyNowData, setBuyNowData] = useState({
-    machine: "",
-    billingStreet: "",
-    billingCity: "",
-    billingState: "",
-    shippingStreet: "",
-    shippingCity: "",
-    shippingState: "",
-    name: "",
-    email: "",
+    fullName: "",
     phone: "",
+    email: "",
+    message: "",
   });
 
   const [buyNowLoading, setBuyNowLoading] = useState(false);
   const [buyNowMessage, setBuyNowMessage] = useState("");
 
   const [contactData, setContactData] = useState({
-    firstName: "",
-    lastName: "",
-    businessName: "",
-    address: "",
-    city: "",
-    state: "",
-    zip: "",
-    email: "",
+    fullName: "",
     phone: "",
+    email: "",
     message: "",
   });
 
@@ -60,13 +48,8 @@ export default function Header() {
 
     // 🔹 Validare simplă
     const requiredFields = [
-      "machine",
-      "billingStreet",
-      "billingCity",
-      "billingState",
-      "shippingStreet",
-      "shippingCity",
-      "shippingState",
+      "fullName",
+      "phone",
       "email",
     ];
 
@@ -90,16 +73,10 @@ export default function Header() {
       if (res.ok) {
         setBuyNowMessage("Inquiry sent successfully!");
         setBuyNowData({
-          machine: "",
-          billingStreet: "",
-          billingCity: "",
-          billingState: "",
-          shippingStreet: "",
-          shippingCity: "",
-          shippingState: "",
-          name: "",
-          email: "",
+          fullName: "",
           phone: "",
+          email: "",
+          message: "",
         });
       } else {
         setBuyNowMessage(data.error || "Something went wrong");
@@ -116,7 +93,7 @@ export default function Header() {
     setContactMessage("");
 
     // Validare simplă
-    const requiredFields = ["firstName", "lastName", "address", "city", "state", "zip", "email", "phone"];
+    const requiredFields = ["fullName", "phone", "email"];
     for (let field of requiredFields) {
       if (!contactData[field]?.trim()) {
         setContactMessage("Please fill all required fields (*)");
@@ -136,15 +113,9 @@ export default function Header() {
       if (res.ok) {
         setContactMessage("Inquiry sent successfully!");
         setContactData({
-          firstName: "",
-          lastName: "",
-          businessName: "",
-          address: "",
-          city: "",
-          state: "",
-          zip: "",
-          email: "",
+          fullName: "",
           phone: "",
+          email: "",
           message: "",
         });
       } else {
@@ -218,7 +189,7 @@ export default function Header() {
       {/* ---------------- Buy Now Modal ---------------- */}
       {buyNowOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start justify-center z-50 px-4 pt-28 overflow-y-auto"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
           onClick={(e) => {
             if (modalRef.current && !modalRef.current.contains(e.target)) {
               setBuyNowOpen(false);
@@ -227,7 +198,7 @@ export default function Header() {
         >
           <div
             ref={modalRef}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative overflow-y-auto"
+            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
           >
             <button
               onClick={() => setBuyNowOpen(false)}
@@ -236,119 +207,63 @@ export default function Header() {
               <FaTimes />
             </button>
 
-            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-4">Buy Now Inquiry</h3>
+            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">Buy Now Inquiry</h3>
 
             <p className="text-xs text-gray-500 mb-4">
               All fields marked with an (*) are required.
             </p>
 
             <form onSubmit={handleBuyNowSubmit} className="flex flex-col gap-4">
-              {/* Machine */}
-              <input
-                type="text"
-                  name="machine"
-                  value={buyNowData.machine}
-                  onChange={handleBuyNowChange}
-                placeholder="Which Machine Are You Purchasing? *"
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                required
-              />
-
-              {/* Billing Address */}
-              <div className="text-center my-2 text-gray-400 font-medium">Billing Address</div>
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                <input
-                  type="text"
-                  name="billingStreet"
-                  value={buyNowData.billingStreet}
-                  onChange={handleBuyNowChange}
-                  placeholder="Street Address *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-                <div className="flex gap-2 mt-2">
-                  <input
-                    type="text"
-                    name="billingCity"
-                    value={buyNowData.billingCity}
-                    onChange={handleBuyNowChange}
-                    placeholder="City *"
-                    className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="billingState"
-                    value={buyNowData.billingState}
-                    onChange={handleBuyNowChange}
-                    placeholder="State *"
-                    className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                    required
-                  />
-                </div>
-              </div>
-
-              {/* Shipping Address */}
-              <div className="text-center my-2 text-gray-400 font-medium">Shipping Address</div>
-              <div className="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                <input
-                  type="text"
-                  name="shippingStreet"
-                  value={buyNowData.shippingStreet}
-                  onChange={handleBuyNowChange}
-                  placeholder="Street Address *"
-                  className="border border-gray-300 rounded-lg px-3 py-2 w-full focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                  required
-                />
-                <div className="flex gap-2 mt-2">
-                  <input
-                    type="text"
-                    name="shippingCity"
-                    value={buyNowData.shippingCity}
-                    onChange={handleBuyNowChange}
-                    placeholder="City *"
-                    className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                    required
-                  />
-                  <input
-                    type="text"
-                    name="shippingState"
-                    value={buyNowData.shippingState}
-                    onChange={handleBuyNowChange}
-                    placeholder="State *"
-                    className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-                    required
-                  />
-                </div>
-              </div>
 
               {/* Existing Fields */}
               <input 
               type="text" 
-              placeholder="Name" 
-              name="name" 
-              value={buyNowData.name}                    
+              placeholder="Full Name *" 
+              name="fullName" 
+              value={buyNowData.fullName}                    
               onChange={handleBuyNowChange} 
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" />
 
               <input 
               type="email" 
               name="email" 
-              placeholder="Email*" 
+              placeholder="Email *" 
               value={buyNowData.email}
               onChange={handleBuyNowChange} 
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" required />
 
               <input 
               type="text" 
-              placeholder="Cell Phone"  
+              placeholder="Phone Number *"  
               name="phone" 
               value={buyNowData.phone}
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]" 
               onChange={handleBuyNowChange}/>
 
+              <textarea
+              name="message"
+              value={buyNowData.message}
+              onChange={handleBuyNowChange}
+              placeholder="Message"
+              rows={4}
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
+            />
+
+            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
+              <input
+                type="checkbox"
+                name="consent"
+                defaultChecked
+                required
+                className="mt-1"
+              />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+            </label>
+
+
               <button type="submit"  disabled={buyNowLoading} className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300">
-                Send Inquiry
 
                 {buyNowLoading ? "Sending..." : "Send Inquiry"}
                 
@@ -399,73 +314,22 @@ export default function Header() {
             </p>
 
            <form onSubmit={handleContactSubmit} className="flex flex-col gap-4">
-            <div className="flex gap-2">
-              <input
-                type="text"
-                name="firstName"
-                value={contactData.firstName}
-                onChange={handleContactChange}
-                placeholder="First Name *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-              <input
-                type="text"
-                name="lastName"
-                value={contactData.lastName}
-                onChange={handleContactChange}
-                placeholder="Last Name *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-            </div>
-
             <input
-              type="text"
-              name="businessName"
-              value={contactData.businessName}
-              onChange={handleContactChange}
-              placeholder="Business Name"
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+                type="text"
+                name="fullName"
+                value={contactData.fullName}
+                onChange={handleContactChange}
+                placeholder="Full Name *"
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
 
             <input
               type="text"
-              name="address"
-              value={contactData.address}
+              name="phone"
+              value={contactData.phone}
               onChange={handleContactChange}
-              placeholder="Address *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
-            <div className="flex gap-2">
-              <input
-                type="text"
-                name="city"
-                value={contactData.city}
-                onChange={handleContactChange}
-                placeholder="City *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-              <input
-                type="text"
-                name="state"
-                value={contactData.state}
-                onChange={handleContactChange}
-                placeholder="State *"
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 w-1/2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-            </div>
-
-            <input
-              type="text"
-              name="zip"
-              value={contactData.zip}
-              onChange={handleContactChange}
-              placeholder="Zip Code *"
+              placeholder="Phone Number *"
               required
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
@@ -480,16 +344,6 @@ export default function Header() {
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
 
-            <input
-              type="text"
-              name="phone"
-              value={contactData.phone}
-              onChange={handleContactChange}
-              placeholder="Phone Number *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
-
             <textarea
               name="message"
               value={contactData.message}
@@ -498,6 +352,19 @@ export default function Header() {
               rows={4}
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
             />
+
+            <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
+              <input
+                type="checkbox"
+                name="consent"
+                defaultChecked
+                required
+                className="mt-1"
+              />
+              <span>
+                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+              </span>
+            </label>
 
             <button
               type="submit"
