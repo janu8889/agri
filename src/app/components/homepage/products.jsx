@@ -251,9 +251,9 @@ export default function ProductsSection({ products }) {
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             >
               <option value="">Preferred Time to Be Contacted *</option>
-              <option value="Morning">Morning (8AM - 12PM)</option>
-              <option value="Afternoon">Afternoon (12PM - 5PM)</option>
-              <option value="Evening">Evening (5PM - 8PM)</option>
+              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
+              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
+              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
             </select>
 
             <textarea
