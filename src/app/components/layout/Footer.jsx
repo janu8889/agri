@@ -11,6 +11,7 @@ export default function Footer() {
   const [contactData, setContactData] = useState({
     fullName: "",
     phone: "",
+    contactTime: "",
     email: "",
     message: "",
   });
@@ -54,6 +55,7 @@ export default function Footer() {
 
         setContactData({
           fullName: "",
+          contactTime: "",
           phone: "",
           email: "",
           message: "",
@@ -187,6 +189,16 @@ export default function Footer() {
             />
 
             <input
+              type="email"
+              name="email"
+              value={contactData.email}
+              onChange={handleContactChange}
+              placeholder="Email *"
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            />
+
+            <input
               type="text"
               name="phone"
               value={contactData.phone}
@@ -196,15 +208,19 @@ export default function Footer() {
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
 
-            <input
-              type="email"
-              name="email"
-              value={contactData.email}
-              onChange={handleContactChange}
-              placeholder="Email *"
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            />
+              <select
+                name="contactTime"
+                value={contactData.contactTime}
+                onChange={handleContactChange}
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              >
+
+              <option value="">Preferred Time to Be Contacted *</option>
+              <option value="Morning">Morning (8AM - 12PM)</option>
+              <option value="Afternoon">Afternoon (12PM - 5PM)</option>
+              <option value="Evening">Evening (5PM - 8PM)</option>
+            </select>
 
             <textarea
               name="message"
@@ -231,7 +247,7 @@ export default function Footer() {
             <button
               type="submit"
               disabled={contactLoading}
-              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+              className="cursor-pointer bg-[#e6c65a] text-black font-semibold py-3 rounded-xl hover:bg-[#d4b44f] hover:text-black transition-all duration-300"
             >
               {contactLoading ? "Sending..." : "Send Inquiry"}
             </button>

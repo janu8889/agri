@@ -15,6 +15,7 @@ export default function FiltreList({ products: initialProducts }) {
   const [shippingData, setShippingData] = useState({
     fullName: "",
     phone: "",
+    contactTime: "",
     email: "",
     message: "",
   });
@@ -38,6 +39,7 @@ export default function FiltreList({ products: initialProducts }) {
       "fullName",
       "phone",
       "email",
+      'contactTime',
     ];
 
     for (let field of requiredFields) {
@@ -65,6 +67,7 @@ export default function FiltreList({ products: initialProducts }) {
         }
         setShippingData({
           fullName: "",
+          contactTime: "",
           phone: "",
           email: "",
           message: "",
@@ -194,9 +197,9 @@ export default function FiltreList({ products: initialProducts }) {
 
                       setModalOpen(true);
                     }}
-                    className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300 w-full"
+                    className="cursor-pointer bg-[#e6c65a] text-black font-semibold py-3 rounded-xl  hover:bg-[#d4b44f] hover:text-black transition-all duration-300 w-full"
                   >
-                    Get Shipping Quotes
+                    Get Full Media
                   </button>
                   <Link
                     href={`/products/${prod._id}`}
@@ -273,6 +276,20 @@ export default function FiltreList({ products: initialProducts }) {
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
 
+
+            <select
+              name="contactTime"
+              value={shippingData.contactTime}
+              onChange={handleShippingChange}
+              required
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+            >
+              <option value="">Preferred Time to Be Contacted *</option>
+              <option value="Morning">Morning (8AM - 12PM)</option>
+              <option value="Afternoon">Afternoon (12PM - 5PM)</option>
+              <option value="Evening">Evening (5PM - 8PM)</option>
+            </select>
+
             <textarea
               name="message"
               value={shippingData.message}
@@ -298,7 +315,7 @@ export default function FiltreList({ products: initialProducts }) {
             <button
               type="submit"
               disabled={shippingLoading}
-              className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+              className="cursor-pointer bg-[#e6c65a] text-black font-semibold py-3 rounded-xl hover:bg-[#d4b44f] hover:text-black transition-all duration-300"
             >
               {shippingLoading ? "Sending..." : "Send Inquiry"}
             </button>

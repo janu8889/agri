@@ -7,10 +7,11 @@ export async function POST(req) {
       productName,
       email,
       phone,
-      message
+      message,
+      contactTime
     } = await req.json();
 
-    if (!fullName || !email || !phone) {
+    if (!fullName || !email || !contactTime || !phone) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -27,6 +28,7 @@ Product: ${productName}
 
 fullName ${fullName}
 phone: ${phone}
+ContactTime: ${contactTime}
 email: ${email}
 message: ${message}
 `;

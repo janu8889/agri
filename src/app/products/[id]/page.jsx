@@ -30,6 +30,7 @@ export default function ProductDetailsClient() {
     productName: "", // aici trimitem LINK-ul complet
     fullName: "",
     phone: "",
+    contactTime: "",
     email: "",
     message: "",
   });
@@ -52,6 +53,7 @@ export default function ProductDetailsClient() {
     const requiredFields = [
       "fullName",
       "phone",
+      "contactTime",
       "email",
     ];
 
@@ -82,6 +84,7 @@ export default function ProductDetailsClient() {
           productName: "",
           fullName: "",
           phone: "",
+          contactTime: "",
           email: "",
           message: "",
         });
@@ -456,6 +459,19 @@ export default function ProductDetailsClient() {
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
 
+              <select
+                name="contactTime"
+                value={inquiryData.contactTime}
+                onChange={handleInquiryChange}
+                required
+                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
+              >
+              <option value="">Preferred Time to Be Contacted *</option>
+              <option value="Morning">Morning (8AM - 12PM)</option>
+              <option value="Afternoon">Afternoon (12PM - 5PM)</option>
+              <option value="Evening">Evening (5PM - 8PM)</option>
+            </select>
+
               {/* MESSAGE */}
               <textarea
                 name="message"
@@ -484,7 +500,7 @@ export default function ProductDetailsClient() {
               <button
                 type="submit"
                 disabled={inquiryLoading}
-                className="cursor-pointer bg-[#1a1a1a] text-white font-semibold py-3 rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+                className="cursor-pointer bg-[#e6c65a] text-black font-semibold py-3 rounded-xl hover:bg-[#d4b44f] hover:text-black transition-all duration-300"
               >
                 {inquiryLoading ? "Sending..." : "Send Inquiry"}
               </button>
