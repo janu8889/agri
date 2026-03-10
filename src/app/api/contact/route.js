@@ -9,7 +9,7 @@ export async function POST(req) {
     }
 
     const token = '7594221274:AAHhvlVReiGLUAbAhePSW6cq0CEW6_5i80s';
-    const chatId = '892718536';
+    const chatId = '-5263521263';
 
     const text = `
 CONTACT US FORM
