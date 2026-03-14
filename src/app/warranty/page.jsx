@@ -47,7 +47,7 @@ export default function Warranty() {
           If for any reason you are not completely happy with your equipment purchase, simply notify us within 30 days of delivery and we will issue you a full refund – no questions asked. Whether it’s an issue with performance, suitability for the job or simply changing needs, you can return the equipment hassle-free. 
         </p>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          We even provide complimentary shipping both ways within the continental US, so there’s absolutely no risk to you. We’ll pickup the equipment and deliver it back to our dealership on us. You’ll get a prompt and courteous refund in up to 48 hours.
+          We even provide complimentary shipping both ways within the continental US, so there’s absolutely no risk to you. We’ll pick up the equipment and return it to our facility at no cost. You’ll get a prompt and courteous refund in up to 48 hours.
         </p>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
           We stand behind the quality of the equipment we sell and your complete satisfaction. Our 30-day money back guarantee allows you to purchase with confidence from our dealership. Experience the customer service and excellence we are known for – if you are not thrilled with your purchase, your money back is guaranteed.
