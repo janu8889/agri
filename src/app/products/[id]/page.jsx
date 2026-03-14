@@ -275,12 +275,17 @@ export default function ProductDetailsClient() {
                 }
               }}
             >
-              {thumbBatch.map((img, idx) => (
+            {thumbBatch.map((img, idx) => {
+              const originalImg = product.imgs.find((url) =>
+                img.includes(url.split("/upload/")[1])
+              );
+
+              return (
                 <div
                   key={idx}
-                  onClick={() => setMainImg(product.imgs[idx])}
+                  onClick={() => setMainImg(originalImg)}
                   className={`relative w-[80px] h-[80px] flex-shrink-0 rounded overflow-hidden border-2 cursor-pointer transition ${
-                    mainImg === product.imgs[idx] ? "border-[#c9a227] active-thumb" : "border-transparent"
+                    mainImg === originalImg ? "border-[#c9a227] active-thumb" : "border-transparent"
                   }`}
                 >
                   <img
@@ -291,7 +296,8 @@ export default function ProductDetailsClient() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-              ))}
+              );
+            })}
             </div>
           </div>
 
