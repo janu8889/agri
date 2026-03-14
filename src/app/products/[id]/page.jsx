@@ -109,9 +109,11 @@ export default function ProductDetailsClient() {
         const data = await res.json();
 
         // Optimizează imaginile pentru thumbnails
-        const optimizedImgs = data.imgs.map((url) =>
-          url.replace("/upload/", "/upload/f_auto,q_auto:eco,w_200/")
-        );
+        // const optimizedImgs = data.imgs.map((url) =>
+        //   url.replace("/upload/", "/upload/f_auto,q_auto:eco,w_200/")
+        // );
+        
+        const optimizedImgs = data.imgs.map(url => url);
         data.optimizedImgs = optimizedImgs;
 
         setProduct(data);
