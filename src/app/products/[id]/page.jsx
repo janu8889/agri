@@ -239,6 +239,7 @@ export default function ProductDetailsClient() {
                 alt={product.name}
                 fill
                 priority
+                unoptimized
                 sizes="(max-width: 768px) 100vw, 500px"
                 className="object-cover cursor-pointer transition-transform duration-300 hover:scale-105"
                 onClick={() => setGalleryModalOpen(true)}
@@ -275,17 +276,12 @@ export default function ProductDetailsClient() {
                 }
               }}
             >
-            {thumbBatch.map((img, idx) => {
-              const originalImg = product.imgs.find((url) =>
-                img.includes(url.split("/upload/")[1])
-              );
-
-              return (
+              {thumbBatch.map((img, idx) => (
                 <div
                   key={idx}
-                  onClick={() => setMainImg(originalImg)}
+                  onClick={() => setMainImg(product.imgs[idx])}
                   className={`relative w-[80px] h-[80px] flex-shrink-0 rounded overflow-hidden border-2 cursor-pointer transition ${
-                    mainImg === originalImg ? "border-[#c9a227] active-thumb" : "border-transparent"
+                    mainImg === product.imgs[idx] ? "border-[#c9a227] active-thumb" : "border-transparent"
                   }`}
                 >
                   <img
@@ -296,8 +292,7 @@ export default function ProductDetailsClient() {
                     className="w-full h-full object-cover"
                   />
                 </div>
-              );
-            })}
+              ))}
             </div>
           </div>
 
@@ -475,7 +470,7 @@ export default function ProductDetailsClient() {
               <option value="">Preferred Time to Be Contacted *</option>
               <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
               <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
+              <option value="Evening">Evening (5PM - 8PM)</option>
             </select>
 
               {/* MESSAGE */}
