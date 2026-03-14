@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Carousel from "./components/homepage/carousel";
 import Inventory from "./components/homepage/inventory";
 import ProductsSection from "./components/homepage/products";
+
+
 import Info from "./components/homepage/info";
 
 export default function Home() {
