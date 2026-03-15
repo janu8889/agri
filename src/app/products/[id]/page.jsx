@@ -135,10 +135,7 @@ export default function ProductDetailsClient() {
       .filter((url) => url !== mainImg)
       .forEach((url) => {
         const img = new window.Image();
-        img.src = url.replace(
-          "/upload/",
-          "/upload/f_auto,q_auto:eco,dpr_auto,w_800/"
-        );
+        img.src = url;
       });
   }, [product, mainImg]);
 
@@ -149,10 +146,8 @@ export default function ProductDetailsClient() {
     const currentIndex = product.imgs.indexOf(mainImg);
     const nextIndex = (currentIndex + 1) % product.imgs.length;
     const img = new window.Image();
-    img.src = product.imgs[nextIndex].replace(
-      "/upload/",
-      "/upload/f_auto,q_auto:eco,dpr_auto,w_800/"
-    );
+    img.src = product.imgs[nextIndex];
+    
   }, [mainImg, product]);
 
   // Fetch produse random
