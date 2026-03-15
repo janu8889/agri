@@ -147,7 +147,7 @@ export default function ProductDetailsClient() {
     const nextIndex = (currentIndex + 1) % product.imgs.length;
     const img = new window.Image();
     img.src = product.imgs[nextIndex];
-    
+
   }, [mainImg, product]);
 
   // Fetch produse random
@@ -210,10 +210,7 @@ export default function ProductDetailsClient() {
     currentIndex > 0 && setMainImg(product.imgs[currentIndex - 1]);
 
   // Main image optimizată (800px) + dpr_auto
-  const mainImgOptimized = mainImg.replace(
-    "/upload/",
-    "/upload/f_auto,q_auto:eco,dpr_auto,w_800/"
-  );
+  const mainImgOptimized = mainImg;
 
   // Încarcă batch-ul următor de thumbnails
   const loadNextBatch = () => {
@@ -396,7 +393,7 @@ export default function ProductDetailsClient() {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
             onClick={(e) => {
               if (modalRef.current && !modalRef.current.contains(e.target)) {
-                setModalOpen(false);
+                setInquiryModalOpen(false);
               }
             }}
         >
