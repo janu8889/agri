@@ -34,12 +34,14 @@ export default function FiltreList({ products: initialProducts }) {
   async function handleShippingSubmit(e) {
     e.preventDefault();
     setShippingMessage("");
-   
+
+    if (shippingLoading) return; // 🔥 anti double click
+
     const requiredFields = [
       "fullName",
       "phone",
       "email",
-      'contactTime',
+      "contactTime",
     ];
 
     for (let field of requiredFields) {
@@ -62,25 +64,35 @@ export default function FiltreList({ products: initialProducts }) {
 
       if (res.ok) {
         setShippingMessage("Inquiry sent successfully!");
-        if (typeof window !== "undefined" && window.fbq) {
-           window.fbq("track", "Lead", {
-            content_name: selectedProduct.name,
-            content_category: selectedProduct.category,
-            content_ids: [selectedProduct._id],
-            value: selectedProduct.price || 0,
-            currency: "USD",
-          });    
+
+        // 🔥 META LEAD (cu protecție)
+        if (typeof window !== "undefined" && window.fbq && selectedProduct) {
+          const leadKey = `fb_lead_${selectedProduct._id}_shipping`;
+
+          if (!sessionStorage.getItem(leadKey)) {
+            window.fbq("track", "Lead", {
+              content_ids: [selectedProduct._id],
+              value: selectedProduct.price || 0,
+              currency: "USD",
+            });
+
+            sessionStorage.setItem(leadKey, "1");
+          }
         }
+
+        // ✅ reset doar la succes
         setShippingData({
           fullName: "",
-          contactTime: "",
           phone: "",
+          contactTime: "",
           email: "",
           message: "",
         });
+
       } else {
         setShippingMessage(data.error || "Something went wrong");
       }
+
     } catch (err) {
       setShippingMessage("Server error. Try again later.");
     } finally {

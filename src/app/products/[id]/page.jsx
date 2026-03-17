@@ -46,9 +46,11 @@ export default function ProductDetailsClient() {
     }));
   }
 
-  async function handleInquirySubmit(e) {
+  async function handleShippingSubmit(e) {
     e.preventDefault();
-    setInquiryMessage("");
+    setShippingMessage("");
+
+    if (shippingLoading) return; // 🔥 anti double click
 
     const requiredFields = [
       "fullName",
@@ -58,49 +60,58 @@ export default function ProductDetailsClient() {
     ];
 
     for (let field of requiredFields) {
-      if (!inquiryData[field]?.trim()) {
-        setInquiryMessage("Please fill all required fields (*)");
+      if (!shippingData[field]?.trim()) {
+        setShippingMessage("Please fill all required fields (*)");
         return;
       }
     }
 
-    setInquiryLoading(true);
+    setShippingLoading(true);
 
     try {
-      const res = await fetch("/api/inquiry", {
+      const res = await fetch("/api/shipping-quote", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(inquiryData),
+        body: JSON.stringify(shippingData),
       });
 
       const data = await res.json();
 
       if (res.ok) {
-        setInquiryMessage("Inquiry sent successfully!");
-        if (typeof window !== "undefined" && window.fbq) {
+        setShippingMessage("Inquiry sent successfully!");
+
+        // 🔥 META LEAD (cu protecție)
+        if (typeof window !== "undefined" && window.fbq && selectedProduct) {
+          const leadKey = `fb_lead_${selectedProduct._id}_shipping`;
+
+          if (!sessionStorage.getItem(leadKey)) {
             window.fbq("track", "Lead", {
-              content_name: product.name,
-              content_category: product.category,
-              content_ids: [product._id], // 👈 IMPORTANT (array!)
-              value: product.price || 0,
+              content_ids: [selectedProduct._id],
+              value: selectedProduct.price || 0,
               currency: "USD",
-            });     
+            });
+
+            sessionStorage.setItem(leadKey, "1");
+          }
         }
-        setInquiryData({
-          productName: "",
+
+        // ✅ reset DOAR la succes
+        setShippingData({
           fullName: "",
           phone: "",
           contactTime: "",
           email: "",
           message: "",
         });
+
       } else {
-        setInquiryMessage(data.error || "Something went wrong");
+        setShippingMessage(data.error || "Something went wrong");
       }
+
     } catch (err) {
-      setInquiryMessage("Server error. Try again later.");
+      setShippingMessage("Server error. Try again later.");
     } finally {
-      setInquiryLoading(false);
+      setShippingLoading(false);
     }
   }
 
@@ -114,19 +125,35 @@ export default function ProductDetailsClient() {
         if (!res.ok) return;
         const data = await res.json();
 
-        // Optimizează imaginile pentru thumbnails
-        // const optimizedImgs = data.imgs.map((url) =>
-        //   url.replace("/upload/", "/upload/f_auto,q_auto:eco,w_200/")
-        // );
-        
         const optimizedImgs = data.imgs.map(url => url);
         data.optimizedImgs = optimizedImgs;
 
         setProduct(data);
         setMainImg(data.imgs?.[0] || "/imgs/placeholder.png");
-
-        // Primele BATCH_SIZE thumbnails
         setThumbBatch(optimizedImgs);
+
+        // 🔥 Aici poți pune ViewContent (după setProduct)
+        if (typeof window !== "undefined" && window.fbq) {
+          const key = `fb_vc_${data._id}`;
+          if (!sessionStorage.getItem(key)) {
+            window.fbq("track", "ViewContent", {
+              content_type: "product",
+              content_name: data.name,
+              content_category: data.category,
+              value: data.price || 0,
+              currency: "USD",
+              contents: [{ id: data._id, quantity: 1, item_price: data.price || 0 }],
+              brand: data.manufacturer || "",
+              condition: data.condition || "",
+              year: data.year || null,
+              hours: data.hours || null,
+              power_hp: data.engineHorsepower || null,
+              drive: data.drive || "",
+            });
+            sessionStorage.setItem(key, "1");
+          }
+        }
+
       } catch (err) {
         console.error(err);
       }
