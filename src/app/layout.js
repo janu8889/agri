@@ -2,6 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import TopBar from "./components/layout/TopBar";
+import EmailLink from "./components/layout/EmailLink";
 import Script from "next/script";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
@@ -129,12 +130,7 @@ export default function RootLayout({ children }) {
             <p className="text-gray-800 font-medium text-base md:text-lg tracking-wide">
               EMAIL US:
             </p>
-            <a
-              href="mailto:sales@robinson-equipment.com"
-              className="text-[#c9a227] text-base md:text-lg font-semibold hover:underline hover:text-[#a17f0d] transition duration-300"
-            >
-              	sales@robinson-equipment.com
-            </a>
+          <EmailLink />
           </div>
         </div>
         <Footer />

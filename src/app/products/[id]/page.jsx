@@ -78,7 +78,13 @@ export default function ProductDetailsClient() {
       if (res.ok) {
         setInquiryMessage("Inquiry sent successfully!");
         if (typeof window !== "undefined" && window.fbq) {
-          window.fbq("track", "Lead")     
+            window.fbq("track", "Lead", {
+              content_name: product.name,
+              content_category: product.category,
+              content_ids: [product._id], // 👈 IMPORTANT (array!)
+              value: product.price || 0,
+              currency: "USD",
+            });     
         }
         setInquiryData({
           productName: "",

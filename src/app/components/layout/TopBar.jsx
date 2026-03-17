@@ -25,7 +25,20 @@ export default function TopBar() {
           {/* PHONE - mereu vizibil */}
           <div className="flex items-center space-x-2">
             <FaPhoneAlt className="text-[#c9a227]" />
-            <a href="tel:+16898887714">(689) 888-7714</a>
+            <a
+              href="tel:+16898887714"
+              onClick={() => {
+                if (typeof window !== "undefined" && window.fbq) {
+                  window.fbq("trackCustom", "Contact", {
+                    method: "phone"
+                  });
+
+                  window.fbq("track", "Lead");
+                }
+              }}
+            >
+              (689) 888-7714
+           </a>
            </div> 
 
           {/* ADDRESS - ascuns pe mobil */}
