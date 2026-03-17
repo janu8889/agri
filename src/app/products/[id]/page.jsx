@@ -46,77 +46,80 @@ export default function ProductDetailsClient() {
     }));
   }
 
- async function handleInquirySubmit(e) {
-  e.preventDefault();
-  setInquiryMessage("");
+  async function handleInquirySubmit(e) {
+    e.preventDefault();
 
-  if (inquiryLoading) return; // anti spam click
+    // 🔥 ANTI DOUBLE SUBMIT
+    if (inquiryLoading) return;
 
-  const requiredFields = [
-    "fullName",
-    "phone",
-    "contactTime",
-    "email",
-  ];
+    setInquiryMessage("");
 
-  for (let field of requiredFields) {
-    if (!inquiryData[field]?.trim()) {
-      setInquiryMessage("Please fill all required fields (*)");
-      return;
-    }
-  }
+    const requiredFields = [
+      "fullName",
+      "phone",
+      "contactTime",
+      "email",
+    ];
 
-  setInquiryLoading(true);
-
-  try {
-    const res = await fetch("/api/inquiry", { // 🔥 endpoint corect
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(inquiryData),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      setInquiryMessage("Inquiry sent successfully!");
-
-      // 🔥 META LEAD CORECT
-      if (typeof window !== "undefined" && window.fbq && product) {
-        const leadKey = `fb_lead_${product._id}_inquiry`;
-
-        if (!sessionStorage.getItem(leadKey)) {
-          window.fbq("track", "Lead", {
-            content_ids: [product._id],
-            value: product.price || 0,
-            currency: "USD",
-            form_type: "inquiry", // 🔥 IMPORTANT
-          });
-
-          sessionStorage.setItem(leadKey, "1");
-        }
+    for (let field of requiredFields) {
+      if (!inquiryData[field]?.trim()) {
+        setInquiryMessage("Please fill all required fields (*)");
+        return;
       }
+    }
 
-      // reset
-      setInquiryData({
-        productName: "",
-        fullName: "",
-        phone: "",
-        contactTime: "",
-        email: "",
-        message: "",
+    setInquiryLoading(true);
+
+    try {
+      const res = await fetch("/api/inquiry", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(inquiryData),
       });
 
-    } else {
-      setInquiryMessage(data.error || "Something went wrong");
+      const data = await res.json();
+
+      if (res.ok) {
+        setInquiryMessage("Inquiry sent successfully!");
+
+        if (typeof window !== "undefined" && window.fbq) {
+          const leadKey = `fb_lead_${product._id}`;
+          if (!sessionStorage.getItem(leadKey)) {
+            window.fbq("track", "Lead", {
+              content_name: product.name,
+              content_category: product.category,
+              content_ids: [product._id],
+              value: product.price || 0,
+              currency: "USD",
+              brand: product.manufacturer || "",
+              year: product.year || null,
+              hours: product.hours || null,
+              power_hp: product.engineHorsepower || null,
+              drive: product.drive || "",
+            });
+            sessionStorage.setItem(leadKey, "1");
+          }
+        }
+
+        // ✅ reset DOAR dacă e succes
+        setInquiryData({
+          productName: "",
+          fullName: "",
+          phone: "",
+          contactTime: "",
+          email: "",
+          message: "",
+        });
+
+      } else {
+        setInquiryMessage(data.error || "Something went wrong");
+      }
+    } catch (err) {
+      setInquiryMessage("Server error. Try again later.");
+    } finally {
+      setInquiryLoading(false);
     }
-
-  } catch (err) {
-    setInquiryMessage("Server error. Try again later.");
-  } finally {
-    setInquiryLoading(false);
   }
-}
-
 
   // Fetch produsul curent
   useEffect(() => {

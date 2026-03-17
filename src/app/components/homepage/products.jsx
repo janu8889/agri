@@ -31,12 +31,16 @@ export default function ProductsSection({ products }) {
 
   async function handleShippingSubmit(e) {
     e.preventDefault();
+
+    // 🔥 ANTI DOUBLE SUBMIT
+    if (shippingLoading) return;
+
     setShippingMessage("");
 
     const requiredFields = [
       "fullName",
       "phone",
-      'contactTime',
+      "contactTime",
       "email",
     ];
 
@@ -60,15 +64,27 @@ export default function ProductsSection({ products }) {
 
       if (res.ok) {
         setShippingMessage("Inquiry sent successfully!");
-        if (typeof window !== "undefined" && window.fbq) {
-          window.fbq("track", "Lead", {
-            content_name: selectedProduct.name,
-            content_category: selectedProduct.category,
-            content_ids: [selectedProduct._id],
-            value: selectedProduct.price || 0,
-            currency: "USD",
-          });    
+
+        if (typeof window !== "undefined" && window.fbq && selectedProduct) {
+          const leadKey = `fb_shipping_lead_${selectedProduct._id}`;
+          if (!sessionStorage.getItem(leadKey)) {
+            window.fbq("track", "Lead", {
+              content_name: selectedProduct.name,
+              content_category: selectedProduct.category,
+              content_ids: [selectedProduct._id],
+              value: selectedProduct.price || 0,
+              currency: "USD",
+              brand: selectedProduct.manufacturer || "",
+              year: selectedProduct.year || null,
+              hours: selectedProduct.hours || null,
+              power_hp: selectedProduct.engineHorsepower || null,
+              drive: selectedProduct.drive || "",
+            });
+            sessionStorage.setItem(leadKey, "1");
+          }
         }
+
+        // ✅ reset DOAR dacă e succes
         setShippingData({
           fullName: "",
           contactTime: "",
