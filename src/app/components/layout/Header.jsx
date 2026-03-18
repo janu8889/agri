@@ -278,9 +278,18 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
   const [open, setOpen] = useState(false);
   const [inventoryOpen, setInventoryOpen] = useState(false);
 
+  // 🔥 ASTA E TOT
+  const closeMenu = () => {
+    setOpen(false);
+    setInventoryOpen(false);
+  };
+
   return (
     <div className="relative">
-      <button className="flex flex-col w-6 h-6 justify-between" onClick={() => setOpen(!open)}>
+      <button
+        className="flex flex-col w-6 h-6 justify-between"
+        onClick={() => setOpen(!open)}
+      >
         <span className="block w-full h-[2px] bg-[#1a1a1a]"></span>
         <span className="block w-full h-[2px] bg-[#1a1a1a]"></span>
         <span className="block w-full h-[2px] bg-[#1a1a1a]"></span>
@@ -288,27 +297,51 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
 
       {open && (
         <div className="absolute z-50 right-0 mt-2 w-48 bg-[#eeeeee] shadow-lg rounded-md py-2 flex flex-col gap-1">
+          
+          {/* INVENTORY */}
           <button
             className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]"
             onClick={() => setInventoryOpen(!inventoryOpen)}
           >
             INVENTORY
           </button>
+
           {inventoryOpen && (
             <div className="flex flex-col ml-2 gap-1">
-              <Link href="/inventory/agriculture" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">AGRICULTURE</Link>
-              <Link href="/inventory/construction" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">CONSTRUCTION</Link>
-              <Link href="/inventory/attachments" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] ">ATTACHMENTS</Link>
+              <Link href="/inventory/agriculture" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
+                AGRICULTURE
+              </Link>
+              <Link href="/inventory/construction" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
+                CONSTRUCTION
+              </Link>
+              <Link href="/inventory/attachments" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
+                ATTACHMENTS
+              </Link>
             </div>
           )}
 
-          <Link href="/warranty" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">WARRANTY</Link>
+          {/* LINKS */}
+          <Link href="/warranty" onClick={closeMenu} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
+            WARRANTY
+          </Link>
 
-          <Link href="/shipping" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">SHIPPING</Link>
-          <button onClick={() => setContactOpen(true)} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
+          <Link href="/shipping" onClick={closeMenu} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
+            SHIPPING
+          </Link>
+
+          <button
+            onClick={() => {
+              setContactOpen(true);
+              closeMenu(); // 🔥 important
+            }}
+            className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]"
+          >
             CONTACT US
           </button>
-          <Link href="/about" className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">ABOUT US</Link>
+
+          <Link href="/about" onClick={closeMenu} className="text-left w-full px-4 py-2 uppercase tracking-wide text-[#1a1a1a] hover:text-[#c9a227]">
+            ABOUT US
+          </Link>
         </div>
       )}
     </div>
