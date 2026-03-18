@@ -2,9 +2,9 @@ import { NextResponse } from "next/server";
 
 export async function POST(req) {
   try {
-    const { fullName, email, phone, message, contactTime } = await req.json();
+    const { fullName, email, phone, message } = await req.json();
 
-    if (!fullName || !email || !contactTime || !phone) {
+    if (!fullName || !email || !phone) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -15,10 +15,10 @@ export async function POST(req) {
 CONTACT US FORM
 fullName: ${fullName}
 Email: ${email}
-ContactTime: ${contactTime}
 Phone: ${phone}
 Message: ${message}
 `;
+
 
     const tgRes = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
@@ -27,6 +27,7 @@ Message: ${message}
     });
 
     const data = await tgRes.json();
+
 
     return NextResponse.json({ ok: true, telegram: data });
   } catch (err) {

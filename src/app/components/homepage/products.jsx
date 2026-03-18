@@ -5,6 +5,7 @@ import Spinner from "../ui/spinner";
 import { FaSearch, FaClock, FaTimes } from "react-icons/fa";
 import Link from "next/link";
 
+// contactTime
 export default function ProductsSection({ products }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -13,7 +14,6 @@ export default function ProductsSection({ products }) {
   const [shippingData, setShippingData] = useState({
     fullName: "",
     phone: "",
-    contactTime: "",
     email: "",
     message: "",
   });
@@ -40,7 +40,6 @@ export default function ProductsSection({ products }) {
     const requiredFields = [
       "fullName",
       "phone",
-      "contactTime",
       "email",
     ];
 
@@ -87,7 +86,6 @@ export default function ProductsSection({ products }) {
         // ✅ reset DOAR dacă e succes
         setShippingData({
           fullName: "",
-          contactTime: "",
           phone: "",
           email: "",
           message: "",
@@ -223,7 +221,7 @@ export default function ProductsSection({ products }) {
             </button>
 
             <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
-              Shipping Quote Inquiry
+              Full Media Inquiry
             </h3>
 
             {selectedProduct && (
@@ -264,19 +262,6 @@ export default function ProductsSection({ products }) {
               required
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
-
-            <select
-              name="contactTime"
-              value={shippingData.contactTime}
-              onChange={handleShippingChange}
-              required
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-            >
-              <option value="">Preferred Time to Be Contacted *</option>
-              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
-              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
-            </select>
 
             <textarea
               name="message"

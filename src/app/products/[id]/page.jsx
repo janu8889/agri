@@ -30,7 +30,6 @@ export default function ProductDetailsClient() {
     productName: "", // aici trimitem LINK-ul complet
     fullName: "",
     phone: "",
-    contactTime: "",
     email: "",
     message: "",
   });
@@ -57,7 +56,6 @@ export default function ProductDetailsClient() {
     const requiredFields = [
       "fullName",
       "phone",
-      "contactTime",
       "email",
     ];
 
@@ -106,7 +104,6 @@ export default function ProductDetailsClient() {
           productName: "",
           fullName: "",
           phone: "",
-          contactTime: "",
           email: "",
           message: "",
         });
@@ -491,19 +488,6 @@ export default function ProductDetailsClient() {
                 onChange={handleInquiryChange}
                 className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
               />
-
-              <select
-                name="contactTime"
-                value={inquiryData.contactTime}
-                onChange={handleInquiryChange}
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              >
-              <option value="">Preferred Time to Be Contacted *</option>
-              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
-              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-              <option value="Evening">Evening (5PM - 8PM)</option>
-            </select>
 
               {/* MESSAGE */}
               <textarea

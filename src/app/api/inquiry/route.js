@@ -8,14 +8,13 @@ export async function POST(req) {
       email,
       phone,
       message,
-      contactTime
     } = await req.json();
 
     // Validare required
     if (
       !fullName ||
       !email ||
-      !phone || !contactTime) {
+      !phone) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -32,7 +31,6 @@ Product: ${productName}
 
 fullName ${fullName}
 phone: ${phone}
-ContactTime: ${contactTime}
 email: ${email}
 message: ${message}
 `;

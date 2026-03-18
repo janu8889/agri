@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FaTimes } from "react-icons/fa";
 
+// contactTime
 export default function Footer() {
   const [contactOpen, setContactOpen] = useState(false);
   const modalRef = useRef(null);
@@ -11,7 +12,6 @@ export default function Footer() {
   const [contactData, setContactData] = useState({
     fullName: "",
     phone: "",
-    contactTime: "",
     email: "",
     message: "",
   });
@@ -55,7 +55,6 @@ export default function Footer() {
 
         setContactData({
           fullName: "",
-          contactTime: "",
           phone: "",
           email: "",
           message: "",
@@ -207,20 +206,6 @@ export default function Footer() {
               required
               className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
             />
-
-              <select
-                name="contactTime"
-                value={contactData.contactTime}
-                onChange={handleContactChange}
-                required
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              >
-
-              <option value="">Preferred Time to Be Contacted *</option>
-              <option value="Morning (8AM - 12PM)">Morning (8AM - 12PM)</option>
-              <option value="Afternoon (12PM - 5PM)">Afternoon (12PM - 5PM)</option>
-              <option value="Evening (5PM - 8PM)">Evening (5PM - 8PM)</option>
-            </select>
 
             <textarea
               name="message"

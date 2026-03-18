@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { TbTeapot } from "react-icons/tb";
 
 export async function POST(req) {
   try {
@@ -8,10 +9,9 @@ export async function POST(req) {
       email,
       phone,
       message,
-      contactTime
     } = await req.json();
 
-    if (!fullName || !email || !contactTime || !phone) {
+    if (!fullName || !email  || !phone) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -20,7 +20,7 @@ export async function POST(req) {
 
     const token = '7594221274:AAHhvlVReiGLUAbAhePSW6cq0CEW6_5i80s';
     const chatId = '-5263521263';
-    console.log(productName)
+    
     const text = `
 Fill media REQUEST
 
@@ -28,10 +28,10 @@ Product: ${productName}
 
 fullName ${fullName}
 phone: ${phone}
-ContactTime: ${contactTime}
 email: ${email}
 message: ${message}
 `;
+
 
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
