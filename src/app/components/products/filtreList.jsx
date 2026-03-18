@@ -158,25 +158,6 @@ export default function FiltreList({ products: initialProducts }) {
     <section className="bg-[#f3f4f6] py-16">
       <div className="max-w-screen-2xl mx-auto px-6">
 
-        {/* SORT BY */}
-        <div className="flex flex-wrap items-center justify-between mb-8 gap-4">
-          <div className="flex-1 min-w-[150px]">
-            <label className="block font-semibold text-[#1a1a1a] mb-2">Sort By</label>
-            <select
-              value={sort}
-              onChange={handleSortChange}
-              className="border border-gray-300 rounded px-4 py-2 w-full sm:w-60 focus:ring-2 focus:ring-[#c9a227]"
-            >
-              <option value="">Default</option>
-              <option value="priceLow">Lowest Price</option>
-              <option value="priceHigh">Highest Price</option>
-              <option value="hoursLow">Lowest Hours</option>
-              <option value="hoursHigh">Highest Hours</option>
-              <option value="yearNew">Newest Year</option>
-              <option value="yearOld">Oldest Year</option>
-            </select>
-          </div>
-        </div>
 
         {/* GRID PRODUSE */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-8">

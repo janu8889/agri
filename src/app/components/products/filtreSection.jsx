@@ -117,6 +117,25 @@ export default function FilterSection({ defaultCategory, onFilter }) {
           </select>
         </div>
 
+        {/* 🔥 SORT (ADĂUGAT CORECT) */}
+        <div className="flex flex-col gap-2">
+          <label className="font-semibold text-[#1a1a1a]">Sort By</label>
+          <select
+            name="sort"
+            value={filters.sort}
+            onChange={handleChange}
+            className="border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#c9a227]"
+          >
+            <option value="">Default</option>
+            <option value="priceLow">Lowest Price</option>
+            <option value="priceHigh">Highest Price</option>
+            <option value="hoursLow">Lowest Hours</option>
+            <option value="hoursHigh">Highest Hours</option>
+            <option value="yearNew">Newest Year</option>
+            <option value="yearOld">Oldest Year</option>
+          </select>
+        </div>
+
         {/* Year */}
         <div className="flex flex-col gap-2">
           <label className="font-semibold text-[#1a1a1a]">Year</label>
@@ -210,7 +229,7 @@ export default function FilterSection({ defaultCategory, onFilter }) {
         </div>
       </div>
 
-      {/* Apply Filters Button jos */}
+      {/* Apply Filters Button */}
       <div className="mt-6 text-right md:text-right">
         <button
           onClick={handleSearch}
