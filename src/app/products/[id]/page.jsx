@@ -5,7 +5,12 @@ import { FaTimes, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import CategorySeparator from "@/app/components/product/category";
 import ListsSection from "@/app/components/homepage/products";
 import Spinner from "@/app/components/ui/spinner";
+import MobileBottomBar from "@/app/components/layout/MobileBottomBar";
+import InquiryForm from "@/app/components/product/InquiryForm";
 import { useParams } from "next/navigation";
+import { FaCheckCircle, FaTruck } from "react-icons/fa";
+import { FaEnvelope } from "react-icons/fa";
+
 import Image from "next/image";
 
 const BATCH_SIZE = 1; // câte thumbnails încărcăm pe batch
@@ -21,6 +26,7 @@ export default function ProductDetailsClient() {
   const [products, setProducts] = useState([]);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [thumbBatch, setThumbBatch] = useState([]);
+  const inquiryFormRef = useRef(null);
 
   const inquiryRef = useRef();
   const thumbsRef = useRef(null);
@@ -323,6 +329,33 @@ export default function ProductDetailsClient() {
                 </div>
               ))}
             </div>
+            <div className="flex flex-col sm:flex-row gap-4 mt-6 bg-white p-4 rounded-xl shadow-md border border-gray-100">
+  
+  {/* No Hidden Fees */}
+<div className="flex items-center gap-3 flex-1">
+  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-100">
+    <FaCheckCircle className="w-5 h-5 text-green-600" />
+  </div>
+
+  <div className="flex flex-col">
+    <span className="font-semibold text-gray-800">No Hidden Fees</span>
+    <span className="text-sm text-gray-500">All fees included</span>
+  </div>
+</div>
+
+{/* Nationwide Shipping */}
+<div className="flex items-center gap-3 flex-1">
+  <div className="w-10 h-10 flex items-center justify-center rounded-full bg-[#f5e7b2]">
+    <FaTruck className="w-5 h-5 text-[#c9a227]" />
+  </div>
+
+  <div className="flex flex-col">
+    <span className="font-semibold text-gray-800">Nationwide Shipping</span>
+    <span className="text-sm text-gray-500">All 50 states</span>
+  </div>
+</div>
+
+</div>
           </div>
 
 {/* RIGHT COLUMN */}
@@ -332,18 +365,29 @@ export default function ProductDetailsClient() {
 
   {/* SEND INQUIRY BUTTON */}
   <button
-    onClick={() => {
-      setSelectedProduct(product);
-      setInquiryData(prev => ({
-        ...prev,
-        productName: `https://robinson-equipment.com/products/${product._id}`,
-      }));
-      setInquiryModalOpen(true);
-    }}
-    className="w-full bg-[#e6c65a] text-black py-3 rounded-xl font-bold hover:bg-[#d4b44f] hover:text-black cursor-pointer transition-all duration-300"
-  >
-    Send Inquiry
-  </button>
+      onClick={() => {
+        setSelectedProduct(product);
+        setInquiryData(prev => ({
+          ...prev,
+          productName: `https://robinson-equipment.com/products/${product._id}`,
+        }));
+
+        // Scroll la formular
+        if (inquiryFormRef.current) {
+          const yOffset = -200; // ajustează după nevoie
+          const y = inquiryFormRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: y, behavior: "smooth" });
+        }
+      }}
+      className="flex items-center justify-center gap-2
+            bg-[#e6c65a] text-black font-bold
+            py-3 px-6 rounded-xl
+            shadow-md hover:shadow-lg
+            hover:bg-[#d4b44f] transition-all duration-300 cursor-pointer"
+    >
+      <FaEnvelope className="w-5 h-5" />
+      Make an Inquiry
+    </button>
 
   {/* INFO DYNAMIC + DESCRIPTION */}
   <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
@@ -371,7 +415,6 @@ export default function ProductDetailsClient() {
       </div>
     )}
   </div>
-
   {/* Reference rămâne exact cum e */}
   {product.stockNumber && (
     <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
@@ -422,122 +465,25 @@ export default function ProductDetailsClient() {
           </div>
         </div>
       )}
+      <MobileBottomBar
+        product={product}
+        onInquiryClick={() => {
+          setSelectedProduct(product);
+          setInquiryData(prev => ({
+            ...prev,
+            productName: `https://robinson-equipment.com/products/${product._id}`,
+          }));
 
-      {/* INQUIRY MODAL */}
-      {inquiryModalOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-start pt-28 justify-center z-50 px-4 py-10 overflow-y-auto"
-            onClick={(e) => {
-              if (modalRef.current && !modalRef.current.contains(e.target)) {
-                setInquiryModalOpen(false);
-              }
-            }}
-        >
-          <div
-            ref={modalRef}
-            className="bg-white rounded-xl shadow-2xl max-w-md w-full p-6 relative"
-          >
-            <button
-              onClick={() => setInquiryModalOpen(false)}
-              className="absolute top-3 right-3 text-gray-600 hover:text-[#c9a227] text-xl"
-            >
-              <FaTimes />
-            </button>
+          // Scroll la formular
+          if (inquiryFormRef.current) {
+            const yOffset = -200; // ajustează după nevoie
+            const y = inquiryFormRef.current.getBoundingClientRect().top + window.pageYOffset + yOffset;
+            window.scrollTo({ top: y, behavior: "smooth" });
+          }
+        }}
+      />
 
-            <h3 className="text-[22px] font-bold text-[#1a1a1a] mb-2">
-              Inquiry
-            </h3>
-
-            {selectedProduct && (
-              <p className="mb-4 text-[#555] font-medium">{selectedProduct.name}</p>
-            )}
-
-            <form onSubmit={handleInquirySubmit} className="flex flex-col gap-4">
-              <p className="text-xs text-gray-500 mb-4">
-                All fields marked with an (*) are required.
-              </p>
-
-              {/* NAME */}
-              <input
-                type="text"
-                name="fullName"
-                placeholder="Full Name *"
-                required
-                value={inquiryData.fullName}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* EMAIL */}
-              <input
-                type="email"
-                name="email"
-                placeholder="Email *"
-                required
-                value={inquiryData.email}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* PHONE */}
-              <input
-                type="text"
-                name="phone"
-                placeholder="Phone Number *"
-                required
-                value={inquiryData.phone}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227]"
-              />
-
-              {/* MESSAGE */}
-              <textarea
-                name="message"
-                placeholder="Message"
-                rows={4}
-                value={inquiryData.message}
-                onChange={handleInquiryChange}
-                className="border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#c9a227] resize-none"
-              />
-
-              <label className="flex items-start gap-2 text-xs text-gray-500 mb-4">
-                <input
-                  type="checkbox"
-                  name="consent"
-                  defaultChecked
-                  required
-                  className="mt-1"
-                />
-              <span>
-                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
-              </span>
-              </label>
-
-
-              {/* SUBMIT BUTTON */}
-              <button
-                type="submit"
-                disabled={inquiryLoading}
-                className="cursor-pointer bg-[#e6c65a] text-black font-semibold py-3 rounded-xl hover:bg-[#d4b44f] hover:text-black transition-all duration-300"
-              >
-                {inquiryLoading ? "Sending..." : "Send Inquiry"}
-              </button>
-
-              {/* MESSAGE */}
-              {inquiryMessage && (
-                <p
-                  className={`text-sm ${
-                    inquiryMessage.toLowerCase().includes("success")
-                      ? "text-green-600"
-                      : "text-red-600"
-                  }`}
-                >
-                  {inquiryMessage}
-                </p>
-              )}
-            </form>
-          </div>
-        </div>
-      )}
+      {product && <InquiryForm ref={inquiryFormRef} product={product} />}
 
       <CategorySeparator category={product.category} />
       <ListsSection products={products} />
