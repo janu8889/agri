@@ -394,7 +394,7 @@ export default function ProductDetailsClient() {
     {Object.entries(product).map(([key, value]) => {
       if (!value) return null;
       if (Array.isArray(value) || typeof value === "object") return null;
-      if (key === "name" || key === "price" || key === "imgs" || key === "optimizedImgs" || key === "category" || key === "_id" || key === "createdAt") return null;
+      if (key === "name" || key === "price" || key === "imgs" || key === "optimizedImgs" || key === "category" || key === "_id" || key === "createdAt" || key ==="__v" || key ==="__V") return null;
       if (key === "description") return null;
       if (key === "stockNumber") return null;
 
