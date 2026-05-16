@@ -44,7 +44,7 @@ export default function TopBar() {
           {/* ADDRESS - ascuns pe mobil */}
           <div className="hidden md:flex items-center space-x-2">
             <FaMapMarkerAlt className="text-[#c9a227]" />
-            <span>3030 Cuyler St, Mims, FL 32754</span>
+            <span>4101 Ravenswood Rd Suite 317, Fort Lauderdale, FL 33312</span>
           </div>
 
         </div>

@@ -38,16 +38,16 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Robinson Equipment Co. is a full service provider of pre-owned construction and lift equipment. We add value to the sale of each machine by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
+          Cashman Machinery International is a full service provider of pre-owned construction and lift equipment. We add value to the sale of each machine by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
         </p>
       </div>
 
        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <h1 className="text-[24px] md:text-[28px] font-bold text-[#c9a227] mb-4">
-          Robinson Equipment Co. – Sales
+          Cashman Machinery International – Sales
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Robinson Equipment Co. experience with equipment came from being involved at an early age in the family’s landscaping and snow removal company. He saw how buying clean, good used equipment was one way to have the right equipment at the right time to make jobs flow smoothly without the high payments of new equipment or high priced rentals. Robinson Equipment Co. is interested in helping customers to be profitable in their companies by providing good used equipment to help them get the work done. 
+          Cashman Machinery International experience with equipment came from being involved at an early age in the family’s landscaping and snow removal company. He saw how buying clean, good used equipment was one way to have the right equipment at the right time to make jobs flow smoothly without the high payments of new equipment or high priced rentals. Cashman Machinery International is interested in helping customers to be profitable in their companies by providing good used equipment to help them get the work done. 
         </p>
       </div>
        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
@@ -55,7 +55,7 @@ export default function About() {
           ABOUT US
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Robinson Equipment Co. is a full service provider of pre-owned and new construction and lift equipment. We add value to the sale of each machine by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
+          Cashman Machinery International is a full service provider of pre-owned and new construction and lift equipment. We add value to the sale of each machine by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
         </p>
       </div>
     </div>

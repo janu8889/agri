@@ -369,7 +369,7 @@ export default function ProductDetailsClient() {
         setSelectedProduct(product);
         setInquiryData(prev => ({
           ...prev,
-          productName: `https://robinson-equipment.com/products/${product._id}`,
+          productName: `https://cashman-machinery.com/products/${product._id}`,
         }));
 
         // Scroll la formular
@@ -471,7 +471,7 @@ export default function ProductDetailsClient() {
           setSelectedProduct(product);
           setInquiryData(prev => ({
             ...prev,
-            productName: `https://robinson-equipment.com/products/${product._id}`,
+            productName: `https://cashman-machinery.com/products/${product._id}`,
           }));
 
           // Scroll la formular

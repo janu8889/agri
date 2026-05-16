@@ -177,7 +177,7 @@ export default function Warranty() {
             Our Satisfied Clients
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Our reputation is built on the trust of hundreds of clients across the construction and agricultural sectors who rely on our machinery to drive their businesses forward. We take pride in a track record defined by transparency and the strict honoring of our warranty commitments. For us, success is not just about the sale, but about supporting the people who use our equipment day in and day out. By choosing Robinson Equipment Co., you join a network of professionals who know that their investment is fully protected by a partner dedicated to their long-term operational security.
+          Our reputation is built on the trust of hundreds of clients across the construction and agricultural sectors who rely on our machinery to drive their businesses forward. We take pride in a track record defined by transparency and the strict honoring of our warranty commitments. For us, success is not just about the sale, but about supporting the people who use our equipment day in and day out. By choosing Cashman Machinery International, you join a network of professionals who know that their investment is fully protected by a partner dedicated to their long-term operational security.
         </p>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
@@ -194,7 +194,7 @@ export default function Warranty() {
             Real-World Results
         </h2>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          From demanding construction sites to extensive agricultural projects, our machinery is proven to deliver under pressure. Our satisfied clients are our best advocates, demonstrating daily that Robinson Equipment Co. equipment stands for reliability, efficiency, and job-site excellence.
+          From demanding construction sites to extensive agricultural projects, our machinery is proven to deliver under pressure. Our satisfied clients are our best advocates, demonstrating daily that Cashman Machinery International equipment stands for reliability, efficiency, and job-site excellence.
         </p>
       </div>
     </div>

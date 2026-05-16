@@ -92,11 +92,11 @@ export default function Footer() {
             {/* Contact */}
             <div className="flex flex-col gap-2">
               <h2 className="mb-2 uppercase tracking-wide font-bold text-[18px] text-[#c9a227]">
-                Robinson Equipment Co.
+                Cashman Machinery International
               </h2>
               <div className="flex flex-col gap-1">
-                <span className="text-[16px]">3030 Cuyler St</span>
-                <span className="text-[16px]">Mims, FL 32754</span>
+                <span className="text-[16px]">4101 Ravenswood Rd Suite 317</span>
+                <span className="text-[16px]">Fort Lauderdale, FL 33312</span>
                 <span className="text-[16px]">(754) 277-6164</span>
               </div>
             </div>
@@ -225,7 +225,7 @@ export default function Footer() {
                 className="mt-1"
               />
               <span>
-                I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+                I consent to be contacted by Cashman Machinery International via phone, email, or SMS regarding this inquiry.
               </span>
             </label>
 

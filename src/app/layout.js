@@ -33,26 +33,26 @@ const geistMono = Geist_Mono({
 // };
 
 export const metadata = {
-  metadataBase: new URL("https://robinson-equipment.com"), // pune domeniul tău real
+  metadataBase: new URL("https://cashman-machinery.com"), // pune domeniul tău real
 
   title: {
-    default: "Robinson Equipment Co.",
-    template: "%s | Robinson Equipment Co.",
+    default: "Cashman Machinery International",
+    template: "%s | Cashman Machinery International",
   },
 
   description:
-    "Robinson Equipment Co. offers high-quality agricultural and construction machinery.",
+    "Cashman Machinery International offers high-quality agricultural and construction machinery.",
 
   alternates: {
     canonical: "/", 
   },
 
   openGraph: {
-    title: "Robinson Equipment Co.",
+    title: "Cashman Machinery International",
     description:
       "High-quality agricultural and construction machinery.",
-    url: "https://robinson-equipment.com",
-    siteName: "Robinson Equipment Co.",
+    url: "https://cashman-machinery.com",
+    siteName: "Cashman Machinery International",
     images: [
       {
         url: "/og-image.jpg",

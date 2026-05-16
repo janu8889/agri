@@ -5,7 +5,7 @@ import { FiSend } from "react-icons/fi";
 
 const InquiryForm = forwardRef(({ product }, ref) => {
   const [inquiryData, setInquiryData] = useState({
-    productName: `https://robinson-equipment.com/products/${product._id}`,
+    productName: `https://cashman-machinery.com/products/${product._id}`,
     fullName: "",
     phone: "",
     email: "",
@@ -52,7 +52,7 @@ const InquiryForm = forwardRef(({ product }, ref) => {
         setInquiryMessage("Inquiry sent successfully!");
         // Resetăm formul după trimitere
         setInquiryData({
-          productName: `https://robinson-equipment.com/products/${product._id}`,
+          productName: `https://cashman-machinery.com/products/${product._id}`,
           fullName: "",
           phone: "",
           email: "",
@@ -118,7 +118,7 @@ const InquiryForm = forwardRef(({ product }, ref) => {
         <label className="flex items-center gap-2 text-xs text-gray-500">
           <input type="checkbox" name="consent" defaultChecked required />
           <span>
-            I consent to be contacted by Robinson Equipment Co. via phone, email, or SMS regarding this inquiry.
+            I consent to be contacted by Cashman Machinery International via phone, email, or SMS regarding this inquiry.
           </span>
         </label>
 
