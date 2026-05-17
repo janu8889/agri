@@ -100,8 +100,8 @@ export default function ProductDetailsClient() {
               hours: product.hours || null,
               power_hp: product.engineHorsepower || null,
               drive: product.drive || "",
-            });
-            sessionStorage.setItem(leadKey, "1");
+           });
+             sessionStorage.setItem(leadKey, "1");
           }
         }
 
