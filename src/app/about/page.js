@@ -47,8 +47,7 @@ export default function About() {
           Cashman Machinery International – Sales
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Cashman Machinery International experience with equipment came from being involved at an early age in the family’s landscaping and snow removal company. He saw how buying clean, good used equipment was one way to have the right equipment at the right time to make jobs flow smoothly without the high payments of new equipment or high priced rentals. Cashman Machinery International is interested in helping customers to be profitable in their companies by providing good used equipment to help them get the work done. 
-        </p>
+          Daniel R. Petrov, Sales & Marketing Director at Cashman Machinery International, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at Cashman Machinery International are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.        </p>
       </div>
        <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <h1 className="text-[24px] md:text-[28px] font-bold text-[#c9a227] mb-4">
