@@ -12,11 +12,11 @@ export async function POST(req) {
     const chatId = '-5263521263';
 
     const text = `
-CONTACT US FORM
-fullName: ${fullName}
-Email: ${email}
-Phone: ${phone}
-Message: ${message}
+      CONTACT US FORM
+      fullName: ${fullName}
+      Email: ${email}
+      Phone: ${phone}
+      Message: ${message}
 `;
 
 
