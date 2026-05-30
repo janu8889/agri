@@ -82,94 +82,95 @@ export default function Warranty() {
                 <div className="w-24 h-[3px] bg-[#c9a227]"></div>
             </div>
             </div>
-
             {/* Columns */}
             <div className="grid md:grid-cols-3 gap-10">
 
-            {/* Column 1 */}
-            <div className="text-center">
-                <div className="flex justify-center mb-4">
-                <svg
-                    className="w-12 h-12 text-[#c9a227]"
+              {/* Column 1 */}
+              <div className="group text-center bg-gradient-to-b from-[#252525] to-[#1d1d1d] border border-[#c9a227]/20 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[#c9a227]/60 hover:shadow-[0_0_30px_rgba(201,162,39,0.15)]">
+                <div className="flex justify-center mb-6">
+                  <svg
+                    className="w-14 h-14 text-[#c9a227] transition-transform duration-300 group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
-                >
+                  >
                     <path d="M12 2l7 4v6c0 5-3.5 9-7 10-3.5-1-7-5-7-10V6l7-4z" />
                     <path d="M9 12l2 2 4-4" />
-                </svg>
+                  </svg>
                 </div>
 
-                <h3 className="text-white text-xl font-semibold mb-3">
-                Standard Operational Warranty
+                <h3 className="text-white text-xl md:text-2xl font-bold mb-4">
+                  Standard Operational Warranty
                 </h3>
 
                 <p className="text-gray-300 text-[15px] leading-relaxed">
-                Included with every purchase, this essential coverage ensures your
-                equipment arrives in full working order and ready for immediate
-                operation. It protects you against major mechanical defects on key
-                systems for the initial period after delivery, giving you peace of
-                mind from day one.
+                  Included with every purchase, this essential coverage ensures your
+                  equipment arrives in full working order and ready for immediate
+                  operation. It protects you against major mechanical defects on key
+                  systems for the initial period after delivery, giving you peace of
+                  mind from day one.
                 </p>
-            </div>
+              </div>
 
-            {/* Column 2 */}
-            <div className="text-center">
-                <div className="flex justify-center mb-4">
-                <svg
-                    className="w-12 h-12 text-[#c9a227]"
+              {/* Column 2 */}
+              <div className="group text-center bg-gradient-to-b from-[#252525] to-[#1d1d1d] border border-[#c9a227]/20 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[#c9a227]/60 hover:shadow-[0_0_30px_rgba(201,162,39,0.15)]">
+                <div className="flex justify-center mb-6">
+                  <svg
+                    className="w-14 h-14 text-[#c9a227] transition-transform duration-300 group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
-                >
+                  >
                     <path d="M3 13h2l2-5 4 10 2-5h6" />
-                </svg>
+                  </svg>
                 </div>
 
-                <h3 className="text-white text-xl font-semibold mb-3">
-                Extended Powertrain Protection
+                <h3 className="text-white text-xl md:text-2xl font-bold mb-4">
+                  Extended Powertrain Protection
                 </h3>
 
                 <p className="text-gray-300 text-[15px] leading-relaxed">
-                Designed for long-term security, this plan offers extensive coverage
-                for critical components including the engine, transmission, and
-                hydraulic pumps. It extends your protection for up to 12 months,
-                significantly minimizing the risk of unexpected repair costs and
-                safeguarding your investment.
+                  Designed for long-term security, this plan offers extensive coverage
+                  for critical components including the engine, transmission, and
+                  hydraulic pumps. It extends your protection for up to 12 months,
+                  significantly minimizing the risk of unexpected repair costs and
+                  safeguarding your investment.
                 </p>
-            </div>
+              </div>
 
-            {/* Column 3 */}
-            <div className="text-center">
-                <div className="flex justify-center mb-4">
-                <svg
-                    className="w-12 h-12 text-[#c9a227]"
+              {/* Column 3 */}
+              <div className="group text-center bg-gradient-to-b from-[#252525] to-[#1d1d1d] border border-[#c9a227]/20 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[#c9a227]/60 hover:shadow-[0_0_30px_rgba(201,162,39,0.15)]">
+                <div className="flex justify-center mb-6">
+                  <svg
+                    className="w-14 h-14 text-[#c9a227] transition-transform duration-300 group-hover:scale-110"
                     fill="none"
                     stroke="currentColor"
                     strokeWidth="2"
                     viewBox="0 0 24 24"
-                >
+                  >
                     <path d="M12 3l8 4v5c0 5-4 8-8 9-4-1-8-4-8-9V7l8-4z" />
                     <circle cx="12" cy="11" r="3" />
-                </svg>
+                  </svg>
                 </div>
 
-                <h3 className="text-white text-xl font-semibold mb-3">
-                Certified Quality Assurance
+                <h3 className="text-white text-xl md:text-2xl font-bold mb-4">
+                  Certified Quality Assurance
                 </h3>
 
                 <p className="text-gray-300 text-[15px] leading-relaxed">
-                Every equipment undergoes a rigorous multi-point inspection by our
-                technical team before it leaves our yard. We guarantee that the
-                equipment matches its described condition and performance history
-                specifically, providing total transparency and eliminating
-                uncertainty before you sign.
+                  Every equipment undergoes a rigorous multi-point inspection by our
+                  technical team before it leaves our yard. We guarantee that the
+                  equipment matches its described condition and performance history
+                  specifically, providing total transparency and eliminating
+                  uncertainty before you sign.
                 </p>
-            </div>
+              </div>
 
             </div>
+            
+            
         </div>
         </div>
               <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
