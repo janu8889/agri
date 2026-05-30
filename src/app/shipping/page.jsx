@@ -5,7 +5,7 @@ import FaqSection from "../components/shipping/FaqSection";
 const services = [
   {
     title: "Enclosed Transport",
-    subtitle: "Premium protection for your machine",
+    subtitle: "Premium protection for your equipment",
     price: "Starting at $1.00/mile",
     buttonClass: "btn btn-primary btn-block",
     icon: "enclosed",
@@ -32,8 +32,8 @@ const services = [
 const processSteps = [
   ["1", "Request Quote", "Tell us your delivery locations"],
   ["2", "Schedule", "Choose your pickup date and transport type"],
-  ["3", "Track", "Monitor your machine throughout transit"],
-  ["4", "Receive", "Inspect and accept your machine at delivery"],
+  ["3", "Track", "Monitor your equipment throughout transit"],
+  ["4", "Receive", "Inspect and accept your equipment at delivery"],
 ];
 
 const faqs = [
@@ -42,16 +42,16 @@ const faqs = [
     "Transit times vary by distance. East Coast to West Coast typically takes 7-10 days. Regional transport (under 500 miles) usually takes 2-4 days. We'll provide an accurate estimate with your quote.",
   ],
   [
-    "Is my machine insured during transport?",
-    "Yes, all machines are fully insured during transport. Our carriers provide up to $500,000 in coverage. We can arrange additional coverage for high-value machines upon request.",
+    "Is my equipment insured during transport?",
+    "Yes, all equipment are fully insured during transport. Our carriers provide up to $500,000 in coverage. We can arrange additional coverage for high-value equipment upon request.",
   ],
   [
-    "Can I track my machine?",
+    "Can I track my equipment?",
     "Absolutely. Our transporters are equipped with GPS tracking. You'll receive regular updates and can request real-time location information at any time.",
   ],
   [
-    "What if my machine doesn't run?",
-    "No problem. Our carriers are equipped with winches and ramps to safely load non-running machines. Please let us know in advance so we can accommodate your needs.",
+    "What if my equipment doesn't run?",
+    "No problem. Our carriers are equipped with winches and ramps to safely load non-running equipment. Please let us know in advance so we can accommodate your needs.",
   ],
 ];
 
