@@ -39,7 +39,7 @@ const processSteps = [
 const faqs = [
   [
     "How long does shipping take?",
-    "Transit times vary by distance. East Coast to West Coast typically takes 10-14 days. Regional transport (under 500 miles) usually takes 5-7 days. We'll provide an accurate estimate with your quote.",
+    "Transit times vary by distance. East Coast to West Coast typically takes 14-21 days. Regional transport (under 500 miles) usually takes 7-10 days. We'll provide an accurate estimate with your quote.",
   ],
   [
     "Is my equipment insured during transport?",
@@ -48,10 +48,6 @@ const faqs = [
   [
     "Can I track my equipment?",
     "Absolutely. Our transporters are equipped with GPS tracking. You'll receive regular updates and can request real-time location information at any time.",
-  ],
-  [
-    "What if my equipment doesn't run?",
-    "No problem. Our carriers are equipped with winches and ramps to safely load non-running equipment. Please let us know in advance so we can accommodate your needs.",
   ],
 ];
 
