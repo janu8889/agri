@@ -89,9 +89,6 @@ export default function About() {
           Daniel R. Petrov, Sales & Marketing Director at Cashman Machinery International, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at Cashman Machinery International are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.
         </p>
 
-        <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Cashman Machinery International is a full service provider of pre-owned and new construction and lift equipment. We add value to the sale of each equipment by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
-        </p>
       </div>
 
       {/* ---------------- NEW: 3 Columns Section (Same style as Warranty) ---------------- */}
