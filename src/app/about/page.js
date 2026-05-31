@@ -77,7 +77,7 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Cashman Machinery International is a full service provider of pre-owned construction and lift equipment. We add value to the sale of each equipment by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
+          Cashman Machinery International delivers comprehensive solutions for pre-owned construction and agricultural equipment. We add value to the sale of each equipment by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
         </p>
       </div>
 
