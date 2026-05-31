@@ -91,13 +91,6 @@ function ServicesSection({ services, ServiceIcon, CheckIcon }) {
                     </li>
                   ))}
                 </ul>
-
-                {/* PRICE */}
-                <div className="text-center mb-6">
-                  <p className="text-[#c9a227] text-2xl font-bold">
-                    {service.price}
-                  </p>
-                </div>
               </div>
             </div>
           ))}

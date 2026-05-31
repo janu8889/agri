@@ -39,7 +39,7 @@ const processSteps = [
 const faqs = [
   [
     "How long does shipping take?",
-    "Transit times vary by distance. East Coast to West Coast typically takes 7-10 days. Regional transport (under 500 miles) usually takes 2-4 days. We'll provide an accurate estimate with your quote.",
+    "Transit times vary by distance. East Coast to West Coast typically takes 10-14 days. Regional transport (under 500 miles) usually takes 5-7 days. We'll provide an accurate estimate with your quote.",
   ],
   [
     "Is my equipment insured during transport?",
