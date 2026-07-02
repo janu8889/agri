@@ -157,7 +157,7 @@ export default function Shipping() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Cashman Machinery International, we specialise in providing comprehensive transportation and shipping services for a wide range of agricultural and construction equipment, encompassing all makes, models, and years of manufacture. Our highly experienced team is dedicated to ensuring the safe and careful transportation of your machinery from one location to another.
+          S & W Equipment, we specialise in providing comprehensive transportation and shipping services for a wide range of agricultural and construction equipment, encompassing all makes, models, and years of manufacture. Our highly experienced team is dedicated to ensuring the safe and careful transportation of your machinery from one location to another.
         </p>
       </div>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
@@ -167,7 +167,7 @@ export default function Shipping() {
       </div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          From our enclosed transport trailers that protect your equipment from the elements to our open trailer options which allow for easy loading and unloading, Cashman Machinery International has you covered when it comes to agricultural and construction equipment transport.
+          From our enclosed transport trailers that protect your equipment from the elements to our open trailer options which allow for easy loading and unloading, S & W Equipment has you covered when it comes to agricultural and construction equipment transport.
         </p>
 
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">

@@ -32,9 +32,9 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
                 </h4>
 
                 <p className="text-[#555] leading-relaxed">
-                  4101 Ravenswood Rd Suite 317
+                  715 W Coplin St
                   <br />
-                  Fort Lauderdale, FL 33312
+                  Okemah, OK 74859
                 </p>
               </div>
             </div>
@@ -69,10 +69,10 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
 
                 <p>
                   <a
-                    href="tel:8633168536"
+                    href="tel:"
                     className="text-[#555] hover:text-[#c9a227] transition-colors"
                   >
-                    (863) 316-8536
+                    
                   </a>
                 </p>
               </div>
@@ -90,13 +90,13 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
               </div>
 
               <p className="text-[#555] mb-8">
-                4101 Ravenswood Rd Suite 317
+                715 W Coplin St
                 <br />
-                Fort Lauderdale, FL 33312
+                Okemah, OK 74859
               </p>
 
               <a
-                href="https://www.google.com/maps/place//data=!4m2!3m1!1s0x88d90137ac345ceb:0x258f216418791ad0?sa=X&ved=1t:8290&ictx=111"
+                href="https://www.google.com/maps/place/S+%26+W+Equipment/@35.4193309,-96.3090099,936m/data=!3m2!1e3!4b1!4m6!3m5!1s0x87b40c924158515d:0xff7b19af7ed85bad!8m2!3d35.4193309!4d-96.3090099!16s%2Fg%2F1tj89ylf?entry=ttu&g_ep=EgoyMDI2MDYyOS4wIKXMDSoASAFQAw%3D%3D"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#e6c65a] text-black font-semibold px-6 py-3 rounded-xl hover:bg-[#d4b44f] transition-all duration-300"

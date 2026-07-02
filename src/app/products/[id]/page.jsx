@@ -405,7 +405,7 @@ export default function ProductDetailsClient() {
           <div>{value}</div>
         </div>
       );
-    })}
+    })}Cashman Machinery International
 
     {/* Description separat */}
     {product.description && (
@@ -471,7 +471,7 @@ export default function ProductDetailsClient() {
           setSelectedProduct(product);
           setInquiryData(prev => ({
             ...prev,
-            productName: `https://cashman-machinery.com/products/${product._id}`,
+            productName: `https://agri-beige.vercel.app/products/${product._id}`,
           }));
 
           // Scroll la formular

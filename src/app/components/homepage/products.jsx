@@ -173,7 +173,7 @@ export default function ProductsSection({ products }) {
                 <div className="mt-8 flex flex-col gap-3 w-full">
                   <button
                     onClick={() => {
-                      const productUrl = `https://cashman-machinery.com/products/${prod._id}`;
+                      const productUrl = `https://agri-beige.vercel.app/products/${prod._id}`;
                       setSelectedProduct(prod);
 
                       setShippingData(prev => ({
@@ -280,7 +280,7 @@ export default function ProductsSection({ products }) {
                 className="mt-1"
               />
               <span>
-                I consent to be contacted by Cashman Machinery International via phone, email, or SMS regarding this inquiry.
+                I consent to be contacted by S & W Equipment via phone, email, or SMS regarding this inquiry.
               </span>
             </label>
 
