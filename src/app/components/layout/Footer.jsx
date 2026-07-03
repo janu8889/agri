@@ -97,7 +97,7 @@ export default function Footer() {
               <div className="flex flex-col gap-1">
                 <span className="text-[16px]">715 W Coplin St</span>
                 <span className="text-[16px]">Okemah, OK 74859</span>
-                <span className="text-[16px]"></span>
+                <span className="text-[16px]">(405) 501-7617</span>
               </div>
             </div>
 
