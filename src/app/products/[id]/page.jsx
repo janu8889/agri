@@ -405,7 +405,7 @@ export default function ProductDetailsClient() {
           <div>{value}</div>
         </div>
       );
-    })}Cashman Machinery International
+    })}
 
     {/* Description separat */}
     {product.description && (
