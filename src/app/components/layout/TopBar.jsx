@@ -19,7 +19,7 @@ export default function TopBar() {
           {/* HOURS - ascuns pe mobil */}
           <div className="hidden md:flex items-center space-x-2">
             <FaClock className="text-[#c9a227]" />
-            <span>HOURS BY APPOINTMENT</span>
+            <span>HOURS: 9:00 AM - 5:00 PM</span>
           </div>
 
           {/* PHONE - mereu vizibil */}
