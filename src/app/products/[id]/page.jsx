@@ -369,7 +369,7 @@ export default function ProductDetailsClient() {
         setSelectedProduct(product);
         setInquiryData(prev => ({
           ...prev,
-          productName: `https://cashman-machinery.com/products/${product._id}`,
+          productName: `https://agri-beige.vercel.app/products/${product._id}`,
         }));
 
         // Scroll la formular
