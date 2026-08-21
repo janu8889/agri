@@ -29,9 +29,13 @@
 .signature-line { display: block; border-top: 1px solid #222; padding-top: 2px; }
 .contract-sign-panel { width: min(100% - 2rem, 980px); max-width: none; margin: 2.5rem auto 0; border-top: 4px solid #c9a227; border-radius: 0 0 .75rem .75rem; background: #f7f7f5; padding: 1.5rem; font-family: Arial, Helvetica, sans-serif; }
 .contract-flow { width: 100%; }
-.contract-flow--paper { width: 8.5in; margin-inline: auto; }
+.contract-flow--paper { width: 100%; margin-inline: auto; }
+.contract-document-stage { margin-inline: auto; }
+.contract-document-stage--site { width: 100%; }
+.contract-document-stage--paper { overflow: visible; transition: opacity .12s linear; }
+.contract-document-scale { transform-origin: top left; }
 .contract-flow--paper .contract-document--paper { margin-inline: 0; }
-.contract-flow--paper .contract-sign-panel { width: 100%; margin-inline: 0; }
+.contract-flow--paper .contract-sign-panel { width: min(calc(100% - 2rem),8.5in); margin-inline: auto; }
 .contract-page-break { margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px dashed #bbb; }
 .print-only { display: none; }
 .contract-document { display: flex; width: min(100% - 2rem, 980px); margin-inline: auto; flex-direction: column; align-items: stretch; gap: 22px; font-family: Georgia, "Times New Roman", Times, serif; color: #171717; }
@@ -123,7 +127,7 @@
 .paper-confirmation { margin-top: .15in !important; font-weight: 700; text-transform: uppercase; line-height: 1.1; }
 .paper-witness { line-height: 1.12; }
 @media (max-width: 700px) { .contract-document { width: min(100% - 16px, 980px); gap: 12px; }.contract-letter-page { border-radius: 9px; font-size: 14px; line-height: 1.45; }.contract-page-content { padding: 22px 16px; }.letter-header { min-height: 0; flex-direction: column; gap: 12px; }.letter-header img { width: 150px; height: 78px; }.letter-header address { max-width: none; text-align: left; font-size: 12px; }.letter-row { flex-direction: column; }.letter-cell { width: 100% !important; }.letter-signatures { grid-template-columns: 1fr; gap: 38px; } }
-@media (max-width: 700px) { .contract-sign-panel { width: min(100% - 16px, 980px); } }
+@media (max-width: 700px) { .contract-sign-panel,.contract-flow--paper .contract-sign-panel { width: min(calc(100% - 16px), 8.5in); margin-top: 16px; padding: 1rem; } }
 @media (max-width: 700px) { .contract-document--paper { width: 8.5in; gap: 20px; }.contract-document--paper .contract-letter-page { width: 8.5in; border-radius: 0; }.contract-document--paper .contract-page-content { padding: 0; }.contract-document--paper .letter-header { flex-direction: row; gap: 28px; }.contract-document--paper .letter-row { flex-direction: row; }.contract-document--paper .letter-signatures { grid-template-columns: 1fr 1fr; } }
 @media print { body * { visibility: hidden !important; } .print-only { display: grid !important; visibility: visible !important; position: fixed; inset: 0; place-items: center; font: 700 20pt sans-serif; } }
 @media (max-width: 640px) {
