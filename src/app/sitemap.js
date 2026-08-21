@@ -3,10 +3,13 @@ import dbConnect from "../../lib/dbConnect";
 import Product from "../../models/product";
 
 export default async function sitemap() {
-  await dbConnect();
-
-  // fetch produse
-  const products = await Product.find({}, { _id: 1, updatedAt: 1 }).lean();
+  let products = [];
+  try {
+    await dbConnect();
+    products = await Product.find({}, { _id: 1, updatedAt: 1 }).lean();
+  } catch {
+    // Static pages remain available during builds where database secrets are absent.
+  }
 
   const staticPages = [
     { url: "https://sandwequipments.com/", lastModified: new Date() },

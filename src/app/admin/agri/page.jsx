@@ -8,6 +8,10 @@ export default function Agri() {
         <h1 className="mb-6 text-3xl font-bold text-[#1a1a1a]">Agriculture Products</h1>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center my-10">
           <Link
+            href="/admin/contracts"
+            className="px-8 py-3 bg-[#1a1a1a] text-white font-semibold rounded-xl hover:bg-[#c9a227] hover:text-black transition-all duration-300"
+          >Contracts</Link>
+          <Link
             href="/admin/agri"
             className="px-8 py-3 bg-[#1a1a1a] text-white font-semibold rounded-xl 
             hover:bg-[#c9a227] hover:text-black transition-all duration-300"

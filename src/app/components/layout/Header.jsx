@@ -94,7 +94,8 @@ export default function Header() {
           src="/logo.png"
           alt="Logo"
           width={180}
-          height={80}
+          height={120}
+          style={{ width: "180px", height: "auto" }}
           priority
         />
         </Link>

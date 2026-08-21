@@ -6,6 +6,7 @@ import EmailLink from "./components/layout/EmailLink";
 import Script from "next/script";
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/react";
+import SiteChrome, { SiteMain } from "./components/layout/SiteChrome";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -111,21 +112,17 @@ export default function RootLayout({ children }) {
           />
         </noscript>
 
-        <TopBar />
-        <Header />
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 py-8">
-          {children}
-        </main>
+        <SiteChrome><TopBar /><Header /></SiteChrome>
+        <SiteMain>{children}</SiteMain>
         <Analytics />
-        <div className="w-full py-4">
+        <SiteChrome><div className="w-full py-4">
           <div className="max-w-7xl mx-auto flex justify-center items-center gap-2">
             <p className="text-gray-800 font-medium text-base md:text-lg tracking-wide">
               EMAIL US:
             </p>
           <EmailLink />
           </div>
-        </div>
-        <Footer />
+        </div><Footer /></SiteChrome>
       </body>
     </html>
   );
