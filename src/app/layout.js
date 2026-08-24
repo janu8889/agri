@@ -34,26 +34,26 @@ const geistMono = Geist_Mono({
 // };
 
 export const metadata = {
-  metadataBase: new URL("https://sandwequipments.com"), // pune domeniul tău real
+  metadataBase: new URL("https://centralnewholland.com"), // pune domeniul tău real
 
   title: {
-    default: "S & W Equipment",
-    template: "%s | S & W Equipment",
+    default: "Central New Holland",
+    template: "%s | Central New Holland",
   },
 
   description:
-    "S & W Equipment offers high-quality agricultural and construction machinery.",
+    "Central New Holland offers high-quality agricultural and construction machinery.",
 
   alternates: {
     canonical: "/", 
   },
 
   openGraph: {
-    title: "S & W Equipment",
+    title: "Central New Holland",
     description:
       "High-quality agricultural and construction machinery.",
-    url: "https://cashman-machinery.com",
-    siteName: "S & W Equipment",
+    url: "https://centralnewholland.com",
+    siteName: "Central New Holland",
     images: [
       {
         url: "/og-image.jpg",

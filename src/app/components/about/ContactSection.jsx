@@ -32,9 +32,9 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
                 </h4>
 
                 <p className="text-[#555] leading-relaxed">
-                  715 W Coplin St
+                  8408 I-40, 
                   <br />
-                  Okemah, OK 74859
+                  Oklahoma City, OK 73128
                 </p>
               </div>
             </div>
@@ -72,7 +72,7 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
                     href="tel:"
                     className="text-[#555] hover:text-[#c9a227] transition-colors"
                   >
-                    
+                    00000000000000000000000
                   </a>
                 </p>
               </div>
@@ -90,13 +90,13 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
               </div>
 
               <p className="text-[#555] mb-8">
-                715 W Coplin St
+                8408 I-40 
                 <br />
-                Okemah, OK 74859
+                Oklahoma City, OK 73128
               </p>
 
               <a
-                href="https://www.google.com/maps/place/S+%26+W+Equipment/@35.4193309,-96.3090099,936m/data=!3m2!1e3!4b1!4m6!3m5!1s0x87b40c924158515d:0xff7b19af7ed85bad!8m2!3d35.4193309!4d-96.3090099!16s%2Fg%2F1tj89ylf?entry=ttu&g_ep=EgoyMDI2MDYyOS4wIKXMDSoASAFQAw%3D%3D"
+                href="https://maps.app.goo.gl/dmSafJnuxTFDjoz48"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#e6c65a] text-black font-semibold px-6 py-3 rounded-xl hover:bg-[#d4b44f] transition-all duration-300"

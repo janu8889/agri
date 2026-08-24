@@ -26,7 +26,7 @@ export default function TopBar() {
           <div className="flex items-center space-x-2">
             <FaPhoneAlt className="text-[#c9a227]" />
             <a
-              href="tel:4055017617"
+              href="tel:000000"
               onClick={() => {
                 if (typeof window !== "undefined" && window.fbq) {
                   window.fbq("trackCustom", "Contact", {
@@ -37,14 +37,14 @@ export default function TopBar() {
                 }
               }}
             >
-             (405) 501-7617
+             000000
            </a>
            </div> 
 
           {/* ADDRESS - ascuns pe mobil */}
           <div className="hidden md:flex items-center space-x-2">
             <FaMapMarkerAlt className="text-[#c9a227]" />
-            <span>715 W Coplin St, Okemah, OK 74859</span>
+            <span>8408 I-40, Oklahoma City, OK 73128</span>
           </div>
 
         </div>

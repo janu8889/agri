@@ -9,7 +9,7 @@ export default function MobileBottomBar({ product, onInquiryClick }) {
         
         {/* Call Now */}
         <a
-          href="tel:4055017617"
+          href="tel:000000"
           className="flex-1 flex items-center justify-center gap-2 bg-green-600 text-white py-3 rounded-xl font-semibold hover:bg-green-700 transition-all duration-300"
         >
           <FaPhoneAlt className="w-4 h-4" />

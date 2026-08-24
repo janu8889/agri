@@ -5,8 +5,8 @@ export default function Info() {
         Quality Equipment For Sale
       </h1>
       <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-        Based in the picturesque farming community of Okfuskee County, 
-        S & W Equipment specializes in Pre-owned Construction and Lift equipment. 
+        Based in the community of Oklahoma City, 
+        Central New Holland specializes in Pre-owned Construction and Lift equipment. 
         Our goal is to provide contractors, farmers, and landowners with an alternative 
         to purchasing new equipment by providing good quality, work ready equipment at reasonable prices. 
         We look at each business transaction as an opportunity to build relationships between our team 

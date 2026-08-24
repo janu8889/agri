@@ -92,12 +92,12 @@ export default function Footer() {
             {/* Contact */}
             <div className="flex flex-col gap-2">
               <h2 className="mb-2 uppercase tracking-wide font-bold text-[18px] text-[#c9a227]">
-                S & W Equipment
+                Central New Holland
               </h2>
               <div className="flex flex-col gap-1">
-                <span className="text-[16px]">715 W Coplin St</span>
-                <span className="text-[16px]">Okemah, OK 74859</span>
-                <span className="text-[16px]">(405) 501-7617</span>
+                <span className="text-[16px]">8408 I-40, </span>
+                <span className="text-[16px]">Oklahoma City, OK 73128</span>
+                <span className="text-[16px]">000000</span>
               </div>
             </div>
 
@@ -225,7 +225,7 @@ export default function Footer() {
                 className="mt-1"
               />
               <span>
-                I consent to be contacted by S & W Equipment via phone, email, or SMS regarding this inquiry.
+                I consent to be contacted by Central New Holland via phone, email, or SMS regarding this inquiry.
               </span>
             </label>
 

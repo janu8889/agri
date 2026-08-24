@@ -77,16 +77,16 @@ export default function About() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          S & W Equipment delivers comprehensive solutions for pre-owned construction and agricultural equipment. We add value to the sale of each equipment by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
+          Central New Holland delivers comprehensive solutions for pre-owned construction and agricultural equipment. We add value to the sale of each equipment by taking equipment as trades, convenient payment methods, export document preparation, and transportation services.
         </p>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8 mt-5 mb-12">
         <h1 className="text-[24px] md:text-[28px] font-bold text-[#c9a227] mb-4">
-          S & W Equipment – Sales
+          Central New Holland – Sales
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Daniel R. Petrov, Sales & Marketing Director at S & W Equipment, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at S & W Equipment are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.
+          Daniel R. Petrov, Sales & Marketing Director at Central New Holland, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at Central New Holland are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.
         </p>
 
       </div>
