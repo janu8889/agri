@@ -12,16 +12,16 @@ export default async function sitemap() {
   }
 
   const staticPages = [
-    { url: "https://sandwequipments.com/", lastModified: new Date() },
-    { url: "https://sandwequipments.com/about", lastModified: new Date() },
-    { url: "https://sandwequipments.com/shipping", lastModified: new Date() },
-    { url: "https://sandwequipments.com/inventory/agriculture", lastModified: new Date() },
-    { url: "https://sandwequipments.com/inventory/construction", lastModified: new Date() },
-    { url: "https://sandwequipments.com/inventory/attachments", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/about", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/shipping", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/inventory/agriculture", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/inventory/construction", lastModified: new Date() },
+    { url: "https://www.centralnewholland.com/inventory/attachments", lastModified: new Date() },
   ];
 
   const productPages = products.map((p) => ({
-    url: `https://sandwequipments.com/products/${p._id.toString()}`,
+    url: `https://www.centralnewholland.com/products/${p._id.toString()}`,
     lastModified: p.updatedAt || new Date(),
   }));
 
