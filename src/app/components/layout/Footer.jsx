@@ -97,7 +97,7 @@ export default function Footer() {
               <div className="flex flex-col gap-1">
                 <span className="text-[16px]">8408 I-40, </span>
                 <span className="text-[16px]">Oklahoma City, OK 73128</span>
-                <span className="text-[16px]">000000</span>
+                <span className="text-[16px]">(405) 200-3744</span>
               </div>
             </div>
 

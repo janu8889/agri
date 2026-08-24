@@ -5,7 +5,7 @@ export default function Warranty() {
       <div className="relative w-full h-48 md:h-64 lg:h-80 overflow-hidden">
         {/* Background Image */}
         <img
-          src="/imgs/warranty.webp"
+          src="/imgs/warranty.jpg"
           alt="Decorative border"
           className="absolute inset-0 w-full h-full object-cover"
         />

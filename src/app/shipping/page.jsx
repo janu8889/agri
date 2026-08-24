@@ -124,7 +124,7 @@ export default function Shipping() {
       <div className="relative w-full h-48 md:h-64 lg:h-80 overflow-hidden">
         {/* Background Image */}
         <img
-          src="/imgs/transport.jpeg"
+          src="/imgs/transport.jpg"
           alt="Decorative border"
           className="absolute inset-0 w-full h-full object-cover"
         />

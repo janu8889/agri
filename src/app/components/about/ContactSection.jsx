@@ -69,10 +69,10 @@ function ContactSection({ LocationIcon, ClockIcon, PhoneIcon, ExternalIcon }) {
 
                 <p>
                   <a
-                    href="tel:"
+                    href="tel:4052003744"
                     className="text-[#555] hover:text-[#c9a227] transition-colors"
                   >
-                    00000000000000000000000
+                    (405) 200-3744
                   </a>
                 </p>
               </div>
