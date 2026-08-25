@@ -86,8 +86,20 @@ export default function About() {
           Central New Holland – Sales
         </h1>
         <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
-          Daniel R. Petrov, Sales & Marketing Director at Central New Holland, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at Central New Holland are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.
+          We started this company as a local, family-owned business in 1989, and have been supporting local and regional businesses and agriculture for decades.
         </p>
+
+        <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
+          Our company is a multi-brand, family-owned dealer with experience in agricultural and construction machinery and equipment, headquartered in Oklahoma City.
+        </p>
+
+        <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
+          In addition to our core New Holland inventory, our company carries a robust fleet of industry-reliable construction and agricultural brands, offering warranty, service and expertise for all.
+        </p>
+
+        {/* <p className="text-[#222222] text-[16px] md:text-[18px] leading-relaxed">
+          Daniel R. Petrov, Sales & Marketing Director at Central New Holland, gained his experience with equipment from being involved at an early age in his family’s landscaping and snow removal company. He learned that buying clean, quality used equipment was one of the best ways to have the right equipment at the right time without the high payments of new machinery or expensive rental costs. Today, Daniel and the team at Central New Holland are focused on helping customers stay profitable by providing reliable used equipment that helps get the job done efficiently and affordably.
+        </p> */}
 
       </div>
 
