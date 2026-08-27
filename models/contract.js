@@ -21,7 +21,9 @@ const ContractSchema = new mongoose.Schema({
   templateSnapshot: { type: mongoose.Schema.Types.Mixed, required: true }, templateVersion: Number, snapshotHash: String,
   linkTemplate: { type: String, enum: ["site", "paper"], default: "paper" },
   status: { type: String, enum: ["draft", "ready", "viewed", "signed", "revoked", "expired"], default: "draft", index: true },
-  tokenHash: { type: String, select: false, index: true, sparse: true }, tokenValue: { type: String, select: false }, linkExpiresAt: Date, viewedAt: Date, signedAt: Date,
+  tokenHash: { type: String, select: false, index: true, sparse: true }, tokenValue: { type: String, select: false },
+  signedLinkTokenHash: { type: String, select: false, index: true, sparse: true }, signedLinkTokenValue: { type: String, select: false },
+  linkExpiresAt: Date, viewedAt: Date, signedAt: Date,
   signerName: String, signature: { type: [[[Number]]], select: false }, acceptedTerms: Boolean,
   signatureMethod: { type: String, enum: ["drawn", "typed_consent"] },
   typedSignatureConsent: Boolean,
@@ -55,6 +57,10 @@ if (process.env.NODE_ENV === "development" && mongoose.models.Contract) {
   else cachedLinkTemplate.default("paper");
   if (!mongoose.models.Contract.schema.path("tokenValue")) mongoose.models.Contract.schema.add({
     tokenValue: { type: String, select: false },
+  });
+  if (!mongoose.models.Contract.schema.path("signedLinkTokenHash")) mongoose.models.Contract.schema.add({
+    signedLinkTokenHash: { type: String, select: false, index: true, sparse: true },
+    signedLinkTokenValue: { type: String, select: false },
   });
   const warrantySchema=mongoose.models.Contract.schema.path("warranty")?.schema;
   if(warrantySchema&&!warrantySchema.path("manufacturer"))warrantySchema.add({manufacturer:Boolean,trial:Boolean,other:Boolean});

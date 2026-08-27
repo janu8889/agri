@@ -7,7 +7,7 @@ import { contractSellerDisplayName } from "@/lib/contracts/company";
 
 export async function GET(request, { params }) {
   const { token } = await params; const ip = clientIp(request); if (rateLimited(`view:${ip}`, 60)) return publicHeaders(NextResponse.json({ error: "Too many requests." }, { status: 429 }));
-  await dbConnect(); const contract = await Contract.findOne({ tokenHash: hashToken(token) }).select("-tokenHash -signature -auditIp -auditUserAgent -notification -integrityHash");
+  await dbConnect(); const tokenHash=hashToken(token),contract = await Contract.findOne({ $or: [{ tokenHash }, { signedLinkTokenHash: tokenHash }] }).select("-tokenHash -signedLinkTokenHash -signedLinkTokenValue -signature -auditIp -auditUserAgent -notification -integrityHash");
   if (!contract) return publicHeaders(NextResponse.json({ error: "This link is unavailable." }, { status: 404 }));
   if (contract.status === "signed") return stateReply(contract, "signed");
   if (contract.status === "revoked") return stateReply(contract, "revoked");
