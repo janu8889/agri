@@ -1,5 +1,6 @@
 import SignatureRenderer from "./SignatureRenderer";
 import { signatureMethod } from "@/lib/contracts/security";
+import { contractCompany } from "@/lib/contracts/company";
 
 const REFUND = "Right to Refund: The Client shall be entitled to a full refund of the initial purchase price provided that a written request for cancellation is submitted within 30 calendar days of the effective date. Refunds will be processed via the original payment method within [3] business days of approval.";
 
@@ -7,9 +8,9 @@ export default function PaperContractDocument({contract:c,signed=false,unsignedM
   const t=c.templateSnapshot||{}, terms=t.terms||[], rep=t.sellerRepresentative||{};
   const t1=splitAt(terms[0]?.body,"in this Agreement."), t8=splitAt(terms[7]?.body,"expenses, demands,"), t11=splitAt(terms[10]?.body,"For further information,"), t14=paragraphs(terms[13]?.body);
   return <div className="contract-document contract-document--paper paper-original" data-pages="8" data-template="paper">
-    <PaperPage n={1} mark={unsignedMark}><PaperHeader t={t}/><h1>DELIVERY RECEIPT</h1><PartyGrid c={c} delivery/><Equipment c={c}/><Checks c={c}/><h2>WARRANTIES</h2><Warranties c={c}/><p className="paper-caps">{t.warrantyDisclaimer}</p><p className="paper-refund">{REFUND}</p></PaperPage>
+    <PaperPage n={1} mark={unsignedMark}><PaperHeader t={t} c={c}/><h1>DELIVERY RECEIPT</h1><PartyGrid c={c} delivery/><Equipment c={c}/><Checks c={c}/><h2>WARRANTIES</h2><Warranties c={c}/><p className="paper-caps">{t.warrantyDisclaimer}</p><p className="paper-refund">{REFUND}</p></PaperPage>
     <PaperPage n={2} mark={unsignedMark}><h1 className="declarations-title">BUYER DECLARATIONS</h1><DeclarationList items={t.buyerDeclarations}/><PaperSignatures c={c} rep={rep} signed={signed}/></PaperPage>
-    <PaperPage n={1} mark={unsignedMark}><PaperHeader t={t}/><h1>ORDER</h1><PartyGrid c={c}/><h3>DESCRIPTION:</h3><Equipment c={c}/><PriceBlock c={c}/><h2 className="terms-title">TERMS &amp; CONDITIONS</h2><AgreementDate c={c}/><div className="paper-intro">{paragraphs(t.introduction).map((x,i)=><p key={i}>{x}</p>)}</div><PaperTerm term={terms[0]} body={t1[0]}/></PaperPage>
+    <PaperPage n={1} mark={unsignedMark}><PaperHeader t={t} c={c}/><h1>ORDER</h1><PartyGrid c={c}/><h3>DESCRIPTION:</h3><Equipment c={c}/><PriceBlock c={c}/><h2 className="terms-title">TERMS &amp; CONDITIONS</h2><AgreementDate c={c}/><div className="paper-intro">{paragraphs(t.introduction).map((x,i)=><p key={i}>{x}</p>)}</div><PaperTerm term={terms[0]} body={t1[0]}/></PaperPage>
     <PaperPage n={2} mark={unsignedMark}><p>{t1[1]}</p>{terms.slice(1,7).map(x=><PaperTerm key={x.number} term={x}/>)}<PaperTerm term={terms[7]} body={t8[0]}/></PaperPage>
     <PaperPage n={3} mark={unsignedMark}><p>{t8[1]}</p>{terms.slice(8,10).map(x=><PaperTerm key={x.number} term={x}/>) }<PaperTerm term={terms[10]} body={t11[0]}/></PaperPage>
     <PaperPage n={4} mark={unsignedMark}><p className="paper-indent">{t11[1]}</p><PaperTerm term={terms[11]}/><NoticeAddresses c={c}/><PaperTerm term={terms[12]}/><PaperTerm term={terms[13]} body={t14.slice(0,2).join("\n\n")}/></PaperPage>
@@ -19,7 +20,7 @@ export default function PaperContractDocument({contract:c,signed=false,unsignedM
 }
 
 function PaperPage({n,mark,children}){return <section className="contract-letter-page">{mark?<div className="unsigned-mark">UNSIGNED COPY</div>:null}<div className="contract-page-content">{children}</div><footer>{n}</footer></section>}
-function PaperHeader({t}){const x=t.company||{};return <header className="paper-header"><img src={t.logoUrl||"/logo.png"} alt="S & W Equipment"/><address><b>{x.name}</b><br/>{x.address}<br/>{x.cityStateZip}<br/>{x.phone}<br/>{x.email}<br/>{x.website}<small>{x.name} is a registered<br/>trade name of “{x.legalName}”</small></address></header>}
+function PaperHeader({t,c}){const x=contractCompany(c);return <header className="paper-header"><img src={t.logoUrl||"/logo.png"} alt={x.name||"Seller company"}/><address><b>{x.name}</b><br/>{x.address}<br/>{x.cityStateZip}<br/>{x.phone}<br/>{x.email}<br/>{x.website}<small>{x.name} is a registered<br/>trade name of “{x.legalName}”</small></address></header>}
 function PartyGrid({c,delivery=false}){const sellerValue=delivery?[c.seller?.legalName||c.seller?.name,c.seller?.phone,c.seller?.email].filter(Boolean).join("\n"):seller(c.seller);return <div className={`paper-party-grid ${delivery?"paper-party-grid--delivery":"paper-party-grid--order"}`}><Cell label={`${delivery?"Invoice":"Order"} #`} value={c.orderNumber}/><Cell label={`${delivery?"Delivery":"Order"} Date`} value={shortDate(delivery?c.deliveryDate:c.orderDate)}/><Cell label="Buyer" value={buyer(c.buyer)}/><Cell label="Seller" value={sellerValue}/><Cell label="Contact" value={[c.buyer?.contact||c.buyer?.name,c.buyer?.phonePrimary,c.buyer?.phoneSecondary].filter(Boolean).join("\n")}/><Cell label="Delivery Location" value={address(c)}/></div>}
 function Cell({label,value}){return <div><b>{label}:</b><span>{value||" "}</span></div>}
 function Equipment({c}){return <div className="paper-equipment"><Cell label="Model" value={c.equipment?.model}/><Cell label="Year" value={c.equipment?.year}/><Cell label="Serial No" value={c.equipment?.serialNumber}/><div className="paper-description"><b>Description &amp; Notes:</b><span>{c.equipment?.description||" "}</span></div><Cell label="Make" value={c.equipment?.make}/><Cell label="Hours (if applicable)" value={c.equipment?.hours}/><Cell label="Price" value={money(c.pricing?.subtotal,c.pricing?.currency)}/></div>}

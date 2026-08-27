@@ -88,7 +88,7 @@ export const viewport = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 
         {/* Meta Pixel */}
         <Script id="facebook-pixel" strategy="afterInteractive">

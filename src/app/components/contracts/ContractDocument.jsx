@@ -1,6 +1,7 @@
 import SignatureRenderer from "./SignatureRenderer";
 import PaperContractDocument from "./PaperContractDocument";
 import { signatureMethod } from "@/lib/contracts/security";
+import { contractCompany } from "@/lib/contracts/company";
 
 export default function ContractDocument({ contract, signed = false, unsignedMark = false, variant }) {
   const t = contract.templateSnapshot || {}, terms = t.terms || [], method = signatureMethod(contract), rep = t.sellerRepresentative || {};
@@ -8,9 +9,9 @@ export default function ContractDocument({ contract, signed = false, unsignedMar
   if (layout === "paper") return <PaperContractDocument contract={contract} signed={signed} unsignedMark={unsignedMark}/>;
   const sig = signed ? <SignatureRenderer method={method} strokes={contract.signature} typedName={contract.signerName} className="buyer-signature-render"/> : null;
   return <div className={`contract-document contract-document--${layout}`} data-pages="8" data-template={layout}>
-    <Page n={1} mark={unsignedMark}><Header t={t}/><Title>DELIVERY RECEIPT</Title><OrderTable contract={contract} delivery/><Checks values={contract.deliveryChecks}/><Title small>WARRANTIES</Title><WarrantySummary warranty={contract.warranty}/><p className="font-bold">{t.warrantyDisclaimer}</p></Page>
+    <Page n={1} mark={unsignedMark}><Header t={t} contract={contract}/><Title>DELIVERY RECEIPT</Title><OrderTable contract={contract} delivery/><Checks values={contract.deliveryChecks}/><Title small>WARRANTIES</Title><WarrantySummary warranty={contract.warranty}/><p className="font-bold">{t.warrantyDisclaimer}</p></Page>
     <Page n={2} mark={unsignedMark}><Title>BUYER DECLARATIONS</Title><DeclarationList items={t.buyerDeclarations}/><SignaturePair contract={contract} rep={rep} buyerSignature={sig} signed={signed}/></Page>
-    <Page n={3} mark={unsignedMark}><Header t={t}/><Title>ORDER</Title><OrderTable contract={contract}/><Prices contract={contract}/><Title>TERMS &amp; CONDITIONS</Title><p>This Agreement is entered into as of {date(contract.orderDate)} by and between Buyer and Seller, which jointly may be referred to as the “Parties.”</p><p className="whitespace-pre-line">{t.introduction}</p><Term term={terms[0]}/></Page>
+    <Page n={3} mark={unsignedMark}><Header t={t} contract={contract}/><Title>ORDER</Title><OrderTable contract={contract}/><Prices contract={contract}/><Title>TERMS &amp; CONDITIONS</Title><p>This Agreement is entered into as of {date(contract.orderDate)} by and between Buyer and Seller, which jointly may be referred to as the “Parties.”</p><p className="whitespace-pre-line">{t.introduction}</p><Term term={terms[0]}/></Page>
     <Page n={4} mark={unsignedMark}>{terms.slice(1,7).map(x=><Term key={x.number} term={x}/>)}</Page>
     <Page n={5} mark={unsignedMark}>{terms.slice(7,11).map(x=><Term key={x.number} term={x}/>)}</Page>
     <Page n={6} mark={unsignedMark}>{terms.slice(11,13).map(x=><Term key={x.number} term={x}/>)}</Page>
@@ -19,7 +20,7 @@ export default function ContractDocument({ contract, signed = false, unsignedMar
   </div>;
 }
 function Page({n,mark,children}){return <section className="contract-letter-page">{mark?<div className="unsigned-mark">UNSIGNED COPY</div>:null}<div className="contract-page-content">{children}</div><footer>{n}</footer></section>}
-function Header({t}){const c=t.company||{};return <header className="letter-header"><img src={t.logoUrl||"/logo.png"} alt="S & W Equipment"/><address><b>{c.name}</b><br/>{c.address}<br/>{c.cityStateZip}<br/>{c.phone}<br/>{c.email}<br/>{c.website}<small>{c.name} is a registered trade name of<br/>{c.legalName}</small></address></header>}
+function Header({t,contract}){const c=contractCompany(contract);return <header className="letter-header"><img src={t.logoUrl||"/logo.png"} alt={c.name||"Seller company"}/><address><b>{c.name}</b><br/>{c.address}<br/>{c.cityStateZip}<br/>{c.phone}<br/>{c.email}<br/>{c.website}<small>{c.name} is a registered trade name of<br/>{c.legalName}</small></address></header>}
 function Title({children,small=false}){return <h2 className={small?"letter-subtitle":"letter-title"}>{children}</h2>}
 function OrderTable({contract:c,delivery=false}){return <div className="letter-table"><Row cells={[[delivery?"Invoice #":"Order #",c.orderNumber],[delivery?"Delivery Date":"Order Date",date(delivery?c.deliveryDate:c.orderDate)]]}/><Row cells={[["Buyer",buyer(c.buyer)],["Seller",seller(c.seller)]]}/><Row cells={[["Contact",[c.buyer?.contact||c.buyer?.name,c.buyer?.phonePrimary,c.buyer?.phoneSecondary].filter(Boolean).join("\n")],["Delivery Location",c.deliveryAddress]]}/><Row cells={[["Model",c.equipment?.model],["Year",c.equipment?.year],["Serial No.",c.equipment?.serialNumber]]}/><Row cells={[["Description & Notes",c.equipment?.description]]}/><Row cells={[["Make",c.equipment?.make],["Hours (if applicable)",c.equipment?.hours],["Price",money(c.pricing?.subtotal,c.pricing?.currency)]]}/></div>}
 function Row({cells}){return <div className="letter-row">{cells.map(([k,v],i)=><div className="letter-cell" key={i}><b>{k}:</b><span>{v||" "}</span></div>)}</div>}
