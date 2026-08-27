@@ -73,7 +73,7 @@ Message: ${message || "-"}
 
     await transporter.sendMail({
       from: `messaging.4006218@gmail.com`,
-      to: "sales@centralnewholland.com", // unde vrei să primești mailul
+      to: "sales@centralnewholland.com",
       subject: "📩 New Contact Form Submission",
       text,
     });
