@@ -17,7 +17,7 @@ export async function POST(request, { params }) {
   await dbConnect(); const now = new Date(), tokenHash = hashToken(token);
   const candidate = await Contract.findOne({ $or: [{ tokenHash }, { signedLinkTokenHash: tokenHash }] }).select("+tokenHash +signedLinkTokenHash +signature");
   if (!candidate) return reply({ error: "This link is unavailable." }, 404);
-  if (candidate.linkExpiresAt && candidate.linkExpiresAt <= now) return reply({ error: "This agreement has expired." }, 410);
+  if (candidate.linkExpiresAt && candidate.linkExpiresAt <= now) { await Contract.updateOne({_id:candidate._id,status:{$in:["ready","viewed"]}},{$set:{status:"expired"},$push:{audit:{event:"expired",actor:"system",detail:"Expiration synchronized during signing attempt",at:now}}}); return reply({ error: "This agreement has expired." }, 410); }
   let reusedAsset=null,signature=method === "drawn" ? body.signature : undefined;
   if(method==="drawn"&&body.reuseSavedSignature===true&&candidate.reusedSignatureId){reusedAsset=await ClientSignature.findOne({_id:candidate.reusedSignatureId,normalizedEmail:normalizeEmail(candidate.buyer.email),revokedAt:null}).select("+strokeData");if(!reusedAsset||!validateSignature(reusedAsset.strokeData))return reply({error:"The authorized saved signature is unavailable."},409);signature=reusedAsset.strokeData}
   const consentText = method === "typed_consent" ? TYPED_CONSENT_TEXT : sanitizeText(body.signatureConsentText || TYPED_CONSENT_TEXT, 500);

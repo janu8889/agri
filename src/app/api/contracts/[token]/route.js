@@ -12,8 +12,9 @@ export async function GET(request, { params }) {
   if (contract.status === "signed") return stateReply(contract, "signed");
   if (contract.status === "revoked") return stateReply(contract, "revoked");
   if (contract.linkExpiresAt && contract.linkExpiresAt <= new Date()) { if (contract.status !== "expired") await Contract.updateOne({ _id: contract._id, status: { $in: ["ready","viewed"] } }, { $set: { status: "expired" }, $push: { audit: { event: "expired", actor: "system" } } }); return stateReply(contract, "expired"); }
+  if (contract.status === "expired") return stateReply(contract, "expired");
   if (contract.status === "ready") await Contract.updateOne({ _id: contract._id, status: "ready" }, { $set: { status: "viewed", viewedAt: new Date() }, $push: { audit: { event: "viewed", actor: "client" } } });
-  const obj = contract.toObject(); obj.hasAuthorizedSavedSignature = Boolean(obj.reusedSignatureId); obj.id = undefined; obj._id = undefined; obj.__v = undefined; obj.audit = undefined; obj.reusedSignatureId = undefined; obj.savedSignatureId = undefined; return publicHeaders(NextResponse.json({ contract: obj }));
+  const obj = contract.toObject(); obj.hasAuthorizedSavedSignature = Boolean(obj.reusedSignatureId); obj.id = undefined; obj._id = undefined; obj.__v = undefined; obj.audit = undefined; obj.reusedSignatureId = undefined; obj.savedSignatureId = undefined; return publicHeaders(NextResponse.json({ contract: obj, serverNow: new Date().toISOString() }));
 }
 
 function stateReply(contract, state) {
