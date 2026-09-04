@@ -103,7 +103,13 @@
 .contract-document--paper .contract-letter-page--equipment-expanded { height: auto; min-height: 11in; overflow: visible; }
 .contract-document--paper .contract-letter-page--equipment-expanded .contract-page-content { position: relative; inset: auto; min-height: calc(11in - .87in); overflow: visible; padding: .39in .5in .48in; }
 .contract-document--paper .contract-letter-page--equipment-expanded footer { position: static; padding-bottom: .19in; }
-.paper-page--warranties-declarations .paper-signatures { margin-top: .45in; }.paper-page--warranties-declarations .declarations-title { margin-top: .23in; margin-bottom: .2in; }.paper-page--terms-opening .terms-title { margin-top: .02in; }
+.paper-page--warranties-declarations> .contract-page-content>h2:first-child { margin-top: .4in; }
+.paper-page--warranties-declarations .paper-signatures { margin-top: .45in; }
+.paper-page--warranties-declarations .declarations-title { margin-top: .62in; margin-bottom: .27in; }
+.paper-page--terms-opening .terms-title { margin-top: .02in; }
+.paper-page--multi-final { font-size: 11pt !important; }
+.paper-page--multi-final .paper-witness { margin-top: .28in; }
+.paper-page--multi-final .paper-signatures { margin-top: .35in; }
 .paper-equipment>div { min-height: .35in; border-right: 1px solid #222; padding: 2px 6px; }
 .paper-equipment>div:nth-child(3),.paper-equipment>div:last-child { border-right: 0; }
 .paper-equipment .paper-description { grid-column: 1/-1; min-height: .68in; border-top: 1px solid #222; border-right: 0; border-bottom: 1px solid #222; }

@@ -10,17 +10,16 @@ export default function PaperContractDocument({contract:c,signed=false,unsignedM
   const t=c.templateSnapshot||{}, terms=t.terms||[], rep=t.sellerRepresentative||{};
   const hasMultipleEquipment=contractEquipmentItems(c).length>1;
   const t1=splitAt(terms[0]?.body,"in this Agreement."), t8=splitAt(terms[7]?.body,"expenses, demands,"), t10=paragraphs(terms[9]?.body), t11=splitAt(terms[10]?.body,"For further information,"), t14=paragraphs(terms[13]?.body);
-  return <div className="contract-document contract-document--paper paper-original" data-pages={hasMultipleEquipment?9:8} data-template="paper">
+  return <div className="contract-document contract-document--paper paper-original" data-pages={8} data-template="paper">
     <PaperPage n={1} mark={unsignedMark} expand={hasMultipleEquipment}><PaperHeader t={t} c={c}/><h1>DELIVERY RECEIPT</h1><PartyGrid c={c} delivery/><EquipmentList c={c}/><Checks c={c}/>{!hasMultipleEquipment?<WarrantyBlock c={c} t={t}/>:null}</PaperPage>
     <PaperPage n={2} mark={unsignedMark} className={hasMultipleEquipment?"paper-page--warranties-declarations":""}>{hasMultipleEquipment?<WarrantyBlock c={c} t={t}/>:null}<h1 className="declarations-title">BUYER DECLARATIONS</h1><DeclarationList items={t.buyerDeclarations}/><PaperSignatures c={c} rep={rep} signed={signed}/></PaperPage>
     <PaperPage n={3} mark={unsignedMark} expand={hasMultipleEquipment}><PaperHeader t={t} c={c}/><h1>ORDER</h1><PartyGrid c={c}/><h3>DESCRIPTION:</h3><EquipmentList c={c}/><PriceBlock c={c}/>{!hasMultipleEquipment?<TermsOpening c={c} t={t} term={terms[0]} body={t1[0]}/>:null}</PaperPage>
     {hasMultipleEquipment?<>
       <PaperPage n={4} mark={unsignedMark} className="paper-page--terms-opening"><TermsOpening c={c} t={t} term={terms[0]} body={terms[0]?.body}/>{terms.slice(1,5).map(x=><PaperTerm key={x.number} term={x}/>)}</PaperPage>
       <PaperPage n={5} mark={unsignedMark}>{terms.slice(5,9).map(x=><PaperTerm key={x.number} term={x}/>) }<PaperTerm term={terms[9]} body={t10.slice(0,4).join("\n\n")}/></PaperPage>
-      <PaperPage n={6} mark={unsignedMark}><PaperSubparagraphs items={t10.slice(4)}/><PaperTerm term={terms[10]}/></PaperPage>
-      <PaperPage n={7} mark={unsignedMark}><PaperTerm term={terms[11]}/><NoticeAddresses c={c}/><PaperTerm term={terms[12]}/><PaperTerm term={terms[13]} body={t14.slice(0,4).join("\n\n")}/></PaperPage>
-      <PaperPage n={8} mark={unsignedMark}><PaperSubparagraphs items={t14.slice(4)}/><p className="paper-confirmation">{t.confirmationText}</p></PaperPage>
-      <PaperPage n={9} mark={unsignedMark}><WitnessText text={t.witnessText}/><PaperSignatures c={c} rep={rep} signed={signed}/></PaperPage>
+      <PaperPage n={6} mark={unsignedMark}><PaperSubparagraphs items={t10.slice(4)}/><PaperTerm term={terms[10]}/><PaperTerm term={terms[11]}/><NoticeAddresses c={c}/></PaperPage>
+      <PaperPage n={7} mark={unsignedMark}><PaperTerm term={terms[12]}/><PaperTerm term={terms[13]}/></PaperPage>
+      <PaperPage n={8} mark={unsignedMark} className="paper-page--multi-final"><p className="paper-confirmation">{t.confirmationText}</p><WitnessText text={t.witnessText}/><PaperSignatures c={c} rep={rep} signed={signed}/></PaperPage>
     </>:<>
       <PaperPage n={4} mark={unsignedMark}><p>{t1[1]}</p>{terms.slice(1,7).map(x=><PaperTerm key={x.number} term={x}/>)}<PaperTerm term={terms[7]} body={t8[0]}/></PaperPage>
       <PaperPage n={5} mark={unsignedMark}><p>{t8[1]}</p>{terms.slice(8,10).map(x=><PaperTerm key={x.number} term={x}/>) }<PaperTerm term={terms[10]} body={t11[0]}/></PaperPage>
