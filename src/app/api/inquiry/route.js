@@ -21,8 +21,7 @@
 //       );
 //     }
 
-//     const token = '7594221274:AAHhvlVReiGLUAbAhePSW6cq0CEW6_5i80s';
-//     const chatId = '-5263521263';
+
 
 //     const text = `
 // NEW PRODUCT INQUIRY
@@ -89,14 +88,14 @@ Message: ${message || "-"}
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "messaging.4006218@gmail.com",
-        pass: "zxkm fosn zsts hbji",
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS,
       },
     });
 
     await transporter.sendMail({
-      from: `messaging.4006218@gmail.com`,
-      to: "sales@centralnewholland.com", // unde vrei să primești mailul
+      from: process.env.EMAIL_FROM,
+      to: process.env.EMAIL_TO, // 
       subject: "🛒 New Product Inquiry",
       text,
     });
