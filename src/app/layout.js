@@ -18,21 +18,6 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-// 🔑 Faviconul se pune aici în app directory
-// export const metadata = {
-//   title: "Robinson Equipment Co.",
-//   description:
-//     "Robinson Equipment Co. offers high-quality agricultural and construction machinery. Explore durable tractors, excavators, and equipment solutions designed for efficiency and performance.",
-//   icons: {
-//     icon: "/favicon.ico",               // favicon principal
-//     apple: "/apple-touch-icon.png",     // optional pentru iOS
-//     other: [
-//       { rel: "icon", url: "/favicon-32x32.png", type: "image/png" },
-//       { rel: "icon", url: "/favicon-16x16.png", type: "image/png" },
-//     ],
-//   },
-// };
-
 export const metadata = {
   metadataBase: new URL("https://centralnewholland.com"), // pune domeniul tău real
 
@@ -90,34 +75,8 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
 
-        {/* Meta Pixel */}
-        <Script id="facebook-pixel" strategy="afterInteractive">
-          {`
-            !function(f,b,e,v,n,t,s)
-            {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-            n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-            if(!f._fbq)f._fbq=n;
-            n.push=n;n.loaded=!0;n.version='2.0';
-            n.queue=[];
-            t=b.createElement(e);t.async=!0;
-            t.src=v;s=b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t,s)
-            }(window, document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        
 
-            fbq('init', '27782989024637922');
-            fbq('track', 'PageView');
-          `}
-        </Script>
-
-        {/* Noscript fallback */}
-        <noscript>
-          <img
-            height="1"
-            width="1"
-            style={{ display: "none" }}
-            src="https://www.facebook.com/tr?id=27782989024637922&ev=PageView&noscript=1"
-          />
-        </noscript>
 
         <SiteChrome><TopBar /><Header /></SiteChrome>
         <SiteMain>{children}</SiteMain>
