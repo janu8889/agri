@@ -1,0 +1,139 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import FilterSection from "@/app/components/products/filtreSection";
+import CategorySeparator from "@/app/components/product/category";
+import FiltreList from "@/app/components/products/filtreList";
+
+const LIMIT = 6;
+
+export default function Agriculture() {
+  const [products, setProducts] = useState([]);
+  const [filters, setFilters] = useState({ category: "truck" });
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); 
+  const [firstLoadMoreDone, setFirstLoadMoreDone] = useState(false); // 🔹 pentru prima apăsare Load More
+
+  useEffect(() => {
+    // Primul request = random, initial:1
+    fetchProducts(filters, 0, true, true);
+  }, []);
+
+  const fetchProducts = async (activeFilters, currentSkip, reset = false, initial = false) => {
+    try {
+      setIsLoading(true);
+
+      const params = new URLSearchParams({
+        ...activeFilters,
+        limit: LIMIT,
+        skip: currentSkip,
+        initial: initial ? 1 : 0, // initial=1 doar la primul fetch random
+      });
+
+      const res = await fetch(`/api/products/filter?${params.toString()}`);
+      const data = await res.json();
+      const received = data.products || [];
+
+      if (reset) {
+        setProducts(received);
+      } else {
+        setProducts((prev) => [...prev, ...received]);
+      }
+
+      setSkip(currentSkip + received.length);
+      setHasMore(received.length === LIMIT);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFilter = async (newFilters) => {
+    setFilters(newFilters);
+    setSkip(0);
+    setHasMore(true);
+    await fetchProducts(newFilters, 0, true, false); // filtrele nu folosesc initial:1
+  };
+
+  const handleLoadMore = async () => {
+    if (!hasMore) return;
+
+    if (!firstLoadMoreDone) {
+      // 🔹 Prima dată când apeși Load More:
+      setProducts([]); // golim lista
+      await fetchProducts(filters, 0, true, false); // initial=0
+      setFirstLoadMoreDone(true); // marchează că prima Load More s-a făcut
+    } else {
+      // Load More normal, adaugă produsele fără să golești lista
+      await fetchProducts(filters, skip, false, false);
+    }
+  };
+
+  return (
+    <div className="max-w-screen-2xl mx-auto">
+      <div className="text-left mt-2 mb-6 px-6 md:px-0">
+        {/* ---------------- Decorative Header / Border for About Us ---------------- */}
+      <div className="relative w-full h-48 md:h-64 lg:h-80 overflow-hidden">
+        {/* Background Image */}
+        <img
+          src="/imgs/trucks.jpg"
+          alt="Decorative border"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* Darker Gradient Overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#1a1a1a]/70 via-[#1a1a1a]/30 to-[#f5f5f5]/50"></div>
+
+        {/* Optional: Text or Page Title */}
+        <div className="absolute inset-0 flex items-center justify-center">
+          <h1 className="text-white text-2xl md:text-4xl font-bold drop-shadow-lg">
+            Trucks    
+
+          </h1>
+        </div>
+
+        {/* Decorative cut at bottom (triangle effect) */}
+        <div className="absolute bottom-0 w-full overflow-hidden leading-[0]">
+          <svg
+            className="relative block w-full h-6 md:h-12"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 1200 120"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,0 V60 Q600,120 1200,60 V0 H0 Z"
+              fill="#f5f5f5" // culoarea fundalului paginii / footer
+            />
+          </svg>
+        </div>
+      </div>
+
+        <p className="mt-2 text-lg md:text-xl text-[#555] leading-relaxed">
+           Discover our extensive selection of trucks, including heavy-duty vehicles, transport trucks, and versatile commercial vehicles designed to deliver power, efficiency, reliability, and performance. Everything you need to transport goods, handle demanding jobs, and keep your business moving with confidence.
+        </p>
+      </div>
+
+      <FilterSection
+        defaultCategory="truck"
+        onFilter={handleFilter}
+      />
+
+      <CategorySeparator category="truck" />
+      <FiltreList products={products} />
+
+   {/* ---------------- Products List / Loading / No Results ---------------- */}
+        {hasMore && !isLoading && (
+          <div className="text-center my-8">
+            <button
+              onClick={handleLoadMore}
+              className="cursor-pointer bg-[#c9a227] text-black font-bold px-6 py-3 rounded hover:opacity-90 transition"
+            >
+              Load More
+            </button>
+          </div>
+        )}
+    </div>
+  );
+}

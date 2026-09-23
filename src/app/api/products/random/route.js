@@ -13,6 +13,7 @@ export async function GET() {
         name: 1,
         price: 1,
         hours: 1,
+        miles: 1,
         engineHorsepower: 1,
         category: 1,
         manufacturer: 1,

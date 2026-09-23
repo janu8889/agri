@@ -252,6 +252,12 @@ function InventoryDropdown() {
         <Link href="/inventory/attachments" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">
           ATTACHMENTS
         </Link>
+        <Link href="/inventory/trucks" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">
+          TRUCKS
+        </Link>
+        <Link href="/inventory/dumpTruck" className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227] transition">
+          DUMP TRUCKS
+        </Link>
       </div>
     </div>
   );
@@ -302,6 +308,12 @@ function MobileMenu({ setBuyNowOpen, setContactOpen }) {
               </Link>
               <Link href="/inventory/attachments" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
                 ATTACHMENTS
+              </Link>
+              <Link href="/inventory/trucks" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
+                TRUCKS
+              </Link>
+              <Link href="/inventory/dumpTruck" onClick={closeMenu} className="px-4 py-2 text-[#1a1a1a] hover:text-[#c9a227]">
+                DUMP TRUCKS
               </Link>
             </div>
           )}

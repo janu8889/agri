@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const productSchema = new mongoose.Schema({
   // Required fields
   name: { type: String, required: true, trim: true },
-  category: { type: String, enum: ["agriculture", "construction", "attachments"], required: true },
+  category: { type: String, enum: ["agriculture", "construction", "attachments", "truck", "dump"], required: true },
   price: { type: Number, required: true },
   year: { type: Number, required: true },
   manufacturer: { type: String, required: true, trim: true },
@@ -13,7 +13,8 @@ const productSchema = new mongoose.Schema({
   hours: { type: Number, default: 0 },
   description: { type: String, trim: true },
   engineHorsepower: { type: Number, default: 0 },
-  
+  miles: { type: Number },
+
   stockNumber: {
     type: Number,
     unique: true,

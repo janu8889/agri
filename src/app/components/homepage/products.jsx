@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import Spinner from "../ui/spinner";
-import { FaSearch, FaClock, FaTimes } from "react-icons/fa";
+import { FaSearch, FaClock, FaTimes, FaRoad } from "react-icons/fa";
 import Link from "next/link";
 
 // contactTime
@@ -162,12 +162,16 @@ export default function ProductsSection({ products }) {
               <div className="p-6 flex flex-col flex-grow items-center">
                 <div className="flex justify-center items-center gap-5 text-[#555] text-[14px] font-medium mt-3">
                   <span className="flex items-center gap-2">
-                    <FaClock className="text-[#c9a227]" /> {prod.hours} hrs
+                    {prod.miles && prod.miles > 0 ? (
+                      <>
+                        <FaRoad className="text-[#c9a227]" /> {prod.miles} miles
+                      </>
+                    ) : (
+                      <>
+                        <FaClock className="text-[#c9a227]" /> {prod.hours} hrs
+                      </>
+                    )}                  
                   </span>
-                  {/* <span className="h-4 w-px bg-gray-300"></span>
-                  <span className="flex items-center gap-2">
-                    <TbEngine className="text-[#c9a227]" /> {prod.engineHorsepower} HP
-                  </span> */}
                 </div>
 
                 <div className="mt-8 flex flex-col gap-3 w-full">

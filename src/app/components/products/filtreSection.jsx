@@ -1,9 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { FaSearch } from "react-icons/fa";
 
 export default function FilterSection({ defaultCategory, onFilter }) {
+  const pathname = usePathname();
+
   const [filters, setFilters] = useState({
     search: "",
     category: defaultCategory || "",
@@ -34,6 +37,10 @@ export default function FilterSection({ defaultCategory, onFilter }) {
   const handleSearch = () => {
     onFilter(filters);
   };
+
+  // Nu afișăm Hours pe paginile /truck și /dumpTruck
+  const hideHours =
+    pathname.endsWith("/trucks") || pathname.endsWith("/dumpTruck");
 
   return (
     <div className="bg-white shadow-lg rounded-xl p-6 mb-10">
@@ -71,12 +78,17 @@ export default function FilterSection({ defaultCategory, onFilter }) {
             <option value="agriculture">Agriculture</option>
             <option value="construction">Construction</option>
             <option value="attachments">Attachments</option>
+            <option value="truck">Trucks</option>
+            <option value="dump">Dump Trucks</option>
           </select>
         </div>
 
         {/* Manufacturer */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Manufacturer</label>
+          <label className="font-semibold text-[#1a1a1a]">
+            Manufacturer
+          </label>
+
           <select
             name="manufacturer"
             value={filters.manufacturer}
@@ -84,42 +96,60 @@ export default function FilterSection({ defaultCategory, onFilter }) {
             className="border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-[#c9a227]"
           >
             <option value="">All</option>
-            <option>ARMOR LITE</option>
-            <option>BOBCAT</option>
-            <option>CASE</option>
-            <option>CASE IH</option>
-            <option>CHALLENGER</option>
-            <option>CLAAS</option>
-            <option>CATERPILLAR</option>
-            <option>DEERE</option>
-            <option>DEUTZ FAHR</option>
-            <option>FAE</option>
-            <option>FECON</option>
-            <option>GENIE</option>
-            <option>GLEANER</option>
-            <option>HITACHI</option>
-            <option>J&M</option>
-            <option>JCB</option>
-            <option>JLG</option>
-            <option>JOHN DEERE</option>
-            <option>KOBELCO</option>
-            <option>KOMATSU</option>
-            <option>KUBOTA</option>
-            <option>LEXION</option>
-            <option>MANITOU</option>
-            <option>MASSEY FERGUSON</option>
-            <option>MERIDIAN</option>
-            <option>NEW HOLLAND</option>
-            <option>PARKER</option>
-            <option>TAKEUCHI</option>
-            <option>VERSATILE</option>
-            <option>YANMAR</option>
+
+            {hideHours ? (
+              <>
+                <option>FREIGHTLINER</option>
+                <option>INTERNATIONAL</option>
+                <option>KENWORTH</option>
+                <option>MACK</option>
+                <option>PETERBILT</option>
+                <option>VOLVO</option>
+              </>
+            ) : (
+              <>
+                <option>ARMOR LITE</option>
+                <option>BOBCAT</option>
+                <option>CASE</option>
+                <option>CASE IH</option>
+                <option>CATERPILLAR</option>
+                <option>CHALLENGER</option>
+                <option>CLAAS</option>
+                <option>DEERE</option>
+                <option>DEUTZ FAHR</option>
+                <option>FAE</option>
+                <option>FECON</option>
+                <option>GENIE</option>
+                <option>GLEANER</option>
+                <option>HITACHI</option>
+                <option>J&M</option>
+                <option>JCB</option>
+                <option>JLG</option>
+                <option>JOHN DEERE</option>
+                <option>KOBELCO</option>
+                <option>KOMATSU</option>
+                <option>KUBOTA</option>
+                <option>LEXION</option>
+                <option>MANITOU</option>
+                <option>MASSEY FERGUSON</option>
+                <option>MERIDIAN</option>
+                <option>NEW HOLLAND</option>
+                <option>PARKER</option>
+                <option>TAKEUCHI</option>
+                <option>VERSATILE</option>
+                <option>YANMAR</option>
+              </>
+            )}
           </select>
         </div>
 
-        {/* 🔥 SORT (ADĂUGAT CORECT) */}
+
+        {/* SORT */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Sort By</label>
+          <label className="font-semibold text-[#1a1a1a]">
+            Sort By
+          </label>
+
           <select
             name="sort"
             value={filters.sort}
@@ -138,7 +168,10 @@ export default function FilterSection({ defaultCategory, onFilter }) {
 
         {/* Year */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Year</label>
+          <label className="font-semibold text-[#1a1a1a]">
+            Year
+          </label>
+
           <div className="flex gap-2">
             <input
               type="number"
@@ -148,6 +181,7 @@ export default function FilterSection({ defaultCategory, onFilter }) {
               onChange={handleChange}
               className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
             />
+
             <input
               type="number"
               name="yearMax"
@@ -161,7 +195,10 @@ export default function FilterSection({ defaultCategory, onFilter }) {
 
         {/* Price */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Price</label>
+          <label className="font-semibold text-[#1a1a1a]">
+            Price
+          </label>
+
           <div className="flex gap-2">
             <input
               type="number"
@@ -171,6 +208,7 @@ export default function FilterSection({ defaultCategory, onFilter }) {
               onChange={handleChange}
               className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
             />
+
             <input
               type="number"
               name="priceMax"
@@ -183,31 +221,40 @@ export default function FilterSection({ defaultCategory, onFilter }) {
         </div>
 
         {/* Hours */}
-        <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Hours</label>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              name="hoursMin"
-              placeholder="Min"
-              value={filters.hoursMin}
-              onChange={handleChange}
-              className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
-            />
-            <input
-              type="number"
-              name="hoursMax"
-              placeholder="Max"
-              value={filters.hoursMax}
-              onChange={handleChange}
-              className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
-            />
+        {!hideHours && (
+          <div className="flex flex-col gap-2">
+            <label className="font-semibold text-[#1a1a1a]">
+              Hours
+            </label>
+
+            <div className="flex gap-2">
+              <input
+                type="number"
+                name="hoursMin"
+                placeholder="Min"
+                value={filters.hoursMin}
+                onChange={handleChange}
+                className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
+              />
+
+              <input
+                type="number"
+                name="hoursMax"
+                placeholder="Max"
+                value={filters.hoursMax}
+                onChange={handleChange}
+                className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
+              />
+            </div>
           </div>
-        </div>
+        )}
 
         {/* HP */}
         <div className="flex flex-col gap-2">
-          <label className="font-semibold text-[#1a1a1a]">Horse Power (HP)</label>
+          <label className="font-semibold text-[#1a1a1a]">
+            Horse Power (HP)
+          </label>
+
           <div className="flex gap-2">
             <input
               type="number"
@@ -217,6 +264,7 @@ export default function FilterSection({ defaultCategory, onFilter }) {
               onChange={handleChange}
               className="border border-gray-300 rounded px-3 py-2 w-full focus:ring-2 focus:ring-[#c9a227]"
             />
+
             <input
               type="number"
               name="hpMax"

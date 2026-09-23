@@ -54,7 +54,7 @@ export async function GET(req) {
       if (hpMax) query.engineHorsepower.$lte = Number(hpMax);
     }
 
-    // 🔥 SORT CONFIG (CORECT)
+    // SORT CONFIG 
     let sortOption = {};
 
     switch (sort) {
@@ -94,6 +94,7 @@ export async function GET(req) {
             hours: 1,
             engineHorsepower: 1,
             category: 1,
+            miles:1,
             manufacturer: 1,
             _id: 1,
             imgs: { $slice: ["$imgs", 1] }
@@ -112,6 +113,7 @@ export async function GET(req) {
           hours: 1,
           engineHorsepower: 1,
           category: 1,
+          miles:1,
           manufacturer: 1,
           _id: 1,
           imgs: { $slice: 1 }

@@ -2,6 +2,8 @@ import Link from "next/link";
 import { FaTractor, FaCogs } from "react-icons/fa"; // iconițe cool
 import { GiTowTruck } from "react-icons/gi";
 import ExcavatorBucketIcon from "../icons/ExcavatorBucketIcon"
+import { FaTruck } from "react-icons/fa";
+import { FaTruckMoving } from "react-icons/fa6";
 
 export default function Inventory() {
   const categories = [
@@ -18,7 +20,18 @@ export default function Inventory() {
     {
       title: "Attachments",
       link: "/inventory/attachments",
-      icon: <ExcavatorBucketIcon className="text-[#c9a227] mb-4 mx-auto" />, 
+      icon: <ExcavatorBucketIcon className="text-[#c9a227] text-4xl mb-4 mx-auto" />, 
+    },
+    {
+      title: "Trucks",
+      link: "/inventory/trucks",
+      icon: <FaTruck className="text-[#c9a227] text-4xl mb-4 mx-auto" />, 
+    },
+
+    {
+      title: "Dump Trucks",
+      link: "/inventory/dumpTruck",
+      icon: <FaTruckMoving className="text-[#c9a227] text-4xl mb-4 mx-auto" />, 
     },
   ];
 

@@ -389,39 +389,39 @@ export default function ProductDetailsClient() {
       Make an Inquiry
     </button>
 
-  {/* INFO DYNAMIC + DESCRIPTION */}
-  <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-    {Object.entries(product).map(([key, value]) => {
-      if (!value) return null;
-      if (Array.isArray(value) || typeof value === "object") return null;
-      if (key === "name" || key === "price" || key === "imgs" || key === "optimizedImgs" || key === "category" || key === "_id" || key === "createdAt" || key ==="__v" || key ==="__V") return null;
-      if (key === "description") return null;
-      if (key === "stockNumber") return null;
+    {/* INFO DYNAMIC + DESCRIPTION */}
+    <div className="bg-white p-6 rounded-2xl shadow-lg grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+      {Object.entries(product).map(([key, value]) => {
+        if (!value) return null;
+        if (Array.isArray(value) || typeof value === "object") return null;
+        if (key === "name" || key === "price" || key === "imgs" || key === "optimizedImgs" || key === "category" || key === "_id" || key === "createdAt" || key ==="__v" || key ==="__V") return null;
+        if (key === "description") return null;
+        if (key === "stockNumber") return null;
 
-      return (
-        <div key={key}>
-          {/* afișăm exact cum e cheia în obiect */}
-          <div className="font-semibold capitalize">{key}</div>
-          <div>{value}</div>
+        return (
+          <div key={key}>
+            {/* afișăm exact cum e cheia în obiect */}
+            <div className="font-semibold capitalize">{key}</div>
+            <div>{value}</div>
+          </div>
+        );
+      })}
+
+      {/* Description separat */}
+      {product.description && (
+        <div className="md:col-span-2">
+          <div className="font-semibold">Description</div>
+          <p className="mt-1 text-gray-600">{product.description}</p>
         </div>
-      );
-    })}
-
-    {/* Description separat */}
-    {product.description && (
-      <div className="md:col-span-2">
-        <div className="font-semibold">Description</div>
-        <p className="mt-1 text-gray-600">{product.description}</p>
+      )}
+    </div>
+    {/* Reference rămâne exact cum e */}
+    {product.stockNumber && (
+      <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
+        Reference #{product.stockNumber}
       </div>
     )}
   </div>
-  {/* Reference rămâne exact cum e */}
-  {product.stockNumber && (
-    <div className="text-xs text-gray-400 uppercase tracking-widest mt-2">
-      Reference #{product.stockNumber}
-    </div>
-  )}
-</div>
           </div>
         </div>
 

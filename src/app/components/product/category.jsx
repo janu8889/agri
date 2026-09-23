@@ -1,5 +1,7 @@
 import { FaTractor, FaCogs } from "react-icons/fa";
 import { GiTowTruck } from "react-icons/gi";
+import { FaTruck } from "react-icons/fa";
+import { FaTruckMoving } from "react-icons/fa6";
 import ExcavatorBucketIcon from "../icons/ExcavatorBucketIcon"
 
 export default function CategorySeparator({ category }) {
@@ -14,6 +16,12 @@ export default function CategorySeparator({ category }) {
       break;
     case "attachments":
       IconComponent = ExcavatorBucketIcon;
+      break;
+    case "truck":
+      IconComponent = FaTruck;
+      break;
+    case "dump":
+      IconComponent = FaTruckMoving;
       break;
     default:
       IconComponent = null;
